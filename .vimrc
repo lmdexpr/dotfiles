@@ -50,10 +50,10 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'scrooloose/syntastic'
 
 NeoBundle 'Shougo/vimproc',{
-            \ 'build' : {
-             \ 'unix' : 'make -f make_unix.mak',
-            \},
-           \}
+      \ 'build' : {
+      \ 'unix' : 'make -f make_unix.mak',
+      \},
+      \}
 
 NeoBundle 'Shougo/vinarise.vim'
 
@@ -68,13 +68,13 @@ NeoBundle 'kana/vim-filetype-haskell'
 NeoBundle 'pbrisbin/html-template-syntax'
 
 "Coq
-"NeoBundle 'eagletmt/coqtop-vim'
-"NeoBundle 'vim-scripts/CoqIDE'
-"NeoBundle 'jvoorhis/coq.vim'
+NeoBundle 'eagletmt/coqtop-vim'
+NeoBundle 'vim-scripts/CoqIDE'
+NeoBundle 'jvoorhis/coq.vim'
 
 "C/C++
-"NeoBundle 'vim-scripts/Cpp11-Syntax-Support'
-"NeoBundle 'corpix/cello.vim'
+NeoBundle 'vim-scripts/Cpp11-Syntax-Support'
+NeoBundle 'corpix/cello.vim'
 
 "template
 NeoBundle 'thinca/vim-template'
@@ -83,20 +83,24 @@ NeoBundle 'thinca/vim-template'
 NeoBundle 'tpope/vim-markdown'
 
 "scheme
-"NeoBundle 'aharisu/vim-gdev'
 NeoBundle 'aharisu/vim_goshrepl'
+"NeoBundle 'aharisu/vim-gdev'
 NeoBundle 'amdt/vim-niji'
 
 "Clojure
-"NeoBundle 'guns/vim-clojure-static'
-"NeoBundle 'tpope/vim-fireplace'
+NeoBundle 'guns/vim-clojure-static'
+NeoBundle 'tpope/vim-fireplace'
 
 "Scala
-"NeoBundle 'derekwyatt/vim-scala'
+NeoBundle 'derekwyatt/vim-scala'
 
 "ML
-NeoBundle 'cohama/the-ocamlspot.vim'
+"NeoBundle 'cohama/the-ocamlspot.vim'
 NeoBundle 'kongo2002/fsharp-vim'
+
+"HTML,CSS,PHP
+NeoBundle 'vim-scripts/smarty-syntax'
+NeoBundle 'mattn/emmet-vim'
 
 ""NeoBundle 'https://gitbucket.org/kovisoft/slimv'
 
@@ -106,28 +110,28 @@ NeoBundle 'kongo2002/fsharp-vim'
 let file_name = expand("%:p")
 
 if has('vim_starting') && file_name == ""
-    autocmd VimEnter * call ExecuteNERDTree()
+  autocmd VimEnter * call ExecuteNERDTree()
 endif
 
 function! ExecuteNERDTree()
-    if !exists('g:nerdtatus')
-        execute 'NERDTree ./'
-        let g:windowWidth = winwidth(winnr())
-        let g:nerdtreebuf = bufnr('')
-        let g:nerdstatus = 1
-        
-        elseif g:nerdstatus == 1
-        execute 'wincmd t'
-        execute 'vertical resize' 0
-        execute 'wincmd p'
-        let g:nerdstatus = 2
-        
-        elseif g:nerdstatus == 2
-        execute 'wincmd t'
-        execute 'vertical resize' g:windowWidth
-        let g:nerdstatus = 1
-        
-    endif
+  if !exists('g:nerdtatus')
+    execute 'NERDTree ./'
+    let g:windowWidth = winwidth(winnr())
+    let g:nerdtreebuf = bufnr('')
+    let g:nerdstatus = 1
+
+  elseif g:nerdstatus == 1
+    execute 'wincmd t'
+    execute 'vertical resize' 0
+    execute 'wincmd p'
+    let g:nerdstatus = 2
+
+  elseif g:nerdstatus == 2
+    execute 'wincmd t'
+    execute 'vertical resize' g:windowWidth
+    let g:nerdstatus = 1
+
+  endif
 endfunction
 
 noremap <c-e> :<c-u>:call ExecuteNERDTree()<cr>
@@ -141,14 +145,14 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 " SuperTab like snippets behavior.
 imap <expr><TAB> neosnippet#expandable_or_jumpable() ? 
-  \"\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+      \"\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-  \"\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+      \"\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
 " For snippet_complete marker.
 if has('conceal')
   set conceallevel=2 concealcursor=i
-  endif
+endif
 
 let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neocomplcache_enable_at_startup = 1
@@ -175,14 +179,14 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
-            \ 'default' : '',
-            \ 'vimshell' : $HOME.'/.vimshell_hist',
-            \ 'scheme' : $HOME.'/.gosh_completions'
-            \ }
+      \ 'default' : '',
+      \ 'vimshell' : $HOME.'/.vimshell_hist',
+      \ 'scheme' : $HOME.'/.gosh_completions'
+      \ }
 
 " Define keyword.
 if !exists('g:neocomplcache_keyword_patterns')
-    let g:neocomplcache_keyword_patterns = {}
+  let g:neocomplcache_keyword_patterns = {}
 endif
 let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
@@ -194,9 +198,9 @@ inoremap <expr><C-l> neocomplcache#complete_common_string()
 " <CR>: close popup and save indent.
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
-    return neocomplcache#smart_close_popup() . "\<CR>"
-    " For no inserting <CR> key.
-    "return pumvisible() ?    neocomplcache#close_popup() : "\<CR>"
+  return neocomplcache#smart_close_popup() . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ?    neocomplcache#close_popup() : "\<CR>"
 endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -236,7 +240,7 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
-    let g:neocomplcache_omni_patterns = {}
+  let g:neocomplcache_omni_patterns = {}
 endif
 let g:neocomplcache_omni_patterns.php = '[^.\t]->\h\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.c ='[^.[:digit:] *\t]\%(\.\|->\)'
@@ -250,27 +254,27 @@ let g:neocomplcache_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 "-----------------------Tab Page Setting Start------------------------------
 " Anywhere SID.
 function! s:SID_PREFIX()
-    return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
 
 " Set tabline.
 function! s:my_tabline()  "{{{
-    let s = ''
-    for i in range(1, tabpagenr('$'))
-        let bufnrs = tabpagebuflist(i)
-        let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
-        let no = i  " display 0-origin tabpagenr.
-        let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
-        let title = fnamemodify(bufname(bufnr), ':t')
-        let title = '[' . title . ']'
-        let s .= '%'.i.'T'
-        let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-        let s .= no . ':' . title
-        let s .= mod
-        let s .= '%#TabLineFill# '
-    endfor
-    let s .= '%#TabLineFill#%T%=%#TabLine#'
-    return s
+  let s = ''
+  for i in range(1, tabpagenr('$'))
+    let bufnrs = tabpagebuflist(i)
+    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
+    let no = i  " display 0-origin tabpagenr.
+    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
+    let title = fnamemodify(bufname(bufnr), ':t')
+    let title = '[' . title . ']'
+    let s .= '%'.i.'T'
+    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+    let s .= no . ':' . title
+    let s .= mod
+    let s .= '%#TabLineFill# '
+  endfor
+  let s .= '%#TabLineFill#%T%=%#TabLine#'
+  return s
 endfunction "}}}
 let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
 "-----------------------Tab Page Setting Complete---------------------------
@@ -282,6 +286,17 @@ let g:errormarker_errorgroup   = 'Error'
 let g:errormarker_warninggroup = 'ToDo'
 "-----------------------Marker Setting Complete-----------------------------
 
+"-----------------------Annot Setting Start---------------------------------
+function! OCamlType()
+  let col  = col('.')
+  let line = line('.')
+  let file = expand("%:p:r")
+  echo system("annot -n -type ".line." ".col." ".file.".annot")
+endfunction
+
+map ,t :call OCamlType()<return>
+"-----------------------Annot Setting Complete------------------------------
+
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 
@@ -290,15 +305,19 @@ let g:CoqIDEDefaultKeyMap=1
 let g:haskell_conceal = 0 
 "let g:haskell_conceal_enumerations = 0
 
-let g:neocomplcache_keyword_patterns['gosh-repl'] = "[[:alpha:]+*/@$_=.!?-][[:alnum:]+*/@$_:=.!?-]*"
+let g:neocomplcache_keyword_patterns['gosh-repl'] = 
+      \"[[:alpha:]+*/@$_=.!?-][[:alnum:]+*/@$_:=.!?-]*"
 let g:gosh_buffer_direction = 'v'
 
 vmap <CR> <Plug>(gosh_repl_send_block)
 
 vnoremap <silent> <C-p> "0p<CR>
 
-"vnoremap <silent> <C-g> :CoqGoto<CR>
+vnoremap <silent> <C-g> :CoqGoto<CR>
 
-:set rtp+=/usr/local/share/ocamlmerlin/vim
+" merlin
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+execute "helptags " . g:opamshare . "/merlin/vim/doc"
 
 filetype plugin indent on
