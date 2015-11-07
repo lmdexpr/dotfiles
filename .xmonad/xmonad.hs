@@ -1,11 +1,13 @@
 import XMonad 
 
+import XMonad.Layout.Spacing
+
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 
 import qualified XMonad.StackSet as W
 
--- import XMonad.Actions.Volume
+import XMonad.Actions.Volume
 
 import XMonad.Util.Run
 import XMonad.Util.EZConfig
@@ -14,8 +16,9 @@ import Control.Monad
 
 main = do
     myStatusBar <- spawnPipe "xmobar"
-    spawn "feh --bg-scale ~/img/totori/totori_arch_B.jpg"
-    spawn "xmodmap /home/saku/.Xmodmap"
+    spawn "setxkbmap -layout jp"
+    spawn "feh --bg-scale /home/yuki/img/totori/totori_arch_B.jpg"
+    spawn "xmodmap /home/yuki/.Xmodmap"
     xmonad $ defaultConfig 
         { modMask       = myModMask
         , terminal      = myTerminal
@@ -32,16 +35,18 @@ myModMask = mod4Mask
 
 myTerminal = "urxvt"
 
-myWorkspaces = ["term","web","work","miku","mail"]
-
-myLayoutHook = avoidStruts $ Full ||| myTile
+myWorkspaces = unique ++ map (("work" ++) . show) [1 .. 9 - length unique]
     where
-        myTile = Tall 1 (3/100) (1/2)
+      unique = ["term","web","miku"]
+
+myLayoutHook = spacing 5 $ avoidStruts $ Full ||| myTile
+    where
+      myTile = Tall 1 (3/100) (1/2)
 
 myManageHook = composeAll
                 [ className =? "Urxvt" --> viewShift "term"
                 , className =? "Opera" --> viewShift "web"
-                , className =? "Chromium" --> viewShift "web"
+                , className =? "Vivaldi-preview" --> viewShift "web"
                 , className =? "Mikutter.rb" --> viewShift "miku"
                 , className =? "libreoffice-startcenter" --> viewShift "work"
                 ]
@@ -53,24 +58,22 @@ myLogHook h =
                 }
 
 myAddKeys  = [ ((myModMask, xK_o), spawn "opera")
+             , ((myModMask, xK_v), spawn "vivaldi-preview")
              , ((myModMask, xK_m), spawn "mikutter")
              , ((myModMask, xK_h), sendMessage Shrink)
              , ((myModMask, xK_l), sendMessage Expand)
              ]
 
-myAddKeysP = [ ( "<XF86MonBrightnessDown>"   , spawn "xbacklight -dec 10")
-             , ( "<XF86MonBrightnessUp>"     , spawn "xbacklight -inc 15")
-             {-, ( "<XF86AudioMute>"           , toggleMute    >> return() )
+myAddKeysP = [ ( "<XF86KbdBrightnessDown>"   , spawn "xbacklight -dec 1")
+             , ( "<XF86KbdBrightnessUp>"     , spawn "xbacklight -inc 1")
+             , ( "<XF86AudioMute>"           , toggleMute    >> return() )
              , ( "<XF86AudioLowerVolume>"    , lowerVolume 3 >> return() )
-             , ( "<XF86AudioRaiseVolume>"    , raiseVolume 3 >> return() ) -}
+             , ( "<XF86AudioRaiseVolume>"    , raiseVolume 3 >> return() )
              , ("M-S-r", do
                        screenWorkspace 0 >>= flip whenJust (windows.W.view)
                        (windows . W.greedyView) "term"
                        screenWorkspace 1 >>= flip whenJust (windows.W.view)
                        (windows . W.greedyView) "work")
-             ] ++
-             [ ((m ++ "M-" ++ [key])
-                , screenWorkspace sc >>= flip whenJust (windows . f))
-             | (key, sc) <- zip "hl" [0..]
-             , (f, m) <- [(W.view, ""), (W.shift, "S-")]
+             , ("M-h", sendMessage Shrink)
+             , ("M-l", sendMessage Expand)
              ]

@@ -32,7 +32,7 @@ filetype off
 
 if has( 'vim_starting' )
     set runtimepath+=~/.vim/bundle/neobundle.vim
-    call neobundle#rc(expand('~/.vim/bundle'))
+    call neobundle#begin(expand('~/.vim/bundle'))
 endif
 
 " originalrepos on github
@@ -45,7 +45,6 @@ NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'scrooloose/syntastic'
 
@@ -66,15 +65,7 @@ NeoBundle 'eagletmt/unite-haddock'
 NeoBundle 'ujihisa/neco-ghc'
 NeoBundle 'kana/vim-filetype-haskell'
 NeoBundle 'pbrisbin/html-template-syntax'
-
-"Coq
-NeoBundle 'eagletmt/coqtop-vim'
-NeoBundle 'vim-scripts/CoqIDE'
-NeoBundle 'jvoorhis/coq.vim'
-
-"C/C++
-NeoBundle 'vim-scripts/Cpp11-Syntax-Support'
-NeoBundle 'corpix/cello.vim'
+NeoBundle 'nbouscal/vim-stylish-haskell'
 
 "template
 NeoBundle 'thinca/vim-template'
@@ -85,11 +76,7 @@ NeoBundle 'tpope/vim-markdown'
 "scheme
 NeoBundle 'aharisu/vim_goshrepl'
 "NeoBundle 'aharisu/vim-gdev'
-NeoBundle 'amdt/vim-niji'
-
-"Clojure
-NeoBundle 'guns/vim-clojure-static'
-NeoBundle 'tpope/vim-fireplace'
+"NeoBundle 'amdt/vim-niji'
 
 "Scala
 NeoBundle 'derekwyatt/vim-scala'
@@ -102,7 +89,9 @@ NeoBundle 'kongo2002/fsharp-vim'
 NeoBundle 'vim-scripts/smarty-syntax'
 NeoBundle 'mattn/emmet-vim'
 
-""NeoBundle 'https://gitbucket.org/kovisoft/slimv'
+"NeoBundle 'https://gitbucket.org/kovisoft/slimv'
+
+call neobundle#end()
 
 "-----------------------NeoBundle Setting Complete--------------------------
 
@@ -277,6 +266,12 @@ function! s:my_tabline()  "{{{
   return s
 endfunction "}}}
 let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
+
+for n in range(1, 9)
+  execute 'nnoremap <silent> g'.n ':<C-u>tabnext'.n.'<CR>'
+endfor
+
+nmap <silent> gc :tabnew<CR>
 "-----------------------Tab Page Setting Complete---------------------------
 
 "-----------------------Marker Setting Start--------------------------------
@@ -316,8 +311,9 @@ vnoremap <silent> <C-p> "0p<CR>
 vnoremap <silent> <C-g> :CoqGoto<CR>
 
 " merlin
-let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
-execute "set rtp+=" . g:opamshare . "/merlin/vim"
-execute "helptags " . g:opamshare . "/merlin/vim/doc"
+"let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+"execute "set rtp+=" . g:opamshare . "/merlin/vim"
+"execute "helptags " . g:opamshare . "/merlin/vim/doc"
 
 filetype plugin indent on
+NeoBundleCheck
