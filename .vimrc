@@ -6,8 +6,12 @@ set fileencodings=utf-8,euc-jp,sjis
 set t_Co=256
 set number
 syntax enable
+
 colorscheme hybrid
 set background=dark
+highlight Normal ctermbg=none
+
+let g:deoplete#enable_at_startup = 1
 "----------------------Color Setting Complete-------------------------------
 
 "----------------------Indent Setting Start---------------------------------
@@ -60,12 +64,12 @@ NeoBundle 'vim-scripts/errormarker.vim'
 
 "Haskell
 NeoBundle 'dag/vim2hs'
-NeoBundle 'eagletmt/ghcmod-vim'
+"NeoBundle 'eagletmt/ghcmod-vim'
 NeoBundle 'eagletmt/unite-haddock'
 NeoBundle 'ujihisa/neco-ghc'
 NeoBundle 'kana/vim-filetype-haskell'
 NeoBundle 'pbrisbin/html-template-syntax'
-NeoBundle 'nbouscal/vim-stylish-haskell'
+"NeoBundle 'nbouscal/vim-stylish-haskell'
 
 "template
 NeoBundle 'thinca/vim-template'
@@ -80,14 +84,15 @@ NeoBundle 'aharisu/vim_goshrepl'
 
 "Scala
 NeoBundle 'derekwyatt/vim-scala'
+NeoBundle 'gre/play2vim'
 
 "ML
 "NeoBundle 'cohama/the-ocamlspot.vim'
 NeoBundle 'kongo2002/fsharp-vim'
 
-"HTML,CSS,PHP
-NeoBundle 'vim-scripts/smarty-syntax'
+"HTML,CSS,JS
 NeoBundle 'mattn/emmet-vim'
+NeoBundle 'kchmck/vim-coffee-script'
 
 "NeoBundle 'https://gitbucket.org/kovisoft/slimv'
 
@@ -133,8 +138,8 @@ smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 " SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ? 
-      \"\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+"imap <expr><TAB> neosnippet#expandable_or_jumpable() ? 
+"      \"\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
       \"\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 

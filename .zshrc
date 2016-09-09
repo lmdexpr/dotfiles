@@ -4,6 +4,7 @@
 #General Settings
 #------------------------------
 export EDITOR=vim
+export BROWSER=opera
 export LANG=ja_JP.UTF-8
 export KCODE=u
 export AUTOFEATURE=true
@@ -11,16 +12,18 @@ export TERM=xterm-256color
 
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 
+export JDBC_DATABASE_URL='jdbc:postgresql://testuser@localhost/testdb'
+
 export GISTY_DIR="$HOME/src/gists"
 export GISTY_ACCESS_TOKEN=""
 
 export OCAMLPARAM="_,bin-annot=1"
 
-export PATH=$HOME/.cabal/bin:$HOME/.opam/4.01.0/bin:$PATH
+export PATH=$HOME/.cabal/bin:$HOME/.local/bin:$HOME/.opam/4.01.0/bin:$PATH
 export PATH=$HOME/.ghc-mod/bin:$HOME/.xmonad:$PATH
-export PATH=$HOME/.gem/ruby/2.1.0/bin:$PATH
-export PATH=/opt/android-sdk/platform-tools:/opt/android-sdk/tools/:$PATH
+export PATH=$HOME/.gem/ruby/2.3.0/bin:$PATH
 export PATH=/opt/local:/usr/local/bin/:$PATH
+export PATH=~/.rakudobrew/bin:~/.rakudobrew/moar-nom/install/share/perl6/site/bin:$PATH
 
 export CACHE_DIR=/$HOME/.mikutter/cache
 
@@ -94,10 +97,10 @@ setopt transient_rprompt
 #GIT_PS1_DESCRIBE_STYLE="branch"
 #GIT_PS1_SHOWCOLORHINTS=0
 
-KAO_TMP="(｡╹ω╹｡"
+KAO_TMP="(*'-'"
 KAO="$KAO_TMP)"
 KAOP="$KAO_TMP%)"
-KAO_KANASHI="(｡>ω<｡"
+KAO_KANASHI="(*'~'"
 KAO_K="$KAO_KANASHI%)"
 
 PROMPT="
@@ -121,6 +124,9 @@ alias ls="ls --color=auto -GF"
 ##RVM ###
 if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
 
+##rakudobrew ###
+eval "$(rakudobrew init -)"
+
 ##Aliases ###
 alias l="ls -I contestapplet.conf -I contestapplet.conf.bak"
 alias la="ls -A"
@@ -131,6 +137,8 @@ alias zshrc="vim $HOME/.zshrc"
 alias vimrc="vim $HOME/.vimrc"
 alias xmonadrc="vim $HOME/.xmonad/xmonad.hs"
 
+alias reload="source $HOME/.zshrc"
+
 #alias cabal="LANG=C cabal"
 
 alias ocaml="$RLWRAP_COMMAND ocaml"
@@ -139,10 +147,14 @@ alias ocamltter="$RLWRAP_COMMAND ocamltter"
 alias scheme="$RLWRAP_COMMAND scheme"
 alias gosh="$RLWRAP_COMMAND gosh"
 
-alias dualdisp="xrandr --output VGA1 --auto --output LVDS1 --left-of VGA1"
-alias dualdisable="xrandr --output VGA1 --off"
+alias dualdisp="xrandr --output HDMI1 --auto --output eDP1 --left-of HDMI1"
+alias dualdisable="xrandr --output HDMI1 --off"
 
-# OPAM configuration
+alias weather="curl -4 wttr.in/Kumamoto"
+
+alias msfconsole="msfconsole -x \"db_connect ${USER}@msf\""
+
+## OPAM configuration ###
 . /$HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
