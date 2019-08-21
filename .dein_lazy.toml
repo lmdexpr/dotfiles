@@ -1,0 +1,25 @@
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+on_path = '.*'
+
+[[plugins]]
+repo = 'jiangmiao/auto-pairs'
+on_i = 1
+
+[[plugins]]
+repo = 'Shougo/neoyank.vim'
+on_path = '.*'
+on_i = 1
+
+[[plugins]]
+repo = 'Shougo/unite.vim'
+depends = 'neomru.vim'
+
+[[plugins]]
+repo = "OmniSharp/omnisharp-vim"
+on_ft = ["cs"]
+build = "xbuild server/OmniSharp.sln"
+
+[[plugins]]
+repo = "Robzz/deoplete-omnisharp"
+on_source = ["deoplete.nvim"]
