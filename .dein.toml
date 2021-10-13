@@ -80,3 +80,6 @@ repo = 'derekwyatt/vim-scala'
 
 [[plugins]]
 repo = 'ElmCast/elm-vim'
+
+[[plugins]]
+repo = 'copy/deoplete-ocaml'
