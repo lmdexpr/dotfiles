@@ -1,5 +1,7 @@
 filetype off
 
+set mouse=a
+
 set fileencodings=utf-8,euc-jp,sjis
 
 "----------------------Color Setting Start----------------------------------
@@ -79,7 +81,7 @@ smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 " SuperTab like snippets behavior.
-"imap <expr><TAB> neosnippet#expandable_or_jumpable() ? 
+"imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 "      \"\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
       \"\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
@@ -159,41 +161,32 @@ endfunction
 noremap <c-e> :<c-u>:call ExecuteNERDTree()<cr>
 "-----------------------NerdTree Setting Complete---------------------------
 
+"-----------------------ALE Setting Start-----------------------------------
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+nmap <silent> <M-b> <Plug>(ale_go_to_definition_in_vsplit)
+
+let g:ale_fix_on_save                 = 1
+
+let g:ale_linters = {
+\   'ocaml':      ['merlin'],
+\}
+
+let g:ale_fixers = {
+\   'ocaml':      ['ocamlformat'],
+\   '*':          ['remove_trailing_lines', 'trim_whitespace'],
+\}
+"-----------------------ALE Setting Complete--------------------------------
+
 set completeopt-=preview
 
-if (&filetype=='ocaml')
-  " ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
-  let s:opam_share_dir = system("opam var share")
-  let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+let s:opam_share_dir = system("opam var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
 
-  let s:opam_configuration = {}
-
-  function! OpamConfOcpIndent()
-    execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-  endfunction
-  let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
-
-  function! OpamConfOcpIndex()
-    execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-  endfunction
-  let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
-
-  function! OpamConfMerlin()
-    let l:dir = s:opam_share_dir . "/merlin/vim"
-    execute "set rtp+=" . l:dir
-  endfunction
-  let s:opam_configuration['merlin'] = function('OpamConfMerlin')
-
-  let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
-  let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
-  let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
-  for tool in s:opam_packages
-    " Respect package order (merlin should be after ocp-index)
-    if count(s:opam_available_tools, tool) > 0
-      call s:opam_configuration[tool]()
-    endif
-  endfor
-  " ## end of OPAM user-setup addition for vim / base ## keep this line
-endif
+execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+execute "set rtp+=" . s:opam_share_dir . "/merlin/vim"
 
 filetype plugin indent on
