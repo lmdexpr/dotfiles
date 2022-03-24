@@ -7,6 +7,7 @@ set fileencodings=utf-8,euc-jp,sjis
 "----------------------Color Setting Start----------------------------------
 set termguicolors
 set t_Co=256
+set t_ut=
 set number
 syntax enable
 
@@ -168,7 +169,7 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 nmap <silent> <M-b> <Plug>(ale_go_to_definition_in_vsplit)
 
-let g:ale_fix_on_save                 = 1
+let g:ale_fix_on_save = 1
 
 let g:ale_linters = {
 \   'ocaml':      ['merlin'],
@@ -188,5 +189,10 @@ let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
 execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
 execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
 execute "set rtp+=" . s:opam_share_dir . "/merlin/vim"
+
+let s:opam_bin_dir = system("opam var bin")
+let s:opam_bin_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+execute "set rtp+=" . s:opam_bin_dir . "/ocamlformat"
 
 filetype plugin indent on
