@@ -17,48 +17,12 @@ hook_post_update = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
+repo = 'lewis6991/impatient.nvim'
 hook_add = '''
-let g:deoplete#enable_at_startup   = 1
-inoremap <expr><tab> pumvisible() ? "\<C-n>" :
-        \ neosnippet#expandable_or_jumpable() ?
-        \    "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
+lua << EOF
+require('impatient')
+EOF
 '''
-on_i = 1
-
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-depends = ['neosnippet-snippets', 'context_filetype.vim']
-on_i = 1
-hook_source = '''
-" Plugin key-mappings.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-"imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-"smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-"xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <expr><TAB>
- \ pumvisible() ? "\<C-n>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-imap <expr><CR>
-\ (pumvisible() && neosnippet#expandable()) ? "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
-
-
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" For conceal markers.
-"if has('conceal')
-"  set conceallevel=2 concealcursor=niv
-"endif
-'''
-
-[[plugins]]
-repo = 'Shougo/neosnippet-snippets'
 
 [[plugins]]
 repo = 'cespare/vim-toml'
@@ -73,18 +37,63 @@ hook_add = '''
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
+hook_add = '''
+  let file_name = expand("%:p")
+
+  if has('vim_starting') && file_name == ""
+    autocmd VimEnter * call ExecuteNERDTree()
+  endif
+
+  function! ExecuteNERDTree()
+    if !exists('g:nerdtatus')
+      execute 'NERDTree ./'
+      let g:windowWidth = winwidth(winnr())
+      let g:nerdtreebuf = bufnr('')
+      let g:nerdstatus = 1
+
+    elseif g:nerdstatus == 1
+      execute 'wincmd t'
+      execute 'vertical resize' 0
+      execute 'wincmd p'
+      let g:nerdstatus = 2
+
+    elseif g:nerdstatus == 2
+      execute 'wincmd t'
+      execute 'vertical resize' g:windowWidth
+      let g:nerdstatus = 1
+
+    endif
+  endfunction
+
+  noremap <c-e> :<c-u>:call ExecuteNERDTree()<cr>
+'''
 
 [[plugins]]
-repo = 'derekwyatt/vim-scala'
+repo = 'Shougo/context_filetype.vim'
 
 [[plugins]]
-repo = 'ElmCast/elm-vim'
+repo = 'nvim-lua/plenary.nvim'
 
 [[plugins]]
-repo = 'copy/deoplete-ocaml'
-
-[[plugins]]
-repo = 'dense-analysis/ale'
-
-[[plugins]]
-repo = 'vlime/vlime'
+repo = 'vim-denops/denops.vim'
+hook_add = '''
+  if executable("typescript-language-server")
+    " グローバルインストールされたnpmモジュールの保存場所
+    let s:npm_root = trim(system("npm root -g"))
+    " vim-lspのinitialization_optionsを使用して、typescript-deno-pluginのインストール場所をtypescript-language-serverへ伝えます
+    let s:has_typescript_deno_plugin = isdirectory(s:npm_root . "/typescript-deno-plugin")
+    let s:plugins = s:has_typescript_deno_plugin
+      \ ? [{ "name": "typescript-deno-plugin", "location": s:npm_root }]
+      \ : []
+    augroup LspTypeScript
+      autocmd!
+      autocmd User lsp_setup call lsp#register_server({
+      \   "name": "typescript-language-server",
+      \   "cmd": {server_info -> ["typescript-language-server", "--stdio"]},
+      \   "root_uri": {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+      \   "whitelist": ["typescript", "typescript.tsx"],
+      \   "initialization_options": { "plugins": s:plugins },
+      \ })
+    augroup END
+  endif
+'''
