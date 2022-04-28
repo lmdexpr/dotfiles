@@ -147,6 +147,7 @@ lua << EOF
   map("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
   map("n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
   map("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>")
+  map("n", "<space>r", "<cmd>lua vim.lsp.buf.rename()<CR>")
   ------------------------------------------------
   -- command
   ------------------------------------------------
@@ -169,6 +170,7 @@ EOF
   " TVP
   :command TVP  lua require("metals.tvp").toggle_tree_view()
   :command TVPR lua require("metals.tvp").reveal_in_tree()
+  autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
 '''
 
 [[plugins]]
@@ -185,7 +187,7 @@ lua << EOF
   -- after the language server attaches to the current buffer
   local on_attach = function(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -201,8 +203,15 @@ lua << EOF
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  require'lspconfig'.ocamllsp.setup{
-    on_attach = on_attach
-  }
+  local servers = { 'ocamllsp', 'intelephense' }
+  for _, lsp in pairs(servers) do
+    require('lspconfig')[lsp].setup{
+      on_attach = on_attach
+    }
+  end
 EOF
 '''
+
+[[plugins]]
+repo = 'whonore/Coqtail'
+on_ft = 'coq'

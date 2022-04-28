@@ -36,37 +36,53 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'scrooloose/nerdtree'
+repo = 'antoinemadec/FixCursorHold.nvim'
+hook_add = 'let g:cursorhold_updatetime = 100'
+
+[[plugins]]
+repo = 'lambdalisue/fern.vim'
 hook_add = '''
-  let file_name = expand("%:p")
+  function! s:init_fern() abort
+    nmap <buffer><expr>
+        \ <Plug>(fern-my-open-expand-collapse)
+        \ fern#smart#leaf(
+        \   "\<Plug>(fern-action-open:select)",
+        \   "\<Plug>(fern-action-expand)",
+        \   "\<Plug>(fern-action-collapse)",
+        \ )
+    nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
+    nmap <buffer> o <Plug>(fern-my-open-expand-collapse)
+    nmap <buffer> mf <Plug>(fern-action-new-file)
+    nmap <buffer> md <Plug>(fern-action-new-dir)
+    nmap <buffer> D <Plug>(fern-action-remove)
+    nmap <buffer> mv <Plug>(fern-action-move)
+    nmap <buffer> r <Plug>(fern-action-rename)
+    nmap <buffer> s <Plug>(fern-action-open:split)
+    nmap <buffer> v <Plug>(fern-action-open:vsplit)
+    nmap <buffer> R <Plug>(fern-action-reload)
 
-  if has('vim_starting') && file_name == ""
-    autocmd VimEnter * call ExecuteNERDTree()
-  endif
+    nmap <buffer> <nowait> d <Plug>(fern-action-hidden:toggle)
+    nmap <buffer> <nowait> < <Plug>(fern-action-leave)
+    nmap <buffer> <nowait> > <Plug>(fern-action-enter)
 
-  function! ExecuteNERDTree()
-    if !exists('g:nerdtatus')
-      execute 'NERDTree ./'
-      let g:windowWidth = winwidth(winnr())
-      let g:nerdtreebuf = bufnr('')
-      let g:nerdstatus = 1
-
-    elseif g:nerdstatus == 1
-      execute 'wincmd t'
-      execute 'vertical resize' 0
-      execute 'wincmd p'
-      let g:nerdstatus = 2
-
-    elseif g:nerdstatus == 2
-      execute 'wincmd t'
-      execute 'vertical resize' g:windowWidth
-      let g:nerdstatus = 1
-
-    endif
+    nmap <buffer> q :<C-u>quit<CR>
   endfunction
 
-  noremap <c-e> :<c-u>:call ExecuteNERDTree()<cr>
+  augroup fern-custom
+    autocmd! *
+    autocmd FileType fern call s:init_fern()
+  augroup END
+
+  augroup fern_enter
+    autocmd!
+    autocmd VimEnter * ++nested Fern . -reveal=% -drawer
+  augroup END
+
+  nnoremap <silent><C-e> :Fern . -reveal=% -drawer -toggle<CR>
 '''
+
+[[plugins]]
+repo = 'lambdalisue/fern-git-status.vim'
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
@@ -96,4 +112,37 @@ hook_add = '''
       \ })
     augroup END
   endif
+'''
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+hook_post_update = 'TSUpdate'
+
+[[plugins]]
+repo = 'nvim-telescope/telescope.nvim'
+hook_add = '''
+  nmap <Space> [telescope]
+  nnoremap <silent> [telescope]p <cmd>lua
+    \ require('telescope.builtin').find_files{
+    \ }<cr>
+  nnoremap <silent> [telescope]hp <cmd>lua
+    \ require('telescope.builtin').find_files{
+    \   hidden = true,
+    \ }<cr>
+  nnoremap <silent> [telescope]b  <cmd>lua
+    \ require('telescope.builtin').buffers{
+    \  ignore_current_buffer = true,
+    \  sort_lastused = true,
+    \ }<cr>
+  nnoremap <silent> [telescope]gr <cmd>lua
+    \ require('telescope.builtin').live_grep{
+    \ }<cr>
+  nnoremap <silent> [telescope]gs  <cmd>lua
+    \ require('telescope.builtin').git_status{
+    \ }<cr>
+lua << EOF
+require('telescope').setup{
+  -- 設定が必要になったらここへ
+}
+EOF
 '''
