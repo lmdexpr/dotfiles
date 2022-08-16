@@ -203,7 +203,7 @@ lua << EOF
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  local servers = { 'ocamllsp', 'intelephense' }
+  local servers = { 'ocamllsp', 'intelephense', 'rust_analyzer' }
   for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup{
       on_attach = on_attach
@@ -215,3 +215,7 @@ EOF
 [[plugins]]
 repo = 'whonore/Coqtail'
 on_ft = 'coq'
+
+[[plugins]]
+repo = 'rescript-lang/vim-rescript'
+on_ft = 'rescript'

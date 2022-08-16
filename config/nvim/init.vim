@@ -18,6 +18,12 @@ highlight Normal ctermbg=none
 set tabstop=2
 set shiftwidth=2
 
+augroup vimrc-filetype
+  autocmd!
+  autocmd BufNewFile,BufRead *.php set filetype=php
+  autocmd FileType php setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
+augroup END
+
 set expandtab
 
 set nocindent
@@ -56,8 +62,8 @@ execute 'set runtimepath^=' . s:dein_repo_dir
 if dein#load_state(s:dein_dir)
 	call dein#begin(s:dein_dir)
 
-	let s:toml = '~/.dein.toml'
-	let s:lazy_toml = '~/.dein_lazy.toml'
+	let s:toml = '~/.config/nvim/dein.toml'
+	let s:lazy_toml = '~/.config/nvim/dein_lazy.toml'
 	call dein#load_toml(s:toml, {'lazy': 0})
 	call dein#load_toml(s:lazy_toml, {'lazy': 1})
 
