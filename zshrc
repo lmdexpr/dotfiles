@@ -1,16 +1,9 @@
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Customize to your needs...
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # OPAM configuration
 . /home/yuki/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
@@ -25,8 +18,8 @@ alias vim='nvim'
 
 alias zshrc="nvim $HOME/.zshrc"
 alias nvimrc="nvim $XDG_CONFIG_HOME/nvim/init.vim"
-alias plugins="nvim $HOME/.dein.toml"
-alias plugins_lazy="nvim $HOME/.dein_lazy.toml"
+alias plugins="nvim $XDG_CONFIG_HOME/nvim/dein.toml"
+alias plugins_lazy="nvim $XDG_CONFIG_HOME/nvim/dein_lazy.toml"
 
 alias reload="source $HOME/.zshrc"
 

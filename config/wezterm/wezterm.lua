@@ -14,7 +14,7 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 end)
 
 return {
-  font = wezterm.font("Ricty for Powerline"),
+  font = wezterm.font("Ricty for Powerline", { freetype_load_target = 'HorizontalLcd' }),
   use_ime = true,
   font_size = 18.0,
   color_scheme = "iceberg-dark",
@@ -25,7 +25,6 @@ return {
     {key = "x", mods = "LEADER", action = wezterm.action {CloseCurrentTab = {confirm=true}}},
     {key = "p", mods = "LEADER", action = wezterm.action {ActivateTabRelative = -1}},
     {key = "n", mods = "LEADER", action = wezterm.action {ActivateTabRelative = 1}},
-
     {key = "1", mods = "LEADER", action = wezterm.action {ActivateTab = 0}},
     {key = "2", mods = "LEADER", action = wezterm.action {ActivateTab = 1}},
     {key = "3", mods = "LEADER", action = wezterm.action {ActivateTab = 2}},
@@ -35,15 +34,13 @@ return {
     {key = "|", mods = "LEADER", action = wezterm.action {SplitHorizontal = {domain = "CurrentPaneDomain"} }},
     {key = "-", mods = "LEADER", action = wezterm.action {SplitVertical = {domain = "CurrentPaneDomain"} }},
     {key = "*", mods = "LEADER", action = wezterm.action {CloseCurrentPane = {confirm=false}}},
-
     {key = "l", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Right"}},
     {key = "h", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Left"}},
     {key = "k", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Up"}},
     {key = "j", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Down"}},
-
-    {key = "l", mods = "LEADER", action = wezterm.action {AdjustPaneSize = "Right", 1}},
-    {key = "h", mods = "LEADER", action = wezterm.action {AdjustPaneSize = "Left", 1}},
-    {key = "k", mods = "LEADER", action = wezterm.action {AdjustPaneSize = "Up", 1}},
-    {key = "j", mods = "LEADER", action = wezterm.action {AdjustPaneSize = "Down", 1}},
+    {key = "l", mods = "LEADER|SHIFT", action = wezterm.action {AdjustPaneSize = { "Right", 1}}},
+    {key = "h", mods = "LEADER|SHIFT", action = wezterm.action {AdjustPaneSize = { "Left", 1}}},
+    {key = "k", mods = "LEADER|SHIFT", action = wezterm.action {AdjustPaneSize = { "Up", 1}}},
+    {key = "j", mods = "LEADER|SHIFT", action = wezterm.action {AdjustPaneSize = { "Down", 1}}},
   }
 }
