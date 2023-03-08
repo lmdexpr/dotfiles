@@ -5,11 +5,14 @@ fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# OPAM configuration
-. /home/yuki/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+# asdf
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 export XDG_CONFIG_HOME=$HOME/.config
 export RLWRAP_COMMAND=`which rlwrap`
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
 
 # Aliases
 alias cls='clear;ls'
@@ -28,4 +31,3 @@ alias ocamltter="$RLWRAP_COMMAND ocamltter"
 
 alias scheme="$RLWRAP_COMMAND scheme"
 alias gosh="$RLWRAP_COMMAND gosh"
-

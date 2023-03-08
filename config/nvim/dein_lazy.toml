@@ -13,7 +13,8 @@ hook_source = '''
   inoremap <silent><expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
   " バックスペース時に補完を行うための設定。マニュアルにはちらつくからOFFがデフォルトとある。気になるようならこの設定は消す。
   call ddc#custom#patch_global('backspaceCompletion', 'v:true')
-  call ddc#custom#patch_global('sources', ['file', 'vsnip', 'nvim-lsp', 'deoppet', 'around'])
+  call ddc#custom#patch_global('ui', 'native')
+  call ddc#custom#patch_global('sources', ['file', 'vsnip', 'nvim-lsp', 'around'])
   call ddc#custom#patch_global('sourceOptions', {
        \ '_': {
        \   'matchers': ['matcher_head'],
@@ -22,7 +23,6 @@ hook_source = '''
        \   'minAutoCompleteLength': 1
        \ },
        \ 'around': {'mark': 'A'},
-       \ 'deoppet': {'dup': v:true, 'mark': 'dp'},
        \ 'file': {
        \   'mark': 'F',
        \   'isVolatile': v:true,
@@ -41,6 +41,10 @@ hook_source = '''
   call ddc#enable()
   let g:ale_completion_enabled = 1
 '''
+
+[[plugins]]
+repo = 'Shougo/ddc-ui-native'
+on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'LumaKernel/ddc-file'
@@ -73,23 +77,6 @@ hook_source = 'call popup_preview#enable()'
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
-
-[[plugins]]
-repo = 'Shougo/deoppet.nvim'
-depends = ['neosnippet-snippets', 'context_filetype.vim']
-on_source = 'ddc.vim'
-on_event = 'InsertEnter'
-hook_source = '''
-  call deoppet#initialize()
-  call deoppet#custom#option('snippets',
-  \ map(globpath(&runtimepath, 'neosnippets', 1, 1),
-  \     { _, val -> { 'path': val } }))
-  imap <C-k>  <Plug>(deoppet_expand)
-  imap <C-f>  <Plug>(deoppet_jump_forward)
-  imap <C-b>  <Plug>(deoppet_jump_backward)
-  smap <C-f>  <Plug>(deoppet_jump_forward)
-  smap <C-b>  <Plug>(deoppet_jump_backward)
-'''
 
 [[plugins]]
 repo = 'hrsh7th/vim-vsnip-integ'
@@ -146,7 +133,7 @@ lua << EOF
   map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>")
   map("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
   map("n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-  map("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>")
+  map("n", "<space>f", "<cmd>lua vim.lsp.buf.format { async = true } <CR>")
   map("n", "<space>r", "<cmd>lua vim.lsp.buf.rename()<CR>")
   ------------------------------------------------
   -- command
@@ -198,23 +185,31 @@ lua << EOF
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.format { async = true }<CR>', opts)
   end
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  local servers = { 'ocamllsp', 'intelephense', 'rust_analyzer' }
+  local servers = { 'ocamllsp', 'intelephense', 'rust_analyzer', 'gopls' }
   for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup{
       on_attach = on_attach
     }
   end
+
+  local configs = require'lspconfig/configs'
+  configs.coqlsp = {
+    default_config = {
+      cmd = {'coq-lsp', '--std'};
+      filetypes = {'coq'};
+      root_dir = function(fname)
+        return lspconfig.util.find_git_ancestor(fname) or vim.loop.os_homedir()
+        end;
+      settings = {};
+    };
+  }
 EOF
 '''
-
-[[plugins]]
-repo = 'whonore/Coqtail'
-on_ft = 'coq'
 
 [[plugins]]
 repo = 'rescript-lang/vim-rescript'

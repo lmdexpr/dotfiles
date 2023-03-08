@@ -35,6 +35,15 @@ hook_add = '''
   au MyAutoCmd VimEnter * nested colorscheme hybrid
 '''
 
+# [[plugins]]
+# repo = 'catppuccin/nvim'
+# depends = ['fern.vim', 'telescope.nvim', 'nvim-treesitter']
+# hook_add = '''
+# let g:catppuccin_flavour = "mocha"
+# lua require("catppuccin").setup()
+# colorscheme catppuccin
+# '''
+
 [[plugins]]
 repo = 'antoinemadec/FixCursorHold.nvim'
 hook_add = 'let g:cursorhold_updatetime = 100'
@@ -115,30 +124,65 @@ repo = 'nvim-treesitter/nvim-treesitter'
 hook_post_update = 'TSUpdate'
 
 [[plugins]]
-repo = 'nvim-telescope/telescope.nvim'
+repo = 'nvim-tree/nvim-web-devicons'
+
+[[plugins]]
+repo = 'akinsho/bufferline.nvim'
+tag = 'v3.*'
 hook_add = '''
-  nmap <Space> [telescope]
-  nnoremap <silent> [telescope]p <cmd>lua
-    \ require('telescope.builtin').find_files{
-    \ }<cr>
-  nnoremap <silent> [telescope]hp <cmd>lua
-    \ require('telescope.builtin').find_files{
-    \   hidden = true,
-    \ }<cr>
-  nnoremap <silent> [telescope]b  <cmd>lua
-    \ require('telescope.builtin').buffers{
-    \  ignore_current_buffer = true,
-    \  sort_lastused = true,
-    \ }<cr>
-  nnoremap <silent> [telescope]gr <cmd>lua
-    \ require('telescope.builtin').live_grep{
-    \ }<cr>
-  nnoremap <silent> [telescope]gs  <cmd>lua
-    \ require('telescope.builtin').git_status{
-    \ }<cr>
+set termguicolors
 lua << EOF
-require('telescope').setup{
-  -- 設定が必要になったらここへ
+require("bufferline").setup{
+  options = {
+    mode = "buffers",
+    buffer_close_icon = 'x',
+    modified_icon = '●',
+    close_icon = '',
+    left_trunc_marker = '',
+    right_trunc_marker = '',
+    max_name_length = 18,
+    max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
+    truncate_names = true, -- whether or not tab names should be truncated
+    tab_size = 18,
+    diagnostics = "nvim_lsp",
+    diagnostics_update_in_insert = false,
+    always_show_bufferline = false,
+    hover = { enabled = true, delay = 200, reveal = {'close'} },
+  }
 }
 EOF
+'''
+
+[[plugins]]
+repo = 'nvim-telescope/telescope.nvim'
+hook_add = '''
+nmap <Space> [telescope]
+nnoremap <silent> [telescope]p <cmd>lua require('telescope.builtin').find_files{}<cr>
+nnoremap <silent> [telescope]hp <cmd>lua require('telescope.builtin').find_files{ hidden = true }<cr>
+nnoremap <silent> [telescope]b  <cmd>lua require('telescope.builtin').buffers{ ignore_current_buffer = true, sort_lastused = true }<cr>
+nnoremap <silent> [telescope]gr <cmd>lua require('telescope.builtin').live_grep{}<cr>
+nnoremap <silent> [telescope]gs  <cmd>lua require('telescope.builtin').git_status{}<cr>
+lua require('telescope').setup{}
+'''
+
+[[plugins]]
+repo = 'wakatime/vim-wakatime'
+
+[[plugins]]
+repo = 'whonore/Coqtail'
+hook_add = '''
+let g:coqtail_nomap = 1
+nmap <Space> [coqtail]
+
+nnoremap <silent> [coqtail]cc <Plug>CoqStart
+nnoremap <silent> [coqtail]cq <Plug>CoqStop
+
+nnoremap <silent> [coqtail]cj <Plug>CoqNext
+nnoremap <silent> [coqtail]ck <Plug>CoqUndo
+
+nnoremap <silent> [coqtail]cn <Plug>CoqToLine
+
+nnoremap <silent> [coqtail]cT <Plug>CoqToTop
+nnoremap <silent> [coqtail]cG <Plug>CoqJumpToEnd
+nnoremap <silent> [coqtail]cE <Plug>CoqJumpToError
 '''

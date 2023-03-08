@@ -37,7 +37,7 @@ set formatoptions+=mM
 "----------------------Indent Setting Complete------------------------------
 
 let g:python_host_prog = '/usr/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python3_host_prog = '/opt/homebrew/bin/python3'
 
 "----------------------Dein Setting Start-----------------------------------
 if &compatible
@@ -81,43 +81,6 @@ if dein#check_install()
 endif
 "----------------------Dein Setting Complete-------------------------------
 
-"-----------------------Tab Page Setting Start------------------------------
-" Anywhere SID.
-function! s:SID_PREFIX()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-endfunction
-
-" Set tabline.
-function! s:my_tabline()  "{{{
-  let s = ''
-  for i in range(1, tabpagenr('$'))
-    let bufnrs = tabpagebuflist(i)
-    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
-    let no = i  " display 0-origin tabpagenr.
-    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
-    let title = fnamemodify(bufname(bufnr), ':t')
-    let title = '[' . title . ']'
-    let s .= '%'.i.'T'
-    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-    let s .= no . ':' . title
-    let s .= mod
-    let s .= '%#TabLineFill# '
-  endfor
-  let s .= '%#TabLineFill#%T%=%#TabLine#'
-  return s
-endfunction "}}}
-let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
-
-for n in range(1, 9)
-  execute 'nnoremap <silent> g'.n ':<C-u>tabnext'.n.'<CR>'
-endfor
-
-nmap <silent> gc :tabnew<CR>
-"-----------------------Tab Page Setting Complete---------------------------
-
-" return buffer
-nmap <silent> gb :bprevious<CR>
-
 set completeopt-=preview
 
 " for OCaml
@@ -132,4 +95,13 @@ let s:opam_bin_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
 
 execute "set rtp+=" . s:opam_bin_dir . "/ocamlformat"
 
+" no highlight
+nmap <silent> <Esc><Esc> :<C-u>nohlsearch<CR><Esc>
+
 filetype plugin indent on
+
+augroup Statusline
+  au!
+  au WinEnter,BufEnter * setlocal statusline=%!v:lua.require('statusline').active()
+  au WinLeave,BufLeave * setlocal statusline=%!v:lua.require('statusline').inactive()
+augroup END
