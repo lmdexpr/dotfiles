@@ -11,7 +11,7 @@ highlight.set {
   StatusLineVisual = { fg = '#ff9800', bg = 'NONE' },
   StatusLineReplace = { fg = '#ff5722', bg = 'NONE' },
   StatusLineCommand = { fg = '#8eacbb', bg = 'NONE' },
-  StatusLineInactive = { fg = '#708090', bg = 'NONE' },
+  StatusLineInactive = { fg = '#607080', bg = 'NONE' },
 }
 ---@return string
 local function mode()
@@ -99,7 +99,7 @@ function M.active()
 end
 
 function M.inactive()
-  return '%#StatusLineInactive#' .. '%F'
+  return '%#StatusLineInactive#' .. string.rep('━', vim.o.columns)
 end
 
 return M
