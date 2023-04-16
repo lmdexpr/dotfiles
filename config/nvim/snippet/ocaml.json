@@ -1,0 +1,134 @@
+{
+  "Bit_all": {
+    "prefix": "Bit_all",
+    "body": [
+      "module Bit_all = struct",
+      "  open Iter",
+      "  let on x i = x land (1 lsl (i - 1)) <> 0",
+      "",
+      "  let bits len = 0 -- (1 lsl len - 1)",
+      "  let by_bits x = map (fun bits -> (1 -- x) |> filter (on bits) |> map (fun x -> x - 1) |> to_array)",
+      "  let start x = by_bits x (bits x)",
+      "end"
+    ]
+  },
+  "ZipIter": {
+    "prefix": "ZipIter",
+    "body": [
+      "module Iter = struct",
+      "  include Iter",
+      "  let zip x y = flat_map (fun x -> map (fun y -> x, y) y) x",
+      "  let( * ) = zip",
+      "end"
+    ]
+  },
+  "OpIter": {
+    "prefix": "OpIter",
+    "body": [
+      "let (let+) x k = Iter.flat_map k x",
+      "and (let*) x k = Iter.map k x",
+      "and (let^) x k = Iter.filter_map k x"
+    ]
+  },
+  "Graph": {
+    "prefix": "Graph",
+    "body": [
+      "module Graph = struct",
+      "  include Hashtbl",
+      "  let push v = function",
+      "    | None     -> Iter.singleton v",
+      "    | Some acc -> Iter.cons v acc",
+      "  let push g v u = update g v ~f:(push u)",
+      "  let connect g v u = push g v u; push g u v",
+      "",
+      "  let around g v = find g v |> Option.value ~default:Iter.empty",
+      "end",
+      "let g = Graph.create ~size:n (module Int)",
+      "let () =",
+      "  for _ = 1 to m do",
+      "    scanf \" %d %d\" @@ Graph.connect g",
+      "  done"
+    ]
+  },
+  "Modulo": {
+    "prefix": "Modulo",
+    "body": [
+      "module Modulo (M : sig include Int_intf.S val modulo : t end) = struct",
+      "  open M",
+      "",
+      "  let rec inverse ?(b = modulo) ?(u = one) ?(v = zero) a =",
+      "    if b = zero then (u % modulo + modulo) % modulo",
+      "      else",
+      "      let t = a / b in",
+      "      let a, b = b, a - t * b in",
+      "      let u, v = v, u - t * v in",
+      "      inverse ~b ~u ~v a",
+      "  let power a b =",
+      "    Array.init num_bits ~f:ident",
+      "    |> Array.fold ~init:(one, a) ~f:(fun (p, q) i ->",
+      "      if b land (one lsl i) <> zero then p * q % modulo, q * q % modulo",
+      "      else",
+      "        p, q * q % modulo",
+      "      )",
+      "    |> Tuple2.get1",
+      "",
+      "  let ( + ) a b = (a + b) % modulo",
+      "  let ( * ) a b = (a * b) % modulo",
+      "  let ( / ) a b = a * inverse b",
+      "  let ( ** ) a b = power a b",
+      "end"
+    ]
+  },
+  "Permutation": {
+    "prefix": "Permutation",
+    "body": [
+      "module Array = struct",
+      "  include Array",
+      "  let rec reverse a ~start ~stop =",
+      "    if start < stop then begin",
+      "      Array.swap a start stop;",
+      "      reverse a ~start:(start + 1) ~stop:(stop - 1)",
+      "    end",
+      "end",
+      "",
+      "module Permutation = struct",
+      "  let next a ~l ~r =",
+      "    let downto_loop ~start ~stop ~p ~proc =",
+      "      Iter.(start --^ stop) |> Fn.flip Iter.fold_while false",
+      "      @@ fun _ i -> if p i then (proc i; true, `Stop) else false, `Continue",
+      "    in",
+      "    let change_to_next_permutation a ~l ~r =",
+      "      downto_loop ~start:(r - 1) ~stop:l",
+      "        ~p:(fun i -> a.(l) < a.(i))",
+      "        ~proc:(fun i ->",
+      "            Array.swap a l i;",
+      "            Array.reverse a ~start:(l + 1) ~stop:(r - 1)",
+      "          )",
+      "    in",
+      "    downto_loop ~start:(r - 2) ~stop:l",
+      "      ~p:(fun i -> a.(i) < a.(i + 1) && change_to_next_permutation a ~l:i ~r)",
+      "      ~proc:ignore",
+      "",
+      "  let iter n ~f ~acc =",
+      "    let nums = Array.init n ~f:ident in",
+      "    let rec permutations acc =",
+      "      let acc = f acc nums in",
+      "      let found_next = next nums ~l:0 ~r:n in",
+      "      if found_next then permutations acc else acc",
+      "    in",
+      "  permutations acc",
+      "end"
+    ]
+  },
+  "binary_search": {
+    "prefix": "binary_search",
+    "body": [
+      "let rec binsearch ~ok left right =",
+      "  if abs (right - left) <= 1 then right",
+      "  else",
+      "    let mid = (right + left) / 2 in",
+      "    let left, right = if ok mid then left, mid else mid, right in",
+      "    binsearch ~ok left right"
+    ]
+  }
+}

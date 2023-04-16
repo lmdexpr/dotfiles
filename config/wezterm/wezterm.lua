@@ -14,7 +14,7 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 end)
 
 return {
-  font = wezterm.font("Ricty for Powerline", { freetype_load_target = 'HorizontalLcd' }),
+  font = wezterm.font("Ricty for Powerline"),
   use_ime = true,
   font_size = 16.0,
   color_scheme = "iceberg-dark",
