@@ -29,9 +29,8 @@ alias cls='clear;ls'
 alias vim='nvim'
 
 alias zshrc="nvim $HOME/.zshrc"
-alias nvimrc="nvim $XDG_CONFIG_HOME/nvim/init.vim"
-alias plugins="nvim $XDG_CONFIG_HOME/nvim/dein.toml"
-alias plugins_lazy="nvim $XDG_CONFIG_HOME/nvim/dein_lazy.toml"
+alias nvimrc="nvim $XDG_CONFIG_HOME/nvim/init.lua"
+alias plugins="nvim $XDG_CONFIG_HOME/nvim/lua/plugins.lua"
 
 alias reload="source $HOME/.zshrc"
 

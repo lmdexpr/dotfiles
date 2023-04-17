@@ -7,12 +7,19 @@ return {
   },
 
   {
-    'catppuccin/nvim',
-    dependencies = { 'telescope.nvim', 'nvim-treesitter' },
-    config = function()
-      local catppuccin_config = require('plugins.catppuccin').config()
-      require("catppuccin").setup(catppuccin_config)
-      vim.cmd.colorscheme "catppuccin"
+    'neanias/everforest-nvim',
+    lazy = false,
+    priority = 1000,
+    config = function ()
+      require("everforest").setup({
+        background = "hard",
+
+        transparent_background_level = 0,
+
+        italics = false,
+        disable_italic_comments = false,
+      })
+      require("everforest").load()
     end
   },
 
@@ -22,15 +29,22 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function ()
       local builtin = require('telescope.builtin')
-      vim.keymap.set('n', '<Space>ff', builtin.find_files, {})
-      vim.keymap.set('n', '<Space>b', builtin.buffers, {})
-      vim.keymap.set('n', '<Space>r', builtin.live_grep, {})
-      vim.keymap.set('n', '<Space>g', builtin.git_status, {})
+      vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+      vim.keymap.set('n', '<leader>b', builtin.buffers, {})
+      vim.keymap.set('n', '<leader>r', builtin.live_grep, {})
+      vim.keymap.set('n', '<leader>g', builtin.git_status, {})
 
       local ts = require('telescope')
       local ts_actions = require("telescope.actions")
 
       ts.setup {
+        defaults = {
+          mappings = {
+            i = {
+              ["<C-q>"] = ts_actions.close
+            }
+          }
+        },
         extensions = {
           file_browser = {
             dir_icon = "",
@@ -40,12 +54,50 @@ return {
         }
       }
       ts.load_extension('file_browser')
-      vim.keymap.set('n', '<Space>fb', ':Telescope file_browser<CR>', {})
+      vim.keymap.set('n', '<leader>fb', ':Telescope file_browser<CR>', {})
     end
   },
   {
     'nvim-telescope/telescope-file-browser.nvim',
     dependencies = { 'nvim-telescope/telescope.nvim' ,'nvim-lua/plenary.nvim' },
+  },
+  {
+    'lambdalisue/fern.vim',
+    dependencies = {
+      'lambdalisue/fern-git-status.vim',
+      'lambdalisue/nerdfont.vim',
+      'lambdalisue/fern-renderer-nerdfont.vim',
+      'lambdalisue/glyph-palette.vim'
+    },
+    config = function ()
+      vim.keymap.set('n', '<C-e>', ':<C-u>Fern . -reveal=% -drawer -toggle<CR>', { noremap = true, silent = true })
+      vim.g["fern#renderer"] = 'nerdfont'
+    end
+  },
+  {
+    'dinhhuy258/git.nvim',
+    config = function ()
+      require('git').setup({
+        default_mappings = false,
+        keymaps = {
+          blame = "<Leader>gb",
+          quit_blame = "q",
+          blame_commit = "<CR>",
+
+          browse = "<Leader>go",
+
+          open_pull_request = "<Leader>gp",
+          create_pull_request = "<Leader>gn",
+
+          diff = "<Leader>gd",
+          diff_close = "<Leader>gD",
+
+          revert = "<Leader>gr",
+          revert_file = "<Leader>gR",
+        },
+        target_branch = "master",
+      })
+    end
   },
 
   {
@@ -118,7 +170,9 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     event = 'VeryLazy',
     config = function()
-      require('lualine').setup()
+      require('lualine').setup({
+        theme = 'auto',
+      })
     end
   },
   {
@@ -219,42 +273,38 @@ return {
     'scalameta/nvim-metals',
     ft = 'scala',
     config = function ()
-      local cmd = vim.cmd
-      local function map(mode, lhs, rhs, opts)
-        local options = { noremap = true }
-        if opts then
-          options = vim.tbl_extend("force", options, opts)
-        end
-        vim.api.nvim_set_keymap(mode, lhs, rhs, options)
-      end
-      ------------------------------------------------
-      -- global
-      ------------------------------------------------
       vim.opt_global.completeopt = { "menu", "noinsert", "noselect" }
       vim.opt_global.shortmess:remove("F"):append("c")
-      ------------------------------------------------
-      -- LSP mapping
-      ------------------------------------------------
-      map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
-      map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
-      map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-      map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>")
-      map("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-      map("n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-      map("n", "<space>f", "<cmd>lua vim.lsp.buf.format { async = true } <CR>")
-      map("n", "<space>r", "<cmd>lua vim.lsp.buf.rename()<CR>")
-      ------------------------------------------------
-      -- command
-      ------------------------------------------------
-      cmd([[augroup lsp]])
-      cmd([[autocmd!]])
-      cmd([[autocmd FileType scala setlocal omnifunc=v:lua.vim.lsp.omnifunc]])
-      -- Java のLSPも利用する場合はここがコンフリクトする可能性がある
-      cmd([[autocmd FileType java,scala,sbt lua require("metals").initialize_or_attach(metals_config)]])
-      cmd([[augroup end]])
-      ------------------------------------------------
-      -- Metals Settings
-      ------------------------------------------------
+
+      local function nmap(key, map)
+        local options = { noremap = true }
+        vim.api.nvim_set_keymap('n', key, map, options)
+      end
+      nmap("gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
+      nmap("gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+      nmap("gr", "<cmd>lua vim.lsp.buf.references()<CR>")
+      nmap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
+      nmap("<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+      nmap("<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+      nmap("<space>f", "<cmd>lua vim.lsp.buf.format { async = true } <CR>")
+      nmap("<space>r", "<cmd>lua vim.lsp.buf.rename()<CR>")
+
+      vim.api.nvim_create_augroup('lsp', {})
+      vim.api.nvim_create_autocmd('FileType', {
+        group = 'lsp',
+        pattern = 'scala',
+        callback = function ()
+          vim.opt_local.omnifunc = vim.lsp.omnifunc
+        end
+      })
+      vim.api.nvim_create_autocmd('FileType', {
+        group = 'lsp',
+        pattern = {'java', 'scala', 'sbt'},
+        callback = function ()
+          require('metals').initialize_or_attach(metals_config)
+        end
+      })
+
       metals_config = require("metals").bare_config()
       metals_config.settings = {
         excludedPackages = { "akka.actor.typed.javadsl" },
