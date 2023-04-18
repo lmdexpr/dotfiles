@@ -13,11 +13,19 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
   }
 end)
 
+local home = os.getenv("HOME")
+
 return {
   font = wezterm.font("Ricty for Powerline"),
   use_ime = true,
   font_size = 16.0,
-  color_scheme = "iceberg-dark",
+  color_scheme = 'Hybrid',
+  window_background_image = home .. "/.background.jpg",
+  window_background_image_hsb = {
+    brightness = 0.2,
+    hue = 1.0,
+    saturation = 1.0,
+  },
   adjust_window_size_when_changing_font_size = false,
   leader = { key="b", mods="CTRL" },
   keys = {

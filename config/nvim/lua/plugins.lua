@@ -27,6 +27,7 @@ return {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.1',
     dependencies = { 'nvim-lua/plenary.nvim' },
+    event = 'VeryLazy',
     config = function ()
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
@@ -59,6 +60,7 @@ return {
   },
   {
     'nvim-telescope/telescope-file-browser.nvim',
+    event = 'VeryLazy',
     dependencies = { 'nvim-telescope/telescope.nvim' ,'nvim-lua/plenary.nvim' },
   },
   {
@@ -69,13 +71,14 @@ return {
       'lambdalisue/fern-renderer-nerdfont.vim',
       'lambdalisue/glyph-palette.vim'
     },
+    cmd = 'Fern',
     config = function ()
-      vim.keymap.set('n', '<C-e>', ':<C-u>Fern . -reveal=% -drawer -toggle<CR>', { noremap = true, silent = true })
       vim.g["fern#renderer"] = 'nerdfont'
     end
   },
   {
     'dinhhuy258/git.nvim',
+    event = 'InsertEnter',
     config = function ()
       require('git').setup({
         default_mappings = false,
@@ -102,12 +105,46 @@ return {
 
   {
     'nvim-treesitter/nvim-treesitter',
-    build = ":TSUpdate"
+    build = ":TSUpdate",
+    event = 'InsertEnter'
   },
   {
-    'github/copilot.vim',
+    'zbirenbaum/copilot.lua',
+    event = 'InsertEnter',
+    dependencies = { 'github/copilot.vim' },
     config = function ()
-      vim.g.copilot_no_tab_map = true
+      require('copilot').setup({
+        panel = {
+          enabled = true,
+          auto_refresh = false,
+          keymap = {
+            jump_prev = "[[",
+            jump_next = "]]",
+            accept = "<CR>",
+            refresh = "gr",
+            open = "<M-CR>"
+          },
+          layout = {
+            position = "right", -- | top | left | right
+            ratio = 0.4
+          },
+        },
+        suggestion = {
+          enabled = true,
+          auto_trigger = false,
+          debounce = 75,
+          keymap = {
+            accept = "<C-j>",
+            accept_word = false,
+            accept_line = false,
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-]>",
+          },
+        },
+        copilot_node_command = 'node', -- Node.js version must be > 16.x
+        server_opts_overrides = {},
+      })
     end
   },
   {
@@ -139,15 +176,16 @@ return {
       vim.cmd('let g:vsnip_filetypes = {}')
     end
   },
-  {'hrsh7th/cmp-nvim-lsp', event = 'InsertEnter'}, 
-  {'hrsh7th/cmp-buffer', event = 'InsertEnter'},
-  {'hrsh7th/cmp-path', event = 'InsertEnter'},
-  {'hrsh7th/cmp-vsnip', event = 'InsertEnter'},
-  {'hrsh7th/cmp-cmdline', event = 'ModeChanged'},
-  {'hrsh7th/cmp-nvim-lsp-signature-help', event = 'InsertEnter'},
-  {'hrsh7th/cmp-nvim-lsp-document-symbol', event = 'InsertEnter'},
-  {'hrsh7th/cmp-calc', event = 'InsertEnter'},
-  {'onsails/lspkind.nvim', event = 'InsertEnter'},
+  {'hrsh7th/cmp-nvim-lsp',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-nvim-lsp-signature-help',  event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' }},
+  {'hrsh7th/cmp-nvim-lsp-document-symbol', event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' }},
+  {'onsails/lspkind.nvim',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-buffer',                   event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-path',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-vsnip',                    event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-cmdline',                  event = 'ModeChanged', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-calc',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'zbirenbaum/copilot-cmp',               event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp', 'zbirenbaum/copilot.lua' }}, 
 
   {
     'hrsh7th/vim-vsnip',
@@ -207,11 +245,13 @@ return {
     end
   },
 
-  'wakatime/vim-wakatime',
+  {
+    'wakatime/vim-wakatime',
+  },
 
   {
     'neovim/nvim-lspconfig',
-    event = 'BufEnter',
+    event = 'LspAttach',
     config = function ()
       local opts = { noremap=true, silent=true }
       vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
