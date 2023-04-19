@@ -71,9 +71,9 @@ return {
       'lambdalisue/fern-renderer-nerdfont.vim',
       'lambdalisue/glyph-palette.vim'
     },
-    cmd = 'Fern',
     config = function ()
       vim.g["fern#renderer"] = 'nerdfont'
+      vim.keymap.set('n', '<C-e>', ':<C-u>Fern . -reveal=% -drawer -toggle<CR>', { noremap = true, silent = true })
     end
   },
   {

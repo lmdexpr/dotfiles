@@ -33,9 +33,9 @@ return {
     {key = "h", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Left"}},
     {key = "k", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Up"}},
     {key = "j", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Down"}},
-    {key = "l", mods = "LEADER|SHIFT", action = wezterm.action {AdjustPaneSize = { "Right", 1}}},
-    {key = "h", mods = "LEADER|SHIFT", action = wezterm.action {AdjustPaneSize = { "Left", 1}}},
-    {key = "k", mods = "LEADER|SHIFT", action = wezterm.action {AdjustPaneSize = { "Up", 1}}},
-    {key = "j", mods = "LEADER|SHIFT", action = wezterm.action {AdjustPaneSize = { "Down", 1}}},
+    {key = "l", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Right", 1}}},
+    {key = "h", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Left", 1}}},
+    {key = "k", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Up", 1}}},
+    {key = "j", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Down", 1}}},
   }
 }

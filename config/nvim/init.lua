@@ -75,11 +75,6 @@ vim.opt.rtp:prepend(lazypath)
 local plugins = require('plugins')
 require('lazy').setup(plugins)
 
--------------
--- plugins --
--------------
-vim.keymap.set('n', '<C-e>', ':<C-u>Fern . -reveal=% -drawer -toggle<CR>', { noremap = true, silent = true })
-
 -----------
 -- OCaml --
 -----------
