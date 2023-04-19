@@ -6,10 +6,10 @@ return {
   font = wezterm.font("Ricty for Powerline"),
   use_ime = true,
   font_size = 16.0,
-  color_scheme = 'Hybrid',
+  color_scheme = "Hybrid",
   window_background_image = home .. "/.background.jpg",
   window_background_image_hsb = {
-    brightness = 0.2,
+    brightness = 0.1,
     hue = 1.0,
     saturation = 1.0,
   },

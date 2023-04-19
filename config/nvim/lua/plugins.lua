@@ -13,12 +13,8 @@ return {
     config = function ()
       require("everforest").setup({
         background = "hard",
-
-        transparent_background_level = 0,
-
-        italics = false,
-        disable_italic_comments = false,
       })
+
       require("everforest").load()
     end
   },
@@ -105,46 +101,19 @@ return {
 
   {
     'nvim-treesitter/nvim-treesitter',
-    build = ":TSUpdate",
-    event = 'InsertEnter'
+    build = function()
+      require("nvim-treesitter.install").update({ with_sync = true })
+    end,
+    config = function ()
+      require('nvim-treesitter').setup({})
+      vim.cmd(':TSEnable highlight')
+    end
   },
   {
-    'zbirenbaum/copilot.lua',
-    event = 'InsertEnter',
-    dependencies = { 'github/copilot.vim' },
+    'github/copilot.vim',
     config = function ()
-      require('copilot').setup({
-        panel = {
-          enabled = true,
-          auto_refresh = false,
-          keymap = {
-            jump_prev = "[[",
-            jump_next = "]]",
-            accept = "<CR>",
-            refresh = "gr",
-            open = "<M-CR>"
-          },
-          layout = {
-            position = "right", -- | top | left | right
-            ratio = 0.4
-          },
-        },
-        suggestion = {
-          enabled = true,
-          auto_trigger = false,
-          debounce = 75,
-          keymap = {
-            accept = "<C-j>",
-            accept_word = false,
-            accept_line = false,
-            next = "<M-]>",
-            prev = "<M-[>",
-            dismiss = "<C-]>",
-          },
-        },
-        copilot_node_command = 'node', -- Node.js version must be > 16.x
-        server_opts_overrides = {},
-      })
+      vim.g.copilot_no_tab_map = true
+      vim.api.nvim_set_keymap("i", "<C-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
     end
   },
   {
@@ -185,18 +154,15 @@ return {
   {'hrsh7th/cmp-vsnip',                    event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
   {'hrsh7th/cmp-cmdline',                  event = 'ModeChanged', dependencies = { 'hrsh7th/nvim-cmp' }}, 
   {'hrsh7th/cmp-calc',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'zbirenbaum/copilot-cmp',               event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp', 'zbirenbaum/copilot.lua' }}, 
 
   {
     'hrsh7th/vim-vsnip',
     event = 'InsertEnter',
     config = function ()
-      vim.api.nvim_set_keymap('i', '<C-j>', 'vsnip#expandable() ? "<Plug>(vsnip-expand)" : "<C-j>"', { expr = true })
-      vim.api.nvim_set_keymap('s', '<C-j>', 'vsnip#expandable() ? "<Plug>(vsnip-expand)" : "<C-j>"', { expr = true })
-      vim.api.nvim_set_keymap('i', '<C-f>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
-      vim.api.nvim_set_keymap('s', '<C-f>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
-      vim.api.nvim_set_keymap('i', '<C-b>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
-      vim.api.nvim_set_keymap('s', '<C-b>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
+      vim.api.nvim_set_keymap('i', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
+      vim.api.nvim_set_keymap('s', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
+      vim.api.nvim_set_keymap('i', '<C-h>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
+      vim.api.nvim_set_keymap('s', '<C-h>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
       vim.g.vsnip_snippet_dir = '~/.config/nvim/snippet'
     end
   },
