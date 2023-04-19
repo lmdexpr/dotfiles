@@ -16,7 +16,7 @@ return {
   adjust_window_size_when_changing_font_size = false,
   leader = { key="b", mods="CTRL" },
   keys = {
-    {key = "c", mods = "LEADER", action = wezterm.action {SpawnTab = "CurrentPaneDomain"}},
+    {key = "c", mods = "LEADER", action = wezterm.action {SpawnTab = "DefaultDomain"}},
     {key = "x", mods = "LEADER", action = wezterm.action {CloseCurrentTab = {confirm=true}}},
     {key = "p", mods = "LEADER", action = wezterm.action {ActivateTabRelative = -1}},
     {key = "n", mods = "LEADER", action = wezterm.action {ActivateTabRelative = 1}},
