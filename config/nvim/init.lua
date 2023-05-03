@@ -19,6 +19,7 @@ on_ft('php', function()
   vim.bo.tabstop     = 4
   vim.bo.softtabstop = 4
   vim.bo.shiftwidth  = 4
+  vim.bo.autoindent  = true
 end)
 
 vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
@@ -36,6 +37,8 @@ local options = {
   expandtab    = true,
   shiftwidth   = 2,
   tabstop      = 2,
+  autoindent   = true,
+  autoread     = true,
   number       = true,
   background   = "dark",
   showmatch    = true,

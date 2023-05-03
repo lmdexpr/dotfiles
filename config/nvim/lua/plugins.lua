@@ -51,7 +51,7 @@ return {
         }
       }
       ts.load_extension('file_browser')
-      vim.keymap.set('n', '<leader>fb', ':Telescope file_browser<CR>', {})
+      vim.keymap.set('n', '<leader>fb', ':Telescope file_browser path=%:p:h select_buffer=true<CR>', {})
     end
   },
   {
@@ -105,8 +105,17 @@ return {
       require("nvim-treesitter.install").update({ with_sync = true })
     end,
     config = function ()
-      require('nvim-treesitter').setup({})
+      require('nvim-treesitter').setup({
+        highlight = {
+          enable = true,
+        },
+        indent = {
+          enable = true,
+        }
+      })
+
       vim.cmd(':TSEnable highlight')
+      vim.cmd(':TSEnable indent')
     end
   },
   {
