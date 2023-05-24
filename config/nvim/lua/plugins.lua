@@ -252,36 +252,13 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-      local servers = { 'ocamllsp', 'intelephense', 'rust_analyzer', 'gopls', 'csharp_ls' }
+      local servers = { 'ocamllsp', 'intelephense', 'rust_analyzer', 'gopls', 'csharp_ls', 'coqlsp', 'satysfilsp' }
       for _, lsp in pairs(servers) do
         require('lspconfig')[lsp].setup{
-          on_attach = on_attach
+          on_attach = on_attach,
+          autostart = true,
         }
       end
-
-      local configs = require'lspconfig/configs'
-      configs.coqlsp = {
-        default_config = {
-          cmd = {'coq-lsp', '--std'},
-          filetypes = {'coq'},
-          root_dir =
-          function(name)
-            return lspconfig.util.find_git_ancestor(name) or vim.loop.os_homedir()
-          end,
-          settings = {},
-        };
-      }
-      configs.satysfilsp = {
-        default_config = {
-          cmd = {'satysfi-language-server'},
-          filetypes = {'satysfi'},
-          root_dir =
-          function(name)
-            return lspconfig.util.find_git_ancestor(name) or vim.loop.os_homedir()
-          end,
-          settings = {},
-        };
-      }
     end
   },
   {
@@ -330,5 +307,10 @@ return {
       cmd([[:command TVPR lua require("metals.tvp").reveal_in_tree()]])
       cmd([[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]])
     end
+  },
+
+  {
+    'ToruNiina/satysfi.vim',
+    ft = 'satysfi',
   }
 }
