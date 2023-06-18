@@ -15,12 +15,20 @@
     stateVersion = "23.05";
   };
 
-  programs.home-manager.enable = true;
+  programs = {
+    home-manager.enable = true;
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+  };
 
   home.packages = with pkgs; [
     jq
     fzf
     opam
     hackgen-font
+    online-judge-tools
   ];
 }

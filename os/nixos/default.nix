@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixpkgs, ... }:
 
 {
   boot.loader = {
@@ -47,6 +47,18 @@
         libvdpau-va-gl
       ];
     };
+  };
+
+  nix.extraOptions = ''
+    keep-outputs = true
+    keep-derivations = true
+  '';
+
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc
+    ];
   };
 
   system.stateVersion = "23.05";
