@@ -3,9 +3,9 @@ local wezterm = require 'wezterm';
 local home = os.getenv("HOME")
 
 return {
-  font = wezterm.font("Ricty for Powerline"),
+  font = wezterm.font("HackGen"),
   use_ime = true,
-  font_size = 16.0,
+  font_size = 14.0,
   color_scheme = "Hybrid",
   window_background_image = home .. "/.background.jpg",
   window_background_image_hsb = {
@@ -37,5 +37,8 @@ return {
     {key = "h", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Left", 1}}},
     {key = "k", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Up", 1}}},
     {key = "j", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Down", 1}}},
+
+    {key = "c", mods = "CMD", action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection'},
+    {key = "v", mods = "CMD", action = wezterm.action.PasteFrom 'Clipboard'},
   }
 }

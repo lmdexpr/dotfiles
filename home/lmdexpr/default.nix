@@ -1,0 +1,26 @@
+{ pkgs , ... }:
+
+{
+  imports = [
+    ../config/zsh
+    ../config/git
+    ../config/wezterm
+    ../config/neovim
+  ];
+
+  home = {
+    username = "lmdexpr";
+    homeDirectory = "/home/lmdexpr";
+
+    stateVersion = "23.05";
+  };
+
+  programs.home-manager.enable = true;
+
+  home.packages = with pkgs; [
+    jq
+    fzf
+    opam
+    hackgen-font
+  ];
+}

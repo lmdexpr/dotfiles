@@ -87,21 +87,3 @@ vim.opt.rtp:prepend(lazypath)
 
 local plugins = require('plugins')
 require('lazy').setup(plugins)
-
------------
--- OCaml --
------------
-vim.api.nvim_exec(
-[[
-let s:opam_share_dir = system("opam var share")
-let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
-
-execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-
-let s:opam_bin_dir = system("opam var bin")
-let s:opam_bin_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
-
-execute "set rtp+=" . s:opam_bin_dir . "/ocamlformat"
-]],
-false)
