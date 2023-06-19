@@ -22,12 +22,14 @@
       enable = true;
       nix-direnv.enable = true;
     };
+
+    zsh.enable = true;
   };
 
   home.packages = with pkgs; [
     jq
     fzf
-    opam
+    rlwrap
     hackgen-font
     online-judge-tools
   ];
