@@ -26,9 +26,9 @@ return {
     {key = "4", mods = "LEADER", action = wezterm.action {ActivateTab = 3}},
     {key = "5", mods = "LEADER", action = wezterm.action {ActivateTab = 4}},
 
-    {key = "|", mods = "LEADER", action = wezterm.action {SplitHorizontal = {domain = "CurrentPaneDomain"} }},
+    {key = "\\", mods = "LEADER", action = wezterm.action {SplitHorizontal = {domain = "CurrentPaneDomain"} }},
     {key = "-", mods = "LEADER", action = wezterm.action {SplitVertical = {domain = "CurrentPaneDomain"} }},
-    {key = "*", mods = "LEADER", action = wezterm.action {CloseCurrentPane = {confirm=false}}},
+    {key = "q", mods = "LEADER", action = wezterm.action {CloseCurrentPane = {confirm=false}}},
     {key = "l", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Right"}},
     {key = "h", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Left"}},
     {key = "k", mods = "LEADER", action = wezterm.action {ActivatePaneDirection = "Up"}},
