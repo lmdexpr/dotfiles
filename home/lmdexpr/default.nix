@@ -1,4 +1,4 @@
-{ pkgs , ... }:
+{ pkgs, nixpkgs, ... }:
 
 {
   imports = [
@@ -30,7 +30,9 @@
     jq
     fzf
     rlwrap
+    ripgrep
     hackgen-font
     online-judge-tools
+    notion-app-enhanced
   ];
 }

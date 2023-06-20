@@ -29,8 +29,14 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.lmdexpr = import ./home/lmdexpr;
+            home-manager.users.lmdexpr = ./home/lmdexpr;
           }
+
+          ({ ... }: {
+            nixpkgs.config = {
+              allowUnfree = true;
+            };
+          })
         ];
       };
     };

@@ -14,4 +14,6 @@
   };
 
   networking.hostName = "nkri";
+  
+  hardware.keyboard.qmk.enable = true;
 }
