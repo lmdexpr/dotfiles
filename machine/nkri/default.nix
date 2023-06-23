@@ -1,19 +1,14 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  };
+
   imports = [
     ../../os/nixos
     ./hardware-configuration.nix
   ];
 
-  programs.zsh.enable = true;
-
-  users.users.lmdexpr = {
-    isNormalUser = true;
-    initialPassword = "p4ssw0rd";
-    extraGroups = [ "networkmanager" "wheel" ];
-    shell = pkgs.zsh;
-  };
-
   networking.hostName = "nkri";
-  
-  hardware.keyboard.qmk.enable = true;
 }

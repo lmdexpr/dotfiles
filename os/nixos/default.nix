@@ -1,9 +1,15 @@
 { config, pkgs, nixpkgs, ... }:
-
+let
+  main-user = "lmdexpr";
+in
 {
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
+  programs.zsh.enable = true;
+
+  users.users."${main-user}" = {
+    isNormalUser = true;
+    initialPassword = "p4ssw0rd";
+    extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
   };
 
   networking.networkmanager.enable = true;
@@ -47,6 +53,8 @@
         libvdpau-va-gl
       ];
     };
+
+    keyboard.qmk.enable = true;
   };
 
   nix.extraOptions = ''
@@ -61,9 +69,18 @@
     ];
   };
 
+  programs.fuse = {
+    userAllowOther = true;
+  };
+
   environment.systemPackages = with pkgs; [
     google-drive-ocamlfuse
   ];
+  imports = [ ../../modules/services/google-drive-ocamlfuse.nix ];
+  services.google-drive-ocamlfuse = {
+    enable = true;
+    main-user = main-user;
+  };
 
   system.stateVersion = "23.05";
 }

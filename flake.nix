@@ -18,27 +18,22 @@
 
   outputs = { nixpkgs, home-manager, ... }: {
 
-    nixosConfigurations = {
-      nkri = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+    nixosConfigurations.nkri = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [ 
+        ./machine/nkri
 
-        modules = [
-          ./machine/nkri
-
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.lmdexpr = ./home/lmdexpr;
-          }
-
-          ({ ... }: {
-            nixpkgs.config = {
-              allowUnfree = true;
-            };
-          })
-        ];
-      };
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.lmdexpr = ./home/lmdexpr;
+        }
+        
+        ({ ... }: {
+          nixpkgs.config = { allowUnfree = true; };
+        })
+      ];
     };
 
   };
