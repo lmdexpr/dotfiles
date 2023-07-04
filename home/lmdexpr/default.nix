@@ -27,11 +27,13 @@
   };
 
   home.packages = with pkgs; [
+    hackgen-font
     jq
     fzf
     rlwrap
     ripgrep
-    hackgen-font
+    fd
+    tree-sitter
     online-judge-tools
     notion-app-enhanced
   ];

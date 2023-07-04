@@ -86,4 +86,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = require('plugins')
-require('lazy').setup(plugins)
+require('lazy').setup(plugins, {
+  lockfile = "~/.lazy.lock",
+  reset_packpath = false,
+})

@@ -13,6 +13,7 @@ return {
     hue = 1.0,
     saturation = 1.0,
   },
+  hide_mouse_cursor_when_typing = false,
   adjust_window_size_when_changing_font_size = false,
   leader = { key="b", mods="CTRL" },
   keys = {

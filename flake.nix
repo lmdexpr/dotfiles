@@ -16,7 +16,11 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }: {
+  outputs = { nixpkgs, home-manager, ... }:
+  let
+    allow_unfree = { ... }: { nixpkgs.config = { allowUnfree = true; }; };
+  in
+  {
 
     nixosConfigurations.nkri = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -30,9 +34,7 @@
           home-manager.users.lmdexpr = ./home/lmdexpr;
         }
         
-        ({ ... }: {
-          nixpkgs.config = { allowUnfree = true; };
-        })
+        allow_unfree
       ];
     };
 

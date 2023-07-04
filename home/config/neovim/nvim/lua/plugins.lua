@@ -106,6 +106,8 @@ return {
     end,
     config = function ()
       require('nvim-treesitter').setup({
+        ensure_installed = "all",
+
         highlight = {
           enable = true,
         },
@@ -113,9 +115,6 @@ return {
           enable = true,
         }
       })
-
-      vim.cmd(':TSEnable highlight')
-      vim.cmd(':TSEnable indent')
     end
   },
   {
