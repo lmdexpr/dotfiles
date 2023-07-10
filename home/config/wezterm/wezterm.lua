@@ -5,7 +5,7 @@ local home = os.getenv("HOME")
 return {
   font = wezterm.font("HackGen"),
   use_ime = true,
-  font_size = 14.0,
+  font_size = 16.0,
   color_scheme = "Hybrid",
   window_background_image = home .. "/.background.jpg",
   window_background_image_hsb = {

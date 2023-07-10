@@ -108,12 +108,8 @@ return {
       require('nvim-treesitter').setup({
         ensure_installed = "all",
 
-        highlight = {
-          enable = true,
-        },
-        indent = {
-          enable = true,
-        }
+        highlight = { enable = true, },
+        indent    = { enable = true, }
       })
     end
   },

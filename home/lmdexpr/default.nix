@@ -23,13 +23,12 @@
       nix-direnv.enable = true;
     };
 
-    zsh.enable = true;
+    fzf.enable = true;
   };
 
   home.packages = with pkgs; [
     hackgen-font
     jq
-    fzf
     rlwrap
     ripgrep
     fd

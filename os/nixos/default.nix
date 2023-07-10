@@ -12,6 +12,10 @@ in
     shell = pkgs.zsh;
   };
 
+  environment.sessionVariables = rec {
+    XDG_CONFIG_HOME = "$HOME/.config";
+  };
+
   networking.networkmanager.enable = true;
 
   time.timeZone = "Asia/Tokyo";
