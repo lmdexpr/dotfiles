@@ -16,8 +16,9 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
   let
+    inherit (self) outputs;
     allow_unfree = { ... }: { nixpkgs.config = { allowUnfree = true; }; };
   in
   {
@@ -35,6 +36,15 @@
         }
         
         allow_unfree
+      ];
+    };
+
+    homeConfigurations."nixos@nkri" = home-manager.lib.homeManagerConfiguration
+    {
+      pkgs = nixpkgs.legacyPackages."x86_64-linux";
+      extraSpecialArgs = {inherit inputs outputs;};
+      modules = [
+        ./home/nixos
       ];
     };
 

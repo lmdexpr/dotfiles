@@ -5,6 +5,8 @@
 sudo nixos-rebuild switch --flake '.#' --show-trace
 ```
 
-## apply to darwin
-tbw
+## apply home-manager
+```sh 
+home-manager switch --flake '.#nixos@nkri'
+```
 
