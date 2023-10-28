@@ -109,7 +109,7 @@
       "      ~p:(fun i -> a.(i) < a.(i + 1) && change_to_next_permutation a ~l:i ~r)",
       "      ~proc:ignore",
       "",
-      "  let iter n ~f ~acc =",
+      "  let fold n ~f ~acc =",
       "    let nums = Array.init n ~f:Fn.id in",
       "    let rec permutations acc =",
       "      let acc = f acc nums in",
@@ -117,6 +117,8 @@
       "      if found_next then permutations acc else acc",
       "    in",
       "  permutations acc",
+      "",
+      "  let iter n ~f = fold n ~f:(fun () -> f) ~acc:()",
       "end"
     ]
   },
