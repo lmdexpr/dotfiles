@@ -90,3 +90,11 @@ require('lazy').setup(plugins, {
   lockfile = "~/.lazy.lock",
   reset_packpath = false,
 })
+
+----------------
+-- treesitter --
+----------------
+require('nvim-treesitter.configs').setup {
+  highlight = { enable = true },
+  indent    = { enable = true }
+}
