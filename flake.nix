@@ -23,10 +23,10 @@
   in
   {
 
-    nixosConfigurations.nkri = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.svartalfaheimr = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [ 
-        ./machine/nkri
+        ./machine/svartalfaheimr
 
         home-manager.nixosModules.home-manager
         {
