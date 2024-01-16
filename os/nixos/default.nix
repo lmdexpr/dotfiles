@@ -10,6 +10,10 @@ in
     initialPassword = "p4ssw0rd";
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICvs6ThdjoxW6TpVk7z69GdKAuCWEFORrlE0Q2YwPnfu Generate by Termius"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINRbaJ5Y8AbP86laEUUtfYKMCD4uzel+STeDja2BOZpV nixos@nkri"
+    ];
   };
 
   environment.sessionVariables = rec {
@@ -73,19 +77,11 @@ in
     ];
   };
 
-  programs.fuse = {
-    userAllowOther = true;
-  };
-
-  environment.systemPackages = with pkgs; [
-    google-drive-ocamlfuse
-  ];
-  imports = [ ../../modules/services/google-drive-ocamlfuse.nix ];
-  services.google-drive-ocamlfuse = {
+  services.openssh = {
     enable = true;
-    main-user = main-user;
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
   };
 
   system.stateVersion = "23.05";
 }
-
