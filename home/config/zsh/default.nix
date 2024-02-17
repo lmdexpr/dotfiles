@@ -42,5 +42,17 @@
       git.submoduleIgnore = "all";
       prompt.theme = "paradox";
     };
+
+    envExtra = ''
+      export XDG_CONFIG_HOME=$HOME/.config
+      export GOPATH=$HOME/go
+      export PATH=$PATH:$GOPATH/bin
+      export DOTNET_TOOLS_PATH=$HOME/.dotnet/tools
+      export PATH=$PATH:$DOTNET_TOOLS_PATH
+      export CARGO_PATH=$HOME/.cargo/bin
+      export PATH=$PATH:$CARGO_PATH
+      export NPM_PATH=`npm prefix --location=global`/bin
+      export PATH=$PATH:$NPM_PATH
+    '';
   };
 }
