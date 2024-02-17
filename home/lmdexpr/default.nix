@@ -27,6 +27,7 @@
   };
 
   home.packages = with pkgs; [
+    nodePackages.npm
     hackgen-font
     jq
     rlwrap
@@ -34,6 +35,5 @@
     fd
     tree-sitter
     online-judge-tools
-    notion-app-enhanced
   ];
 }
