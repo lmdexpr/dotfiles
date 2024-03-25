@@ -34,7 +34,7 @@
           home-manager.useUserPackages = true;
           home-manager.users.lmdexpr = ./home/lmdexpr;
         }
-        
+
         allow_unfree
       ];
     };
