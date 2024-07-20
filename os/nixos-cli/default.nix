@@ -26,34 +26,33 @@ in
 
   i18n = {
     inputMethod = {
-      enabled = "fcitx5";
+      enabled = "fcitx5"; type = "fcitx5";
+
       fcitx5.addons = with pkgs; [ fcitx5-anthy ];
     };
   };
   services.dbus.packages = [ config.i18n.inputMethod.package ];
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     fira-code
     fira-code-symbols
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
 
   services.xserver = {
-    enable = true;
-    layout = "us";
+    enable = false;
+    xkb.layout = "us";
 
-    libinput.enable = true;
-
-    displayManager = { gdm.enable = true; };
-    desktopManager = { gnome.enable = true; };
+    displayManager = { gdm.enable = false; };
+    desktopManager = { gnome.enable = false; };
   };
+  services.libinput.enable = false;
   
-  sound.enable = true;
   hardware = {
-    pulseaudio.enable = true;
+    pulseaudio.enable = false;
 
-    opengl = {
-      enable = true;
+    graphics= {
+      enable = false;
       extraPackages = with pkgs; [
         intel-media-driver
         vaapiIntel

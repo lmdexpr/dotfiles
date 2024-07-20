@@ -6,7 +6,7 @@
   };
 
   imports = [
-    ../../os/nixos
+    ../../os/nixos-cli
     ./hardware-configuration.nix
   ];
 
