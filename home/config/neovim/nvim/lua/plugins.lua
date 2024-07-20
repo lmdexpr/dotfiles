@@ -101,16 +101,12 @@ return {
 
   {
     'nvim-treesitter/nvim-treesitter',
-    build = function()
-      require("nvim-treesitter.install").update({ with_sync = true })
-    end,
-    config = function ()
-      require('nvim-treesitter').setup({
-        ensure_installed = "all",
-
-        highlight = { enable = true, },
-        indent    = { enable = true, }
-      })
+    build = ":TSUpdate",
+    config = function () 
+      require("nvim-treesitter.configs").setup {
+        highlight = { enable = true },
+        indent    = { enable = true }
+      }
     end
   },
   {
@@ -122,7 +118,7 @@ return {
   },
   {
     'hrsh7th/nvim-cmp',
-    event = 'InsertEnter, CmdlineEnter',
+    event = 'InsertEnter',
     config = function ()
       local cmp = require('cmp')
       local lspkind = require('lspkind')
@@ -178,14 +174,43 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     event = 'VeryLazy',
     config = function()
-      require('lualine').setup({
-        theme = 'auto',
-      })
+      require('lualine').setup {
+        options = {
+          icons_enabled = true,
+          section_separators = { left = '', right = ''},
+          component_separators = { left = '', right = ''},
+          always_divide_middle = true,
+        },
+        sections = {
+          lualine_a = {'filename'},
+          lualine_b = {'branch'},
+          lualine_c = {
+            "'%='",
+            {
+              'diff',
+              symbols = {added = ' ', modified = ' ', removed = ' '},
+              separator = "  |  ",
+            },
+            {
+              'diagnostics',
+              symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '},
+            },
+          },
+          lualine_x = {'encoding', 'fileformat'},
+          lualine_y = {'filetype','searchcount'},
+          lualine_z = {},
+        },
+        inactive_sections = {
+          lualine_a = {}, lualine_b = {}, lualine_c = {},
+          lualine_x = {}, lualine_y = {}, lualine_z = {},
+        },
+        extension = {'fzf', 'fern', 'lazy'},
+      }
     end
   },
   {
     'akinsho/bufferline.nvim',
-    version = "v3.*",
+    version = "*",
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function ()
       vim.o.termguicolors = true
