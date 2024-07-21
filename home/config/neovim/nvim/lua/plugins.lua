@@ -178,7 +178,7 @@ return {
         options = {
           icons_enabled = true,
           section_separators = { left = '', right = ''},
-          component_separators = { left = '', right = ''},
+          component_separators = { left = '|', right = '|' },
           always_divide_middle = true,
         },
         sections = {
@@ -196,15 +196,15 @@ return {
               symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '},
             },
           },
-          lualine_x = {'encoding', 'fileformat'},
-          lualine_y = {'filetype','searchcount'},
-          lualine_z = {},
+          lualine_x = {'encoding', 'fileformat', 'filetype'},
+          lualine_y = {'progress'},
+          lualine_z = {'location'}
         },
         inactive_sections = {
           lualine_a = {}, lualine_b = {}, lualine_c = {},
           lualine_x = {}, lualine_y = {}, lualine_z = {},
         },
-        extension = {'fzf', 'fern', 'lazy'},
+        extension = {'lazy', 'fern'},
       }
     end
   },

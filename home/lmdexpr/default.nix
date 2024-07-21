@@ -28,6 +28,8 @@
 
   home.packages = with pkgs; [
     nodePackages.npm
+    lua51Packages.lua
+    lua51Packages.luarocks
     hackgen-font
     jq
     rlwrap
