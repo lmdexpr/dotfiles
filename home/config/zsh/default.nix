@@ -7,6 +7,7 @@
     shellAliases = {
       cls = "clear;ls";
       reload="source $HOME/.zshrc";
+      k = "kubectl";
     };
 
     plugins = [

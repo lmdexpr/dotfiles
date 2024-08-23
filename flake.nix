@@ -39,14 +39,20 @@
       ];
     };
 
-    homeConfigurations."nixos@nkri" = home-manager.lib.homeManagerConfiguration
-    {
-      pkgs = nixpkgs.legacyPackages."x86_64-linux";
-      extraSpecialArgs = {inherit inputs outputs;};
-      modules = [
-        ./home/wsl
+    nixosConfigurations.fenrir = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [ 
+        ./machine/fenrir
+
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.nixos = ./home/wsl;
+        }
+
+        allow_unfree
       ];
     };
-
   };
 }

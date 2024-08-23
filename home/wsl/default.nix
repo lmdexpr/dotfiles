@@ -11,7 +11,7 @@
     username = "nixos";
     homeDirectory = "/home/nixos";
 
-    stateVersion = "23.05";
+    stateVersion = "24.05";
   };
 
   programs = {
@@ -36,5 +36,10 @@
     fd
     tree-sitter
     online-judge-tools
+    kubectl
+    talosctl
+    argocd
+    kustomize
+    kubernetes-helm
   ];
 }

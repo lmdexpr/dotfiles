@@ -7,6 +7,6 @@ sudo nixos-rebuild switch --flake '.#' --show-trace
 
 ## apply home-manager
 ```sh 
-home-manager switch --flake '.#nixos@nkri'
+home-manager switch --flake '.#'
 ```
 
