@@ -16,13 +16,11 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
+  outputs = { nixpkgs, home-manager, ... }:
   let
-    inherit (self) outputs;
     allow_unfree = { ... }: { nixpkgs.config = { allowUnfree = true; }; };
   in
   {
-
     nixosConfigurations.svartalfaheimr = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [ 

@@ -104,6 +104,7 @@ return {
     build = ":TSUpdate",
     config = function () 
       require("nvim-treesitter.configs").setup {
+        auto_install = true,
         highlight = { enable = true },
         indent    = { enable = true }
       }
@@ -271,7 +272,7 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-      local servers = { 'ocamllsp', 'intelephense', 'rust_analyzer', 'gopls', 'csharp_ls', 'coqlsp', 'satysfilsp' }
+      local servers = { 'nil_ls', 'ocamllsp', 'intelephense', 'rust_analyzer', 'gopls', 'csharp_ls', 'ts_ls' }
       for _, lsp in pairs(servers) do
         require('lspconfig')[lsp].setup{
           on_attach = on_attach,

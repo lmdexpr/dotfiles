@@ -47,6 +47,7 @@ local options = {
   showmatch    = true,
   wildmenu     = true,
   wrapscan     = true,
+  clipboard    = "unnamedplus",
 }
 
 for k, v in pairs(options) do

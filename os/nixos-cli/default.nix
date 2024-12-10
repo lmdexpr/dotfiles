@@ -1,4 +1,4 @@
-{ config, pkgs, nixpkgs, ... }:
+{ config, pkgs, ... }:
 let
   main-user = "lmdexpr";
 in
@@ -16,7 +16,7 @@ in
     ];
   };
 
-  environment.sessionVariables = rec {
+  environment.sessionVariables = {
     XDG_CONFIG_HOME = "$HOME/.config";
   };
 

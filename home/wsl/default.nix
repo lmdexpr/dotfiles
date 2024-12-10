@@ -1,4 +1,4 @@
-{ pkgs, nixpkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -28,18 +28,26 @@
   home.packages = with pkgs; [
     gcc
     nodePackages.npm
+
     lua51Packages.lua
     lua51Packages.luarocks
+
     jq
     rlwrap
     ripgrep
     fd
     tree-sitter
+
     online-judge-tools
+
     kubectl
     talosctl
     argocd
     kustomize
     kubernetes-helm
+
+    nil
+
+    wl-clipboard
   ];
 }

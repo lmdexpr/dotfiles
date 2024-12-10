@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 let
   main-user = "nixos";
 in
@@ -9,7 +9,7 @@ in
     shell = pkgs.zsh;
   };
 
-  environment.sessionVariables = rec {
+  environment.sessionVariables = {
     XDG_CONFIG_HOME = "$HOME/.config";
   };
 
