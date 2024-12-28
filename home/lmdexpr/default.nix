@@ -36,6 +36,5 @@
     ripgrep
     fd
     tree-sitter
-    online-judge-tools
   ];
 }

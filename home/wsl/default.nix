@@ -38,8 +38,6 @@
     fd
     tree-sitter
 
-    online-judge-tools
-
     kubectl
     talosctl
     argocd
