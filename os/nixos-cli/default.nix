@@ -69,7 +69,11 @@ in
     keep-derivations = true
   '';
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ 
+    "nix-command" 
+    "flakes" 
+    "pipe-operators"
+  ];
 
   programs.nix-ld = {
     enable = true;

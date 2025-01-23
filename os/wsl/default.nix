@@ -15,7 +15,11 @@ in
 
   time.timeZone = "Asia/Tokyo";
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ 
+    "nix-command" 
+    "flakes"
+    "pipe-operators"
+  ];
 
   programs.nix-ld = {
     enable = true;
