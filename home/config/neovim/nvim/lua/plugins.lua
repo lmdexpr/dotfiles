@@ -281,51 +281,52 @@ return {
       end
     end
   },
+
   {
     'scalameta/nvim-metals',
     ft = 'scala',
-    config = function ()
-      vim.opt_global.completeopt = { "menu", "noinsert", "noselect" }
-      vim.opt_global.shortmess:remove("F"):append("c")
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    ft = { "scala", "sbt", "java" },
+    opts = function()
+      local metals_config = require("metals").bare_config()
 
-      local function nmap(key, map)
-        local options = { noremap = true }
-        vim.api.nvim_set_keymap('n', key, map, options)
-      end
-      nmap("gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
-      nmap("gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
-      nmap("gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-      nmap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
-      nmap("<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-      nmap("<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-      nmap("<space>f", "<cmd>lua vim.lsp.buf.format { async = true } <CR>")
-      nmap("<space>r", "<cmd>lua vim.lsp.buf.rename()<CR>")
-
-      vim.api.nvim_create_augroup('lsp', {})
-      vim.api.nvim_create_autocmd('FileType', {
-        group = 'lsp',
-        pattern = 'scala',
-        callback = function ()
-          vim.opt_local.omnifunc = vim.lsp.omnifunc
-        end
-      })
-      vim.api.nvim_create_autocmd('FileType', {
-        group = 'lsp',
-        pattern = {'java', 'scala', 'sbt'},
-        callback = function ()
-          require('metals').initialize_or_attach(metals_config)
-        end
-      })
-
-      metals_config = require("metals").bare_config()
       metals_config.settings = {
-        excludedPackages = { "akka.actor.typed.javadsl" },
         showImplicitArguments = true,
-        showInferredType = true,
+        excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
       }
-      cmd([[:command TVP  lua require("metals.tvp").toggle_tree_view()]])
-      cmd([[:command TVPR lua require("metals.tvp").reveal_in_tree()]])
-      cmd([[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]])
+
+      metals_config.init_options.statusBarProvider = "on"
+
+      metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+      metals_config.on_attach = function(client, bufnr)
+        local map = vim.keymap.set
+
+        map("n", "gd", vim.lsp.buf.definition)
+        map("n", "gi", vim.lsp.buf.implementation)
+        map("n", "gr", vim.lsp.buf.references)
+        map("n", "K", vim.lsp.buf.hover)
+
+        map("n", "<C-k>", vim.lsp.buf.signature_help)
+
+        map("n", "<space>ca", vim.lsp.buf.code_action)
+        map("n", "<space>f", vim.lsp.buf.format)
+        map("n", "<space>r", vim.lsp.buf.rename)
+      end
+
+      return metals_config
+    end,
+    config = function(self, metals_config)
+      local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = self.ft,
+        callback = function()
+          require("metals").initialize_or_attach(metals_config)
+        end,
+        group = nvim_metals_group,
+      })
     end
   },
 
