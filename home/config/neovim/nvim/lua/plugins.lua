@@ -242,10 +242,6 @@ return {
   },
 
   {
-    'wakatime/vim-wakatime',
-  },
-
-  {
     'neovim/nvim-lspconfig',
     config = function ()
       local opts = { noremap=true, silent=true }
@@ -272,61 +268,13 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-      local servers = { 'nil_ls', 'ocamllsp', 'intelephense', 'rust_analyzer', 'gopls', 'csharp_ls', 'ts_ls' }
+      local servers = { 'nil_ls', 'ocamllsp', 'intelephense', 'rust_analyzer', 'gopls', 'csharp_ls', 'ts_ls', 'ruby_lsp', 'metals' }
       for _, lsp in pairs(servers) do
         require('lspconfig')[lsp].setup{
           on_attach = on_attach,
           autostart = true,
         }
       end
-    end
-  },
-
-  {
-    'scalameta/nvim-metals',
-    ft = 'scala',
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    ft = { "scala", "sbt", "java" },
-    opts = function()
-      local metals_config = require("metals").bare_config()
-
-      metals_config.settings = {
-        showImplicitArguments = true,
-        excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
-      }
-
-      metals_config.init_options.statusBarProvider = "on"
-
-      metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-      metals_config.on_attach = function(client, bufnr)
-        local map = vim.keymap.set
-
-        map("n", "gd", vim.lsp.buf.definition)
-        map("n", "gi", vim.lsp.buf.implementation)
-        map("n", "gr", vim.lsp.buf.references)
-        map("n", "K", vim.lsp.buf.hover)
-
-        map("n", "<C-k>", vim.lsp.buf.signature_help)
-
-        map("n", "<space>ca", vim.lsp.buf.code_action)
-        map("n", "<space>f", vim.lsp.buf.format)
-        map("n", "<space>r", vim.lsp.buf.rename)
-      end
-
-      return metals_config
-    end,
-    config = function(self, metals_config)
-      local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = self.ft,
-        callback = function()
-          require("metals").initialize_or_attach(metals_config)
-        end,
-        group = nvim_metals_group,
-      })
     end
   },
 
