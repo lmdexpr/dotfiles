@@ -45,7 +45,7 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.nixos = ./home/wsl;
+          home-manager.users.lmdexpr = ./home/lmdexpr;
         }
 
         allow_unfree

@@ -12,7 +12,7 @@
     username = "lmdexpr";
     homeDirectory = "/home/lmdexpr";
 
-    stateVersion = "23.05";
+    stateVersion = "25.05";
   };
 
   programs = {
@@ -27,14 +27,28 @@
   };
 
   home.packages = with pkgs; [
+    gcc
     nodePackages.npm
+
     lua51Packages.lua
     lua51Packages.luarocks
-    hackgen-font
+
     jq
     rlwrap
     ripgrep
     fd
     tree-sitter
+
+    kubectl
+    talosctl
+    argocd
+    kustomize
+    kubernetes-helm
+
+    nil
+
+    hackgen-font
+
+    vivaldi
   ];
 }

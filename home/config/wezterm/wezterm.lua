@@ -39,7 +39,7 @@ return {
     {key = "k", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Up", 1}}},
     {key = "j", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Down", 1}}},
 
-    {key = "c", mods = "CMD", action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection'},
-    {key = "v", mods = "CMD", action = wezterm.action.PasteFrom 'Clipboard'},
+    {key = "y", mods = "LEADER", action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection'},
+    {key = "p", mods = "LEADER", action = wezterm.action.PasteFrom 'Clipboard'},
   }
 }
