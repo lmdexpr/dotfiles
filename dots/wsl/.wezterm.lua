@@ -39,8 +39,19 @@ return {
     {key = "h", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Left", 1}}},
     {key = "k", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Up", 1}}},
     {key = "j", mods = "CMD|SHIFT", action = wezterm.action {AdjustPaneSize = { "Down", 1}}},
+    {key = "y", mods = "LEADER", action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection'},
+    {key = "p", mods = "LEADER", action = wezterm.action.PasteFrom 'Clipboard'},
 
-    {key = "c", mods = "ALT", action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection'},
-    {key = "v", mods = "ALT", action = wezterm.action.PasteFrom 'Clipboard'},
+    {key = "c", mods = "CMD", action = wezterm.action_callback(function(window, pane)
+        selection_text = window:get_selection_text_for_pane(pane)
+        is_selection_active = string.len(selection_text) ~= 0
+        if is_selection_active then
+          window:perform_action(wezterm.action.CopyTo('ClipboardAndPrimarySelection'), pane)
+        else
+          window:perform_action(wezterm.action.SendKey{ key='c', mods='CMD' }, pane)
+        end
+      end
+    )},
+    -- {key = "v", mods = "CMD", action = wezterm.action.PasteFrom 'Clipboard'},
   }
 }
