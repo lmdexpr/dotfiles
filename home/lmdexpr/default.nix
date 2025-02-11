@@ -39,6 +39,8 @@
     fd
     tree-sitter
 
+    wl-clipboard
+
     kubectl
     talosctl
     argocd
@@ -47,8 +49,10 @@
 
     nil
 
-    hackgen-font
-
     vivaldi
+    discord
+    remmina
+    bitwarden-desktop
+    bitwarden-cli
   ];
 }
