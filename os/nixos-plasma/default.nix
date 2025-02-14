@@ -1,11 +1,13 @@
 { config, pkgs, ... }:
 let
-  main-user = "lmdexpr";
+  username = "lmdexpr";
 in
 {
+  system.stateVersion = "24.11";
+
   programs.zsh.enable = true;
 
-  users.users."${main-user}" = {
+  users.users."${username}" = {
     isNormalUser = true;
     initialPassword = "p4ssw0rd";
     extraGroups = [ "networkmanager" "wheel" ];
@@ -23,8 +25,8 @@ in
   i18n = {
     inputMethod = {
       enabled = "fcitx5";
-      type = "fcitx5";
       fcitx5.addons = [ pkgs.fcitx5-anthy ];
+      fcitx5.waylandFrontend = true;
     };
   };
 
@@ -53,9 +55,11 @@ in
     enable = true;
     xkb.layout = "us";
 
-    displayManager = { lightdm.enable = true; };
-    desktopManager = { budgie.enable = true; };
+    displayManager.sddm.enable = true;
+    displayManager.sddm.wayland.enable = true;
+    desktopManager.plasma6.enable = true;
   };
+  security.pam.services.kde-fingerprint.fprintAuth = true;
 
   services.libinput.enable = true;
   
@@ -82,9 +86,9 @@ in
     openFirewall = true;
   };
 
-  services.cloudflare-warp = {
-    enable = true;
-  };
+  environment.systemPackages = [ pkgs.cloudflare-warp ];
+  systemd.packages = [ pkgs.cloudflare-warp ];
+  systemd.targets.multi-user.wants = [ "warp-svc.service" ];
 
   hardware.graphics = {
     enable = true;
@@ -122,6 +126,4 @@ in
   };
 
   systemd.services.libinput-gestures.enable = true;
-
-  system.stateVersion = "24.11";
 }

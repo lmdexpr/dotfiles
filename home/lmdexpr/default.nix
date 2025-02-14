@@ -49,7 +49,14 @@
 
     nil
 
-    vivaldi
+    (vivaldi.overrideAttrs (oldAttrs: {
+      dontWrapQtApps = false;
+      dontPatchELF = true;
+      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ 
+        kdePackages.wrapQtAppsHook 
+      ];
+    }))
+    
     discord
     remmina
     bitwarden-desktop

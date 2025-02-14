@@ -3,9 +3,9 @@ local wezterm = require 'wezterm';
 local home = os.getenv("HOME")
 
 return {
-  font = wezterm.font("HackGen"),
+  font = wezterm.font("HackGen Console NF"),
   use_ime = true,
-  font_size = 16.0,
+  font_size = 12.0,
   color_scheme = "Hybrid",
   -- window_background_image = home .. "/.background.jpg",
   window_background_image_hsb = {
@@ -13,6 +13,7 @@ return {
     hue = 1.0,
     saturation = 1.0,
   },
+  window_background_opacity = 0.9,
   hide_mouse_cursor_when_typing = false,
   adjust_window_size_when_changing_font_size = false,
   leader = { key="b", mods="CTRL" },
