@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-
+{ pkgs, username, ... }:
 {
   imports = [
     ../config/zsh
@@ -7,13 +6,6 @@
     ../config/wezterm
     ../config/neovim
   ];
-
-  home = {
-    username = "lmdexpr";
-    homeDirectory = "/home/lmdexpr";
-
-    stateVersion = "25.05";
-  };
 
   programs = {
     home-manager.enable = true;
@@ -26,6 +18,12 @@
     fzf.enable = true;
   };
 
+  home = {
+    inherit username;
+    homeDirectory = "/home/${username}";
+
+    stateVersion = "25.05";
+  };
   home.packages = with pkgs; [
     gcc
     nodePackages.npm

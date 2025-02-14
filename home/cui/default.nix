@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-
+{ pkgs, username, ... }:
 {
   imports = [
     ../config/zsh
@@ -8,8 +7,8 @@
   ];
 
   home = {
-    username = "nixos";
-    homeDirectory = "/home/nixos";
+    inherit username;
+    homeDirectory = "/home/${username}";
 
     stateVersion = "24.05";
   };
@@ -38,6 +37,8 @@
     fd
     tree-sitter
 
+    wl-clipboard
+
     kubectl
     talosctl
     argocd
@@ -45,7 +46,5 @@
     kubernetes-helm
 
     nil
-
-    wl-clipboard
   ];
 }

@@ -1,4 +1,7 @@
 { ... }:
+let
+  hostName = "nkri";
+in 
 {
   boot.loader = {
     systemd-boot.enable = true;
@@ -10,5 +13,5 @@
     ./hardware-configuration.nix
   ];
 
-  networking.hostName = "nkri";
+  networking = { inherit hostName; };
 }

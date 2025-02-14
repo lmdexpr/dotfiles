@@ -1,12 +1,14 @@
-{ ... }:
-
+{ username, ... }:
+let
+  hostName = "skelton";
+in 
 {
   imports = [
     ../../os/wsl
   ];
 
   wsl.enable = true;
-  wsl.defaultUser = "nixos";
+  wsl.defaultUser = username;
 
-  networking.hostName = "skelton";
+  networking = { inherit hostName; };
 }

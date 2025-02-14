@@ -1,7 +1,4 @@
-{ config, pkgs, ... }:
-let
-  username = "lmdexpr";
-in
+{ config, pkgs, username, ... }:
 {
   system.stateVersion = "24.11";
 
@@ -51,10 +48,7 @@ in
     }}"
   ];
 
-  services.xserver = {
-    enable = true;
-    xkb.layout = "us";
-
+  services = {
     displayManager.sddm.enable = true;
     displayManager.sddm.wayland.enable = true;
     desktopManager.plasma6.enable = true;
