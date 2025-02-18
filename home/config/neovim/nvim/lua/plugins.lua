@@ -268,7 +268,18 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-      local servers = { 'nil_ls', 'ocamllsp', 'intelephense', 'rust_analyzer', 'gopls', 'csharp_ls', 'ts_ls', 'ruby_lsp', 'metals' }
+      local servers = { 
+        'nil_ls', 
+        'ocamllsp', 
+        'intelephense', 
+        'rust_analyzer', 
+        'gopls', 
+        'csharp_ls', 
+        'ts_ls', 
+        'ruby_lsp', 
+        'metals',
+        'elmls'
+      }
       for _, lsp in pairs(servers) do
         require('lspconfig')[lsp].setup{
           on_attach = on_attach,
