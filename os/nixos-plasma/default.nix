@@ -13,6 +13,10 @@
 
   environment.sessionVariables = {
     XDG_CONFIG_HOME = "$HOME/.config";
+    GTK_IM_MODULE   = "fcitx";
+    QT_IM_MODULE    = "fcitx";
+    XMODIFIERS      = "@im=fcitx";
+    GLFW_IM_MODULE  = "ibus";
   };
 
   networking.networkmanager.enable = true;

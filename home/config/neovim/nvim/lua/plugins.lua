@@ -117,85 +117,78 @@ return {
       vim.api.nvim_set_keymap("i", "<C-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
     end
   },
-  -- {
-  --   "yetone/avante.nvim",
-  --   enabled = true,
-  --   event = "VeryLazy",
-  --   lazy = false,
-  --   version = false,
-  --   opts = {
-  --     -- provider = "copilot",
-  --     provider = "claude",
-  --     -- provider = "openai",
-  --     -- auto_suggestions_provider = "copilot",
-  --     behaviour = {
-  --       auto_suggestions = false,
-  --       auto_set_highlight_group = true,
-  --       auto_set_keymaps = true,
-  --       auto_apply_diff_after_generation = true,
-  --       support_paste_from_clipboard = true,
-  --     },
-  --     windows = {
-  --       position = "right",
-  --       width = 30,
-  --       sidebar_header = {
-  --         align = "center",
-  --         rounded = false,
-  --       },
-  --       ask = {
-  --         floating = true,
-  --         start_insert = true,
-  --         border = "rounded"
-  --       }
-  --     },
-  --     -- providers-setting
-  --     claude = {
-  --       model = "claude-3-5-sonnet-20240620", -- $3/$15, maxtokens=8000
-  --       -- model = "claude-3-opus-20240229",  -- $15/$75
-  --       -- model = "claude-3-haiku-20240307", -- $0.25/1.25
-  --       max_tokens = 8000,
-  --     },
-  --     copilot = {
-  --       model = "gpt-4o-2024-05-13",
-  --       -- model = "gpt-4o-mini",
-  --       max_tokens = 4096,
-  --     },
-  --     openai = {
-  --       model = "gpt-4o", -- $2.5/$10
-  --       -- model = "gpt-4o-mini", -- $0.15/$0.60
-  --       max_tokens = 4096,
-  --     },
-  --   },
-  --   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-  --   -- build = "make",
-  --   -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false",
-  --   dependencies = {
-  --     "nvim-treesitter/nvim-treesitter",
-  --     "stevearc/dressing.nvim",
-  --     "nvim-lua/plenary.nvim",
-  --     "MunifTanjim/nui.nvim",
-  --     --- The below dependencies are optional,
-  --     "nvim-tree/nvim-web-devicons",
-  --     "zbirenbaum/copilot.lua",  -- for providers='copilot'
-  --     {
-  --       -- support for image pasting
-  --       "HakonHarnes/img-clip.nvim",
-  --       event = "VeryLazy",
-  --       opts = {
-  --         -- recommended settings
-  --         default = {
-  --           embed_image_as_base64 = false,
-  --           prompt_for_file_name = false,
-  --           drag_and_drop = {
-  --             insert_mode = true,
-  --           },
-  --           -- required for Windows users
-  --           use_absolute_path = true,
-  --         },
-  --       },
-  --     },
-  --   },
-  -- },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      { "github/copilot.vim" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+    },
+    -- build = "make tiktoken", -- Only on MacOS or Linux
+    opts = {
+      -- debug = true, -- Enable debugging
+    },
+    config = function ()
+      vim.opt.splitright = true
+
+      require("CopilotChat").setup({
+        show_help = "yes",
+        prompts = {
+          Explain = {
+            prompt = "/COPILOT_EXPLAIN コードを日本語で説明してください",
+            mapping = '<leader>ce',
+            description = "コードの説明をお願いする",
+          },
+          Review = {
+            prompt = '/COPILOT_REVIEW コードを日本語でレビューしてください。',
+            mapping = '<leader>cr',
+            description = "コードのレビューをお願いする",
+          },
+          Fix = {
+            prompt = "/COPILOT_FIX このコードには問題があります。バグを修正したコードを表示してください。説明は日本語でお願いします。",
+            mapping = '<leader>cf',
+            description = "コードの修正をお願いする",
+          },
+          Optimize = {
+            prompt = "/COPILOT_REFACTOR 選択したコードを最適化し、パフォーマンスと可読性を向上させてください。説明は日本語でお願いします。",
+            mapping = '<leader>co',
+            description = "コードの最適化をお願いする",
+          },
+          Docs = {
+            prompt = "/COPILOT_GENERATE 選択したコードに関するドキュメントコメントを日本語で生成してください。",
+            mapping = '<leader>cd',
+            description = "コードのドキュメント作成をお願いする",
+          },
+          Tests = {
+            prompt = "/COPILOT_TESTS 選択したコードの詳細なユニットテストを書いてください。説明は日本語でお願いします。",
+            mapping = '<leader>ct',
+            description = "テストコード作成をお願いする",
+          },
+          FixDiagnostic = {
+            prompt = 'コードの診断結果に従って問題を修正してください。修正内容の説明は日本語でお願いします。',
+            mapping = '<leader>cd',
+            description = "コードの修正をお願いする",
+            selection = require('CopilotChat.select').diagnostics,
+          },
+          Commit = {
+            prompt =
+              '実装差分に対するコミットメッセージを日本語で記述してください。',
+            mapping = '<leader>cco',
+            description = "コミットメッセージの作成をお願いする",
+            selection = require('CopilotChat.select').gitdiff,
+          },
+          CommitStaged = {
+            prompt =
+              'ステージ済みの変更に対するコミットメッセージを日本語で記述してください。',
+            mapping = '<leader>cs',
+            description = "ステージ済みのコミットメッセージの作成をお願いする",
+            selection = function(source)
+              return require('CopilotChat.select').gitdiff(source, true)
+            end,
+          },
+        },
+      })
+    end,
+  },
   {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',

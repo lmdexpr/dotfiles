@@ -1,5 +1,5 @@
 {
-  description = "";
+  description = "lmdexpr's dotfiles";
 
   nixConfig = {
     experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
@@ -20,7 +20,7 @@
       mkNixosSystem = { system, hostname, username, homename, additionalModules ? [] }: 
         nixpkgs.lib.nixosSystem rec {
           inherit system;
-          specialArgs = { inherit hostname; inherit username; };
+          specialArgs = { inherit hostname username; };
           modules = additionalModules ++ [
             ./machine/${hostname}
 

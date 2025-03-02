@@ -5,9 +5,10 @@
     enable   = true;
     viAlias  = true;
     vimAlias = true;
-    # plugins  = with pkgs.vimPlugins; [
-    #   nvim-treesitter.withAllGrammars
-    # ];
+    plugins  = with pkgs.vimPlugins; [
+      CopilotChat-nvim
+      # nvim-treesitter.withAllGrammars
+    ];
     extraPackages = with pkgs; [ gcc ];
   };
 
