@@ -13,10 +13,12 @@
 
   environment.sessionVariables = {
     XDG_CONFIG_HOME = "$HOME/.config";
-    GTK_IM_MODULE   = "fcitx";
-    QT_IM_MODULE    = "fcitx";
-    XMODIFIERS      = "@im=fcitx";
-    GLFW_IM_MODULE  = "ibus";
+
+    QT_QPA_PLATFORM     = "wayland";
+    QT_IM_MODULE        = "fcitx";
+    IM_MODULE_CLASSNAME = "fcitx::QFcitxPlatformInputContext";
+
+    GTK_IM_MODULE = "fcitx";
   };
 
   networking.networkmanager.enable = true;
@@ -26,7 +28,11 @@
   i18n = {
     inputMethod = {
       enabled = "fcitx5";
-      fcitx5.addons = [ pkgs.fcitx5-anthy ];
+      fcitx5.addons = with pkgs; [
+        fcitx5-mozc
+        fcitx5-nord
+        kdePackages.fcitx5-qt
+      ];
       fcitx5.waylandFrontend = true;
     };
   };
