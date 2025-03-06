@@ -350,7 +350,8 @@ return {
         'ts_ls', 
         'ruby_lsp', 
         'metals',
-        'elmls'
+        'elmls',
+        'pylsp',
       }
       for _, lsp in pairs(servers) do
         require('lspconfig')[lsp].setup{
