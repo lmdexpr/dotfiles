@@ -6,7 +6,7 @@ return {
   font = wezterm.font("HackGen Console NF"),
   use_ime = true,
   enable_wayland = false,
-  font_size = 12.0,
+  font_size = 14.0,
   color_scheme = "Hybrid",
   -- window_background_image = home .. "/.background.jpg",
   window_background_image_hsb = {
@@ -14,7 +14,8 @@ return {
     hue = 1.0,
     saturation = 1.0,
   },
-  window_background_opacity = 0.9,
+  window_decorations = "RESIZE",
+  window_background_opacity = 0.95,
   hide_mouse_cursor_when_typing = false,
   adjust_window_size_when_changing_font_size = false,
   leader = { key="b", mods="CTRL" },

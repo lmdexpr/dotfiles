@@ -352,6 +352,7 @@ return {
         'metals',
         'elmls',
         'pylsp',
+        'jdtls',
       }
       for _, lsp in pairs(servers) do
         require('lspconfig')[lsp].setup{
