@@ -15,12 +15,14 @@ local function on_ft(ft, cb)
   })
 end
 
-on_ft('php', function()
-  vim.bo.tabstop     = 4
-  vim.bo.softtabstop = 4
-  vim.bo.shiftwidth  = 4
-  vim.bo.autoindent  = true
-end)
+for _,ft in pairs({'php', 'java'}) do
+  on_ft(ft, function()
+    vim.bo.tabstop     = 4
+    vim.bo.softtabstop = 4
+    vim.bo.shiftwidth  = 4
+    vim.bo.autoindent  = true
+  end)
+end
 
 vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
   pattern = '*.saty',

@@ -16,10 +16,9 @@ return {
   },
   window_decorations = "RESIZE",
   window_background_opacity = 0.9,
-  macos_window_background_blur = 20,
+  macos_window_background_blur = 10,
   hide_mouse_cursor_when_typing = false,
   show_new_tab_button_in_tab_bar = false,
-  show_close_tab_button_in_tabs = false,
   adjust_window_size_when_changing_font_size = false,
   leader = { key="b", mods="CTRL" },
   keys = {
