@@ -114,6 +114,17 @@ return {
     "OXY2DEV/markview.nvim",
     lazy = false,
   },
+  {
+    "uga-rosa/ccc.nvim",
+    config = function ()
+      require("ccc").setup({
+        highlighter = {
+          auto_enable = true,
+          lsp = true,
+        },
+      })
+    end
+  },
   
   {
     'github/copilot.vim',
