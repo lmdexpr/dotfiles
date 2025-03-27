@@ -127,84 +127,69 @@ return {
   },
   
   {
-    'github/copilot.vim',
-    config = function ()
-      vim.g.copilot_no_tab_map = true
-      vim.api.nvim_set_keymap("i", "<C-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-    end
-  },
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    dependencies = {
-      { "github/copilot.vim" }, -- or github/copilot.vim
-      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
-    },
-    -- build = "make tiktoken", -- Only on MacOS or Linux
-    opts = {
-      -- debug = true, -- Enable debugging
-    },
-    config = function ()
-      vim.opt.splitright = true
-
-      require("CopilotChat").setup({
-        show_help = "yes",
-        prompts = {
-          Explain = {
-            prompt = "/COPILOT_EXPLAIN コードを日本語で説明してください",
-            mapping = '<leader>ce',
-            description = "コードの説明をお願いする",
-          },
-          Review = {
-            prompt = '/COPILOT_REVIEW コードを日本語でレビューしてください。',
-            mapping = '<leader>cr',
-            description = "コードのレビューをお願いする",
-          },
-          Fix = {
-            prompt = "/COPILOT_FIX このコードには問題があります。バグを修正したコードを表示してください。説明は日本語でお願いします。",
-            mapping = '<leader>cf',
-            description = "コードの修正をお願いする",
-          },
-          Optimize = {
-            prompt = "/COPILOT_REFACTOR 選択したコードを最適化し、パフォーマンスと可読性を向上させてください。説明は日本語でお願いします。",
-            mapping = '<leader>co',
-            description = "コードの最適化をお願いする",
-          },
-          Docs = {
-            prompt = "/COPILOT_GENERATE 選択したコードに関するドキュメントコメントを日本語で生成してください。",
-            mapping = '<leader>cd',
-            description = "コードのドキュメント作成をお願いする",
-          },
-          Tests = {
-            prompt = "/COPILOT_TESTS 選択したコードの詳細なユニットテストを書いてください。説明は日本語でお願いします。",
-            mapping = '<leader>ct',
-            description = "テストコード作成をお願いする",
-          },
-          FixDiagnostic = {
-            prompt = 'コードの診断結果に従って問題を修正してください。修正内容の説明は日本語でお願いします。',
-            mapping = '<leader>cd',
-            description = "コードの修正をお願いする",
-            selection = require('CopilotChat.select').diagnostics,
-          },
-          Commit = {
-            prompt =
-              '実装差分に対するコミットメッセージを日本語で記述してください。',
-            mapping = '<leader>cco',
-            description = "コミットメッセージの作成をお願いする",
-            selection = require('CopilotChat.select').gitdiff,
-          },
-          CommitStaged = {
-            prompt =
-              'ステージ済みの変更に対するコミットメッセージを日本語で記述してください。',
-            mapping = '<leader>cs',
-            description = "ステージ済みのコミットメッセージの作成をお願いする",
-            selection = function(source)
-              return require('CopilotChat.select').gitdiff(source, true)
-            end,
+    "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          hide_during_completion = true,
+          debounce = 75,
+          keymap = {
+            accept = "<C-j>",
+            accept_word = false,
+            accept_line = false,
+            next = "<C-l>",
+            prev = "<C-h>",
+            dismiss = "<C-]>",
           },
         },
       })
     end,
   },
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    lazy = false,
+    version = false,
+    opts = {
+      provider = "copilot", -- copilotを使用
+      -- auto_suggestions_provider = "copilot",
+    },
+    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+    build = "make",
+    dependencies = {
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      "hrsh7th/nvim-cmp",
+      "nvim-tree/nvim-web-devicons",
+      "zbirenbaum/copilot.lua",
+      {
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+            use_absolute_path = true,
+          },
+        },
+      },
+      {
+        "MeanderingProgrammer/render-markdown.nvim",
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
+    },
+  },
+
   {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
