@@ -6,10 +6,14 @@
     viAlias  = true;
     vimAlias = true;
     plugins  = with pkgs.vimPlugins; [
-      CopilotChat-nvim
+      # avante-nvim
       # nvim-treesitter.withAllGrammars
     ];
-    extraPackages = with pkgs; [ gcc ];
+    extraPackages = with pkgs; [ 
+      gcc 
+      cargo
+      gnumake
+    ];
   };
 
   xdg.configFile = {

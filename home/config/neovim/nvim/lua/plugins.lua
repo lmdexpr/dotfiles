@@ -145,6 +145,7 @@ return {
             dismiss = "<C-]>",
           },
         },
+        lsp_binary = "$XDG_CONFIG_HOME/nvim/copilot/bin/copilot-language-server",
       })
     end,
   },
