@@ -159,6 +159,7 @@ return {
       -- auto_suggestions_provider = "copilot",
       hints = { enabled = false },
       vertex = {
+        -- require LOCATION, PROJECT_ID environment variable
         endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
         model = "gemini-2.0-pro-exp-02-05",
         timeout = 30000, -- Timeout in milliseconds
