@@ -111,10 +111,6 @@ return {
     end
   },
   {
-    "OXY2DEV/markview.nvim",
-    lazy = false,
-  },
-  {
     "uga-rosa/ccc.nvim",
     config = function ()
       require("ccc").setup({
@@ -146,6 +142,9 @@ return {
           },
         },
         lsp_binary = "$XDG_CONFIG_HOME/nvim/copilot/bin/copilot-language-server",
+        -- $ export XDG_CONFIG_HOME=$HOME/.config
+        -- $ npm install @github/copilot-language-server -g --prefix ~/.config/nvim/copilot/ 
+        -- $ chmod +x ~/.config/nvim/copilot/bin/copilot-language-server
       })
     end,
   },
