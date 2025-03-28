@@ -154,17 +154,27 @@ return {
     lazy = false,
     version = false,
     opts = {
-      provider = "copilot",
+      provider = "copilot", -- :Copilot auth
       -- provider = "vertex",
+      -- provider = "bedrock",
       -- auto_suggestions_provider = "copilot",
       hints = { enabled = false },
       vertex = {
-        -- require LOCATION, PROJECT_ID environment variable
+        -- require 
+        -- export LOCATION=<location>
+        -- export PROJECT_ID=<projcet id>
         endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
         model = "gemini-2.0-pro-exp-02-05",
         timeout = 30000, -- Timeout in milliseconds
         temperature = 0,
         max_tokens = 8192,
+      },
+      bedrock = {
+        -- require export BEDROCK_KEYS=$AWS_ACCESS_KEY_ID,$AWS_SECRET_ACCESS_KEY,$AWS_REGION,$AWS_SESSION_TOKEN
+        model = "anthropic.claude-3-5-sonnet-20241022-v2:0",
+        timeout = 30000, -- Timeout in milliseconds
+        temperature = 0,
+        max_tokens = 20480,
       },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
