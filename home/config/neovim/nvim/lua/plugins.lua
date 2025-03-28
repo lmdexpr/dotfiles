@@ -154,9 +154,17 @@ return {
     lazy = false,
     version = false,
     opts = {
-      provider = "copilot", -- copilotを使用
+      provider = "copilot",
+      -- provider = "vertex",
       -- auto_suggestions_provider = "copilot",
       hints = { enabled = false },
+      vertex = {
+        endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
+        model = "gemini-2.0-pro-exp-02-05",
+        timeout = 30000, -- Timeout in milliseconds
+        temperature = 0,
+        max_tokens = 8192,
+      },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make",
