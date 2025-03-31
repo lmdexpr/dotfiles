@@ -154,7 +154,7 @@ return {
     lazy = false,
     version = false,
     opts = {
-      provider = "copilot", -- :Copilot auth
+      provider = vim.env.AVANTE_PROVIDER or "copilot", -- :Copilot auth
       -- provider = "vertex",
       -- provider = "bedrock",
       -- auto_suggestions_provider = "copilot",
