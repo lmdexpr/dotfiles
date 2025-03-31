@@ -164,7 +164,7 @@ return {
         -- export LOCATION=<location>
         -- export PROJECT_ID=<projcet id>
         endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
-        model = "gemini-2.0-pro-exp-02-05",
+        model = "gemini-2.5-pro-exp-03-25",
         timeout = 30000, -- Timeout in milliseconds
         temperature = 0,
         max_tokens = 8192,
