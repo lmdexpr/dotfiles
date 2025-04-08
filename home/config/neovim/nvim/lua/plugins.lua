@@ -156,6 +156,7 @@ return {
     opts = {
       provider = vim.env.AVANTE_PROVIDER or "copilot", -- :Copilot auth
       -- provider = "vertex",
+      -- provider = "vertex_claude",
       -- provider = "bedrock",
       -- auto_suggestions_provider = "copilot",
       hints = { enabled = false },
@@ -169,12 +170,44 @@ return {
         temperature = 0,
         max_tokens = 8192,
       },
+      vertex_claude = {
+        -- require 
+        -- export LOCATION=<location>
+        -- export PROJECT_ID=<projcet id>
+        endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/antrhopic/models",
+        model = "claude-3-7-sonnet@20250219",
+        timeout = 30000, -- Timeout in milliseconds
+        temperature = 0,
+        max_tokens = 20480,
+      },
       bedrock = {
         -- require export BEDROCK_KEYS=$AWS_ACCESS_KEY_ID,$AWS_SECRET_ACCESS_KEY,$AWS_REGION,$AWS_SESSION_TOKEN
         model = "anthropic.claude-3-5-sonnet-20241022-v2:0",
         timeout = 30000, -- Timeout in milliseconds
         temperature = 0,
         max_tokens = 20480,
+      },
+      system_prompt = function()
+        local hub = require("mcphub").get_hub_instance()
+        return hub:get_active_servers_prompt()
+      end,
+      -- The custom_tools type supports both a list and a function that returns a list. Using a function here prevents requiring mcphub before it's loaded
+      custom_tools = function()
+        return {
+          require("mcphub.extensions.avante").mcp_tool(),
+        }
+      end,
+      disabled_tools = {
+        "list_files",    -- Built-in file operations
+        "search_files",
+        "read_file",
+        "create_file",
+        "rename_file",
+        "delete_file",
+        "create_dir",
+        "rename_dir",
+        "delete_dir",
+        "bash",         -- Built-in terminal access
       },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
@@ -206,6 +239,19 @@ return {
           file_types = { "markdown", "Avante" },
         },
         ft = { "markdown", "Avante" },
+      },
+      {
+        "ravitemer/mcphub.nvim",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+        },
+        cmd = "MCPHub",
+        build = "npm install -g mcp-hub@latest",
+        config = function()
+          require("mcphub").setup({
+            auto_approve = false,
+          })
+        end,
       },
     },
   },
