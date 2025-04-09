@@ -235,10 +235,12 @@ return {
           "nvim-lua/plenary.nvim",
         },
         cmd = "MCPHub",
-        build = "npm install -g mcp-hub@latest",
+        -- build = "npm install -g mcp-hub@latest",
+        build = "bundled_build.lua",
         config = function()
           require("mcphub").setup({
             auto_approve = false,
+            use_bundled_binary = true,
           })
         end,
       },
