@@ -20,6 +20,7 @@ return {
   hide_mouse_cursor_when_typing = false,
   show_new_tab_button_in_tab_bar = false,
   adjust_window_size_when_changing_font_size = false,
+  default_domain = "WSL:NixOS",
   leader = { key="b", mods="CTRL" },
   keys = {
     {key = "c", mods = "LEADER", action = wezterm.action {SpawnTab = "DefaultDomain"}},
