@@ -155,9 +155,9 @@ return {
         -- export PROJECT_ID=<projcet id>
         endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
         model = "gemini-2.5-pro-exp-03-25",
-        timeout = 30000, -- Timeout in milliseconds
+        timeout = 60000, -- Timeout in milliseconds
         temperature = 0,
-        max_tokens = 8192,
+        max_tokens = 16384,
       },
       vertex_claude = {
         -- require 
@@ -165,16 +165,16 @@ return {
         -- export PROJECT_ID=<projcet id>
         endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/antrhopic/models",
         model = "claude-3-7-sonnet@20250219",
-        timeout = 30000, -- Timeout in milliseconds
+        timeout = 60000, -- Timeout in milliseconds
         temperature = 0,
-        max_tokens = 20480,
+        max_tokens = 32768,
       },
       bedrock = {
         -- require export BEDROCK_KEYS=$AWS_ACCESS_KEY_ID,$AWS_SECRET_ACCESS_KEY,$AWS_REGION,$AWS_SESSION_TOKEN
         model = "anthropic.claude-3-5-sonnet-20241022-v2:0",
-        timeout = 30000, -- Timeout in milliseconds
+        timeout = 60000, -- Timeout in milliseconds
         temperature = 0,
-        max_tokens = 20480,
+        max_tokens = 32768,
       },
       system_prompt = function()
         local hub = require("mcphub").get_hub_instance()
