@@ -148,6 +148,9 @@ return {
       -- provider = "vertex_claude",
       -- provider = "bedrock",
       -- auto_suggestions_provider = "copilot",
+      behaviour = {
+        enable_cursor_planning_mode = true,
+      },
       hints = { enabled = false },
       vertex = {
         -- require 
