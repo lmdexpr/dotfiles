@@ -96,15 +96,21 @@ return {
             end
           end,
         },
-        window = {
-          mappings = {
-            ['oa'] = 'avante_add_files',
-          },
-        },
       },
     },
-    config = function ()
+    config = function (_, opts)
       vim.keymap.set('n', '<C-e>', ':<C-u>Neotree<CR>', { noremap = true, silent = true })
+
+      -- Setup neo-tree with merged options and mappings
+      require('neo-tree').setup(vim.tbl_deep_extend('force', opts, {
+        filesystem = {
+          window = {
+            mappings = {
+              ['oa'] = 'avante_add_files',
+            },
+          },
+        },
+      }))
     end
   },
   {
