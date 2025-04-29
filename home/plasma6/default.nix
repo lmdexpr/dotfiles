@@ -59,5 +59,7 @@
     remmina
     bitwarden-desktop
     bitwarden-cli
+
+    aider-chat
   ];
 }
