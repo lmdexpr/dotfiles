@@ -56,9 +56,13 @@
     }))
     
     discord
+
     remmina
+
     bitwarden-desktop
     bitwarden-cli
+
+    obsidian
 
     aider-chat
   ];

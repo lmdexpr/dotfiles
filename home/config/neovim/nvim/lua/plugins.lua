@@ -465,6 +465,7 @@ return {
         'elmls',
         'pylsp',
         'jdtls',
+        'rescriptls',
       }
       for _, lsp in pairs(servers) do
         require('lspconfig')[lsp].setup{
