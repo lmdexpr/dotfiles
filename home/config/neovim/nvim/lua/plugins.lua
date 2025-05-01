@@ -455,6 +455,8 @@ return {
       local servers = { 
         'nil_ls', 
         'ocamllsp', 
+        'rescriptls',
+        'reason_ls',
         'intelephense', 
         'rust_analyzer', 
         'gopls', 
@@ -465,7 +467,6 @@ return {
         'elmls',
         'pylsp',
         'jdtls',
-        'rescriptls',
       }
       for _, lsp in pairs(servers) do
         require('lspconfig')[lsp].setup{
