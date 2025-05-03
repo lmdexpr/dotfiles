@@ -198,6 +198,7 @@ return {
       -- provider = "vertex",
       -- provider = "vertex_claude",
       -- provider = "bedrock",
+      -- provider = "gemini",
       -- auto_suggestions_provider = "copilot",
       behaviour = {
         enable_cursor_planning_mode = true,
@@ -211,7 +212,7 @@ return {
         model = "gemini-2.5-pro-exp-03-25",
         timeout = 60000, -- Timeout in milliseconds
         temperature = 0,
-        max_tokens = 16384,
+        max_tokens = 65534,
       },
       vertex_claude = {
         -- require 
@@ -229,6 +230,13 @@ return {
         timeout = 60000, -- Timeout in milliseconds
         temperature = 0,
         max_tokens = 32768,
+      },
+      gemini = {
+        -- require export GEMINI_API_KEY=<api key>
+        model = "gemini-2.5-pro-exp-03-25",
+        timeout = 60000, -- Timeout in milliseconds
+        temperature = 0,
+        max_tokens = 65534,
       },
       -- system_prompt = function()
       --   local hub = require("mcphub").get_hub_instance()
