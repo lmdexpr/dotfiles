@@ -1,12 +1,5 @@
 return {
   {
-    'lewis6991/impatient.nvim',
-    config = function ()
-      require('impatient')
-    end
-  },
-
-  {
     'neanias/everforest-nvim',
     lazy = false,
     priority = 1000,
@@ -50,14 +43,7 @@ return {
           },
         }
       }
-      ts.load_extension('file_browser')
-      vim.keymap.set('n', '<leader>fb', ':Telescope file_browser path=%:p:h select_buffer=true<CR>', {})
     end
-  },
-  {
-    'nvim-telescope/telescope-file-browser.nvim',
-    event = 'VeryLazy',
-    dependencies = { 'nvim-telescope/telescope.nvim' ,'nvim-lua/plenary.nvim' },
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -149,16 +135,6 @@ return {
         highlight = { enable = true },
         indent    = { enable = true }
       }
-    end
-  },
-  {
-    'ocaml-mlx/ocaml_mlx.nvim',
-    dependencies = {
-      'neovim/nvim-lspconfig',
-      'nvim-treesitter/nvim-treesitter'
-    },
-    config = function ()
-      require 'ocaml_mlx'
     end
   },
   
@@ -462,19 +438,15 @@ return {
 
       local servers = { 
         'nil_ls', 
-        'ocamllsp', 
-        'rescriptls',
-        'reason_ls',
-        'intelephense', 
+        'ocamllsp', 'rescriptls', 'reason_ls',
         'rust_analyzer', 
         'gopls', 
+        'metals', 'jdtls',
         'csharp_ls', 
-        'ts_ls', 
+        'ts_ls', 'elmls',
         'ruby_lsp', 
-        'metals',
-        'elmls',
         'pylsp',
-        'jdtls',
+        'intelephense', 
       }
       for _, lsp in pairs(servers) do
         require('lspconfig')[lsp].setup{
@@ -484,9 +456,18 @@ return {
       end
     end
   },
-
   {
     'ToruNiina/satysfi.vim',
     ft = 'satysfi',
+  },
+  {
+    'ocaml-mlx/ocaml_mlx.nvim',
+    dependencies = {
+      'neovim/nvim-lspconfig',
+      'nvim-treesitter/nvim-treesitter'
+    },
+    config = function ()
+      require 'ocaml_mlx'
+    end
   }
 }
