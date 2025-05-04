@@ -36,12 +36,12 @@
         "utility"
         "syntax-highlighting"
         "autosuggestions"
-        "prompt"
         "completion"
+        "prompt"
       ];
       editor.keymap = "vi";
       git.submoduleIgnore = "all";
-      prompt.theme = "paradox";
+      prompt.theme = "pure";
     };
 
     envExtra = ''
