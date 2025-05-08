@@ -286,28 +286,28 @@ return {
         temperature = 0,
         max_tokens = 65534,
       },
-      -- system_prompt = function()
-      --   local hub = require("mcphub").get_hub_instance()
-      --   return hub:get_active_servers_prompt()
-      -- end,
-      -- -- The custom_tools type supports both a list and a function that returns a list. Using a function here prevents requiring mcphub before it's loaded
-      -- custom_tools = function()
-      --   return {
-      --     require("mcphub.extensions.avante").mcp_tool(),
-      --   }
-      -- end,
-      -- disabled_tools = {
-      --   "list_files",    -- Built-in file operations
-      --   "search_files",
-      --   "read_file",
-      --   "create_file",
-      --   "rename_file",
-      --   "delete_file",
-      --   "create_dir",
-      --   "rename_dir",
-      --   "delete_dir",
-      --   "bash",         -- Built-in terminal access
-      -- },
+      system_prompt = function()
+        local hub = require("mcphub").get_hub_instance()
+        return hub:get_active_servers_prompt()
+      end,
+      -- The custom_tools type supports both a list and a function that returns a list. Using a function here prevents requiring mcphub before it's loaded
+      custom_tools = function()
+        return {
+          require("mcphub.extensions.avante").mcp_tool(),
+        }
+      end,
+      disabled_tools = {
+        "list_files",    -- Built-in file operations
+        "search_files",
+        "read_file",
+        "create_file",
+        "rename_file",
+        "delete_file",
+        "create_dir",
+        "rename_dir",
+        "delete_dir",
+        "bash",         -- Built-in terminal access
+      },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make",
@@ -339,21 +339,21 @@ return {
         },
         ft = { "markdown", "Avante" },
       },
-      -- {
-      --   "ravitemer/mcphub.nvim",
-      --   dependencies = {
-      --     "nvim-lua/plenary.nvim",
-      --   },
-      --   cmd = "MCPHub",
-      --   -- build = "npm install -g mcp-hub@latest",
-      --   build = "bundled_build.lua",
-      --   config = function()
-      --     require("mcphub").setup({
-      --       auto_approve = false,
-      --       use_bundled_binary = true,
-      --     })
-      --   end,
-      -- },
+      {
+        "ravitemer/mcphub.nvim",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+        },
+        cmd = "MCPHub",
+        -- build = "npm install -g mcp-hub@latest",
+        build = "bundled_build.lua",
+        config = function()
+          require("mcphub").setup({
+            auto_approve = false,
+            use_bundled_binary = true,
+          })
+        end,
+      },
     },
   },
 
