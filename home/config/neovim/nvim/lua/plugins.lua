@@ -99,6 +99,78 @@ return {
       }))
     end
   },
+
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    event = 'VeryLazy',
+    config = function()
+      require('lualine').setup {
+        options = {
+          icons_enabled = true,
+          section_separators = { left = '', right = ''},
+          component_separators = { left = '|', right = '|' },
+          always_divide_middle = true,
+        },
+        sections = {
+          lualine_a = {'filename'},
+          lualine_b = {'branch'},
+          lualine_c = {
+            "'%='",
+            {
+              'diff',
+              symbols = {added = ' ', modified = ' ', removed = ' '},
+              separator = "  |  ",
+            },
+            {
+              'diagnostics',
+              symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '},
+            },
+          },
+          lualine_x = {'encoding', 'fileformat', 'filetype'},
+          lualine_y = {'progress'},
+          lualine_z = {'location'}
+        },
+        inactive_sections = {
+          lualine_a = {}, lualine_b = {}, lualine_c = {},
+          lualine_x = {}, lualine_y = {}, lualine_z = {},
+        },
+        extension = {'neo-tree'},
+      }
+    end
+  },
+  {
+    'akinsho/bufferline.nvim',
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function ()
+      vim.o.termguicolors = true
+      require("bufferline").setup{
+        options = {
+          mode = "buffers",
+          numbers = function(opts) return string.format('%s·%s', opts.raise(opts.id), opts.lower(opts.ordinal)) end,
+          buffer_close_icon = 'x',
+          modified_icon = '●',
+          close_icon = '',
+          left_trunc_marker = '',
+          right_trunc_marker = '',
+          max_name_length = 18,
+          max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
+          truncate_names = true, -- whether or not tab names should be truncated
+          tab_size = 18,
+          diagnostics = "nvim_lsp",
+          diagnostics_update_in_insert = false,
+          always_show_bufferline = false,
+          hover = { enabled = true, delay = 200, reveal = {'close'} },
+        }
+      }
+      vim.keymap.set('n', '<Tab>', '<Cmd>BufferLineCycleNext<CR>', {})
+      vim.keymap.set('n', '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', {})
+      vim.keymap.set('n', '@', '<Cmd>BufferLineCloseRight<CR>', {})
+      vim.keymap.set('n', '!', '<Cmd>BufferLineCloseLeft<CR>', {})
+    end
+  },
+
   {
     'dinhhuy258/git.nvim',
     event = 'InsertEnter',
@@ -240,10 +312,10 @@ return {
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make",
     dependencies = {
+      'nvim-treesitter/nvim-treesitter',
       "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
-      "hrsh7th/nvim-cmp",
       "nvim-tree/nvim-web-devicons",
       "zbirenbaum/copilot.lua",
       {
@@ -286,131 +358,74 @@ return {
   },
 
   {
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
-    config = function ()
-      local cmp = require('cmp')
-      local lspkind = require('lspkind')
+    'saghen/blink.cmp',
+    dependencies = {
+      'rafamadriz/friendly-snippets',
+      'Kaiser-Yang/blink-cmp-avante'
+    },
 
-      cmp.setup(require('plugins.cmp').config(cmp, lspkind))
+    -- use a release tag to download pre-built binaries
+    version = '1.*',
+    -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+    -- build = 'cargo build --release',
+    -- If you use nix, you can build from source using latest nightly rust with:
+    -- build = 'nix run .#build-plugin',
 
-      cmp.setup.cmdline({ '/', '?' }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources(
-        { { name = 'nvim_lsp_document_symbol' } },
-        { { name = 'buffer' } }
-        )
-      })
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+      -- 'super-tab' for mappings similar to vscode (tab to accept)
+      -- 'enter' for enter to accept
+      -- 'none' for no mappings
+      --
+      -- All presets have the following mappings:
+      -- C-space: Open menu or open docs if already open
+      -- C-n/C-p or Up/Down: Select next/previous item
+      -- C-e: Hide menu
+      -- C-k: Toggle signature help (if signature.enabled = true)
+      --
+      -- See :h blink-cmp-config-keymap for defining your own keymap
+      keymap = { preset = 'super-tab' },
 
-      cmp.setup.cmdline(':', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources(
-        { { name = 'path' } },
-        { { name = 'cmdline', keyword_length = 2 } }
-        )
-      })
+      appearance = {
+        -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = 'mono'
+      },
 
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      vim.cmd('let g:vsnip_filetypes = {}')
-    end
-  },
-  {'hrsh7th/cmp-nvim-lsp',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-nvim-lsp-signature-help',  event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' }},
-  {'hrsh7th/cmp-nvim-lsp-document-symbol', event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' }},
-  {'onsails/lspkind.nvim',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-buffer',                   event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-path',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-vsnip',                    event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-cmdline',                  event = 'ModeChanged', dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-calc',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+      completion = {
+        documentation = { auto_show = false },
+      },
 
-  {
-    'hrsh7th/vim-vsnip',
-    event = 'InsertEnter',
-    config = function ()
-      vim.api.nvim_set_keymap('i', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
-      vim.api.nvim_set_keymap('s', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
-      vim.api.nvim_set_keymap('i', '<C-h>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
-      vim.api.nvim_set_keymap('s', '<C-h>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
-      vim.g.vsnip_snippet_dir = '~/.config/nvim/snippet'
-    end
-  },
-  {'hrsh7th/vim-vsnip-integ', event = 'InsertEnter'},
-  {'rafamadriz/friendly-snippets', event = 'InsertEnter'},
-
-  {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    event = 'VeryLazy',
-    config = function()
-      require('lualine').setup {
-        options = {
-          icons_enabled = true,
-          section_separators = { left = '', right = ''},
-          component_separators = { left = '|', right = '|' },
-          always_divide_middle = true,
-        },
-        sections = {
-          lualine_a = {'filename'},
-          lualine_b = {'branch'},
-          lualine_c = {
-            "'%='",
-            {
-              'diff',
-              symbols = {added = ' ', modified = ' ', removed = ' '},
-              separator = "  |  ",
-            },
-            {
-              'diagnostics',
-              symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '},
-            },
-          },
-          lualine_x = {'encoding', 'fileformat', 'filetype'},
-          lualine_y = {'progress'},
-          lualine_z = {'location'}
-        },
-        inactive_sections = {
-          lualine_a = {}, lualine_b = {}, lualine_c = {},
-          lualine_x = {}, lualine_y = {}, lualine_z = {},
-        },
-        extension = {'neo-tree'},
-      }
-    end
-  },
-  {
-    'akinsho/bufferline.nvim',
-    version = "*",
-    dependencies = 'nvim-tree/nvim-web-devicons',
-    config = function ()
-      vim.o.termguicolors = true
-      require("bufferline").setup{
-        options = {
-          mode = "buffers",
-          numbers = function(opts) return string.format('%s·%s', opts.raise(opts.id), opts.lower(opts.ordinal)) end,
-          buffer_close_icon = 'x',
-          modified_icon = '●',
-          close_icon = '',
-          left_trunc_marker = '',
-          right_trunc_marker = '',
-          max_name_length = 18,
-          max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
-          truncate_names = true, -- whether or not tab names should be truncated
-          tab_size = 18,
-          diagnostics = "nvim_lsp",
-          diagnostics_update_in_insert = false,
-          always_show_bufferline = false,
-          hover = { enabled = true, delay = 200, reveal = {'close'} },
+      -- Default list of enabled providers defined so that you can extend it
+      -- elsewhere in your config, without redefining it, due to `opts_extend`
+      sources = {
+        default = { 'avante', 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          avante = {
+            module = 'blink-cmp-avante',
+            name = 'Avante',
+            opts = {
+              -- options for blink-cmp-avante
+            }
+          }
         }
-      }
-      vim.keymap.set('n', '<Tab>', '<Cmd>BufferLineCycleNext<CR>', {})
-      vim.keymap.set('n', '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', {})
-      vim.keymap.set('n', '@', '<Cmd>BufferLineCloseRight<CR>', {})
-      vim.keymap.set('n', '!', '<Cmd>BufferLineCloseLeft<CR>', {})
-    end
+      },
+
+      -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+      -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
+      -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+      --
+      -- See the fuzzy documentation for more information
+      fuzzy = { implementation = "prefer_rust_with_warning" }
+    },
+    opts_extend = { "sources.default" }
   },
 
   {
     'neovim/nvim-lspconfig',
+    dependencies = { 'saghen/blink.cmp' },
     config = function ()
       local opts = { noremap=true, silent=true }
       vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
@@ -433,8 +448,7 @@ return {
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.format { async = true }<CR>', opts)
       end
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities.textDocument.completion.completionItem.snippetSupport = true
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       local servers = { 
         'nil_ls', 
@@ -452,6 +466,7 @@ return {
         require('lspconfig')[lsp].setup{
           on_attach = on_attach,
           autostart = true,
+          capabilities = capabilities,
         }
       end
     end
@@ -469,5 +484,47 @@ return {
     config = function ()
       require 'ocaml_mlx'
     end
+  },
+
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    keys = {
+      {
+        -- Customize or remove this keymap to your liking
+        "<leader>ft",
+        function()
+          require("conform").format({ async = true })
+        end,
+        mode = "",
+        desc = "Format buffer",
+      },
+    },
+    -- This will provide type hinting with LuaLS
+    ---@module "conform"
+    ---@type conform.setupOpts
+    opts = {
+      -- Define your formatters
+      formatters_by_ft = {
+        -- lua = { "stylua" },
+      },
+      -- Set default options
+      default_format_opts = {
+        lsp_format = "fallback",
+      },
+      -- Set up format-on-save
+      format_on_save = { timeout_ms = 500 },
+      -- Customize formatters
+      formatters = {
+        shfmt = {
+          prepend_args = { "-i", "2" },
+        },
+      },
+    },
+    init = function()
+      -- If you want the formatexpr, here is the place to set it
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    end,
   }
 }
