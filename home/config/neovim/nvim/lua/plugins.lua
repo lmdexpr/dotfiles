@@ -314,6 +314,7 @@ return {
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
       "stevearc/dressing.nvim",
+      "hrsh7th/nvim-cmp",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
       "nvim-tree/nvim-web-devicons",
@@ -357,75 +358,103 @@ return {
     },
   },
 
+
   {
-    'saghen/blink.cmp',
-    dependencies = {
-      'rafamadriz/friendly-snippets',
-      'Kaiser-Yang/blink-cmp-avante'
-    },
+    'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
+    config = function ()
+      local cmp = require('cmp')
+      local lspkind = require('lspkind')
 
-    -- use a release tag to download pre-built binaries
-    version = '1.*',
-    -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-    -- build = 'cargo build --release',
-    -- If you use nix, you can build from source using latest nightly rust with:
-    -- build = 'nix run .#build-plugin',
+      cmp.setup {
+        snippet = {
+          expand = function(args)
+            vim.fn['vsnip#anonymous'](args.body)
+          end
+        },
 
-    ---@module 'blink.cmp'
-    ---@type blink.cmp.Config
-    opts = {
-      -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-      -- 'super-tab' for mappings similar to vscode (tab to accept)
-      -- 'enter' for enter to accept
-      -- 'none' for no mappings
-      --
-      -- All presets have the following mappings:
-      -- C-space: Open menu or open docs if already open
-      -- C-n/C-p or Up/Down: Select next/previous item
-      -- C-e: Hide menu
-      -- C-k: Toggle signature help (if signature.enabled = true)
-      --
-      -- See :h blink-cmp-config-keymap for defining your own keymap
-      keymap = { preset = 'super-tab' },
+        window = {
+          completion = cmp.config.window.bordered({
+            border = 'single'
+          }),
+          documentation = cmp.config.window.bordered({
+            border = 'single'
+          }),
+        },
 
-      appearance = {
-        -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-        -- Adjusts spacing to ensure icons are aligned
-        nerd_font_variant = 'mono'
-      },
+        mapping = cmp.mapping.preset.insert({
+          ['<Tab>'] = cmp.mapping.select_next_item(),
+          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        }),
 
-      completion = {
-        documentation = { auto_show = false },
-      },
+        formatting = {
+          format = lspkind.cmp_format({
+            mode = 'symbol',
+            maxwidth = 50,
+            ellipsis_char = '...',
+          })
+        },
 
-      -- Default list of enabled providers defined so that you can extend it
-      -- elsewhere in your config, without redefining it, due to `opts_extend`
-      sources = {
-        default = { 'avante', 'lsp', 'path', 'snippets', 'buffer' },
-        providers = {
-          avante = {
-            module = 'blink-cmp-avante',
-            name = 'Avante',
-            opts = {
-              -- options for blink-cmp-avante
-            }
-          }
-        }
-      },
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          { name = 'vsnip' },
+          { name = 'nvim_lsp_signature_help' },
+          { name = 'calc' },
+        }, {
+            { name = 'buffer', keyword_length = 2 },
+          })
+      }
 
-      -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
-      -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
-      -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
-      --
-      -- See the fuzzy documentation for more information
-      fuzzy = { implementation = "prefer_rust_with_warning" }
-    },
-    opts_extend = { "sources.default" }
+      cmp.setup.cmdline({ '/', '?' }, {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources(
+          { { name = 'nvim_lsp_document_symbol' } },
+          { { name = 'buffer' } }
+        )
+      })
+      cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources(
+          { { name = 'path' } },
+          { { name = 'cmdline', keyword_length = 2 } }
+        )
+      })
+
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      vim.cmd('let g:vsnip_filetypes = {}')
+    end
   },
+  {'hrsh7th/cmp-nvim-lsp',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-nvim-lsp-signature-help',  event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' }},
+  {'hrsh7th/cmp-nvim-lsp-document-symbol', event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' }},
+  {'onsails/lspkind.nvim',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-buffer',                   event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-path',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-vsnip',                    event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-cmdline',                  event = 'ModeChanged', dependencies = { 'hrsh7th/nvim-cmp' }}, 
+  {'hrsh7th/cmp-calc',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }},
+
+  {
+    'hrsh7th/vim-vsnip',
+    event = 'InsertEnter',
+    config = function ()
+      vim.api.nvim_set_keymap('i', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
+      vim.api.nvim_set_keymap('s', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
+      vim.api.nvim_set_keymap('i', '<C-h>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
+      vim.api.nvim_set_keymap('s', '<C-h>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
+      vim.g.vsnip_snippet_dir = '~/.config/nvim/snippet'
+    end
+  },
+  {'hrsh7th/vim-vsnip-integ', event = 'InsertEnter'},
+  {'rafamadriz/friendly-snippets', event = 'InsertEnter'},
 
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'saghen/blink.cmp' },
     config = function ()
       local opts = { noremap=true, silent=true }
       vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
@@ -448,7 +477,8 @@ return {
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.format { async = true }<CR>', opts)
       end
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
 
       local servers = { 
         'nil_ls', 
