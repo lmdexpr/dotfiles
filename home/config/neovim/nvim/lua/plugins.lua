@@ -45,6 +45,7 @@ return {
     ---@module "neo-tree"
     ---@type neotree.Config?
     opts = {
+      close_if_last_window = true,
       filesystem = {
         commands = {
           avante_add_files = function(state)
