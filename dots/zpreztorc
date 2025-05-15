@@ -8,6 +8,8 @@ zstyle ':prezto:load' pmodule \
   'directory' \
   'spectrum' \
   'utility' \
+  'syntax-highlighting' \
+  'autosuggestions' \
   'completion' \
   'git' \
   'haskell' \
@@ -26,8 +28,6 @@ zstyle ':prezto:module:history-substring-search:color' not-found ''
 
 zstyle ':prezto:module:history-substring-search' globbing-flags ''
 
-zstyle ':prezto:module:pacman' frontend 'paru'
+zstyle ':prezto:module:prompt' theme 'pure'
 
-zstyle ':prezto:module:prompt' theme 'paradox'
-
-zstyle ':prezto:module:ssh:load' identities 'id_rsa' 'id_rsa2' 'id_github'
+zstyle :prompt:pure:git:stash show yes

@@ -42,6 +42,9 @@
       editor.keymap = "vi";
       git.submoduleIgnore = "all";
       prompt.theme = "pure";
+      extraConfig = ''
+        zstyle :prompt:pure:git:stash show yes
+      '';
     };
 
     envExtra = ''
