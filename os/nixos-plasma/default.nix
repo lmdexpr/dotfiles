@@ -1,6 +1,6 @@
 { config, pkgs, username, ... }:
 {
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.05";
 
   programs.zsh.enable = true;
 
@@ -27,7 +27,8 @@
 
   i18n = {
     inputMethod = {
-      enabled = "fcitx5";
+      enable = true;
+      type = "fcitx5";
       fcitx5.addons = with pkgs; [
         fcitx5-mozc
         fcitx5-nord
