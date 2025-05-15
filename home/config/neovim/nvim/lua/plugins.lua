@@ -1,18 +1,5 @@
 return {
   {
-    'neanias/everforest-nvim',
-    lazy = false,
-    priority = 1000,
-    config = function ()
-      require("everforest").setup({
-        background = "hard",
-      })
-
-      require("everforest").load()
-    end
-  },
-
-  {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.8',
     dependencies = { 'nvim-lua/plenary.nvim' },
@@ -107,6 +94,7 @@ return {
     config = function()
       require('lualine').setup {
         options = {
+          theme = "catppuccin",
           icons_enabled = true,
           section_separators = { left = '', right = ''},
           component_separators = { left = '|', right = '|' },
@@ -556,5 +544,60 @@ return {
       -- If you want the formatexpr, here is the place to set it
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
     end,
+  },
+
+  -- {
+  --   'neanias/everforest-nvim',
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function ()
+  --     require("everforest").setup({
+  --       background = "hard",
+  --     })
+
+  --     require("everforest").load()
+  --   end
+  -- }
+  { 
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    opts = {
+      flavour = "frappe", -- latte, frappe, macchiato, mocha
+      transparent_background = false,
+      integrations = {
+        cmp = true,
+        render_markdown = true,
+        nvimtree = true,
+        treesitter = true,
+        native_lsp = {
+          enabled = true,
+          virtual_text = {
+            errors = { "italic" },
+            hints = { "italic" },
+            warnings = { "italic" },
+            information = { "italic" },
+            ok = { "italic" },
+          },
+          underlines = {
+            errors = { "underline" },
+            hints = { "underline" },
+            warnings = { "underline" },
+            information = { "underline" },
+            ok = { "underline" },
+          },
+          inlay_hints = {
+            background = true,
+          },
+        },
+        telescope = {
+          enabled = true,
+        }
+      }
+    },
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
+      vim.cmd.colorscheme "catppuccin"
+    end
   }
 }
