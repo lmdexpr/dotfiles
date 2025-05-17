@@ -489,10 +489,8 @@ return {
       end
     end
   },
-  {
-    'ToruNiina/satysfi.vim',
-    ft = 'satysfi',
-  },
+  { 'ToruNiina/satysfi.vim', ft = 'satysfi', },
+  { 'rescript-lang/vim-rescript', ft="rescript" },
   {
     'ocaml-mlx/ocaml_mlx.nvim',
     dependencies = {
