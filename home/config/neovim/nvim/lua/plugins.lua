@@ -470,7 +470,7 @@ return {
 
       local servers = { 
         'nil_ls', 
-        'ocamllsp', 'rescriptls', 'reason_ls',
+        'ocamllsp', 'rescriptls', -- 'reason_ls',
         'rust_analyzer', 
         'gopls', 
         'metals', 'jdtls',
@@ -489,8 +489,9 @@ return {
       end
     end
   },
-  { 'ToruNiina/satysfi.vim', ft = 'satysfi', },
-  { 'rescript-lang/vim-rescript', ft="rescript" },
+  { 'ToruNiina/satysfi.vim', ft='satysfi', },
+  { 'rescript-lang/vim-rescript', ft='rescript' },
+  { 'reasonml-editor/vim-reason-plus', ft='reason'},
   {
     'ocaml-mlx/ocaml_mlx.nvim',
     dependencies = {
