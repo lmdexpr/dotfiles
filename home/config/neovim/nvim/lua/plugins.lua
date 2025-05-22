@@ -269,7 +269,7 @@ return {
       },
       gemini = {
         -- require export GEMINI_API_KEY=<api key>
-        model = "gemini-2.5-pro-exp-03-25",
+        model = "gemini-2.5-pro-preview-05-06",
         timeout = 60000, -- Timeout in milliseconds
         temperature = 0,
         max_tokens = 65534,
