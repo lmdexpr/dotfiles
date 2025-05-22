@@ -227,7 +227,7 @@ return {
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
-    lazy = false,
+    -- lazy = false,
     version = false,
     opts = {
       provider = vim.env.AVANTE_PROVIDER or "copilot", -- :Copilot auth
@@ -245,7 +245,7 @@ return {
         -- export LOCATION=<location>
         -- export PROJECT_ID=<projcet id>
         endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
-        model = "gemini-2.5-pro-exp-03-25",
+        model = "gemini-2.5-pro-preview-05-06",
         timeout = 60000, -- Timeout in milliseconds
         temperature = 0,
         max_tokens = 65534,
@@ -494,6 +494,7 @@ return {
   { 'reasonml-editor/vim-reason-plus', ft='reason'},
   {
     'ocaml-mlx/ocaml_mlx.nvim',
+    ft = 'ocaml',
     dependencies = {
       'neovim/nvim-lspconfig',
       'nvim-treesitter/nvim-treesitter'
