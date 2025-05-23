@@ -240,6 +240,9 @@ return {
         enable_cursor_planning_mode = true,
       },
       hints = { enabled = false },
+      copilot = {
+        model = "claude-3.7-sonnet",
+      },
       vertex = {
         -- require 
         -- export LOCATION=<location>
