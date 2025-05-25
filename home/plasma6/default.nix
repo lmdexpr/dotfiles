@@ -16,6 +16,16 @@
     };
 
     fzf.enable = true;
+
+    ssh = {
+      enable = true;
+      extraConfig = ''
+        Host git.lmdex.pro
+        Port 22
+        User git
+        ProxyCommand cloudflared access ssh --hostname %h
+      '';
+    };
   };
 
   home = {
@@ -44,6 +54,7 @@
     argocd
     kustomize
     kubernetes-helm
+    cloudflared
 
     nil
 
