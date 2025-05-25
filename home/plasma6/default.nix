@@ -23,7 +23,7 @@
         Host git.lmdex.pro
         Port 22
         User git
-        ProxyCommand cloudflared access ssh --hostname %h
+        ProxyCommand sh -c 'resolved_ip=$(dig +short %h | head -1); if echo "$resolved_ip" | grep -E "^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)"; then nc "$resolved_ip" 22; else cloudflared access ssh --hostname %h; fi'
       '';
     };
   };
@@ -55,6 +55,7 @@
     kustomize
     kubernetes-helm
     cloudflared
+    dig
 
     nil
 
