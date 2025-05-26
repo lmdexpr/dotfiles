@@ -4,7 +4,7 @@ return {
     tag = '0.1.8',
     dependencies = { 'nvim-lua/plenary.nvim' },
     event = 'VeryLazy',
-    config = function ()
+    config = function()
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
       vim.keymap.set('n', '<leader>b', builtin.buffers, {})
@@ -72,7 +72,7 @@ return {
         },
       },
     },
-    config = function (_, opts)
+    config = function(_, opts)
       vim.keymap.set('n', '<C-e>', ':<C-u>Neotree<CR>', { noremap = true, silent = true })
 
       -- Setup neo-tree with merged options and mappings
@@ -90,40 +90,47 @@ return {
 
   {
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
     event = 'VeryLazy',
     config = function()
       require('lualine').setup {
         options = {
           icons_enabled = true,
-          section_separators = { left = '', right = ''},
-          component_separators = { left = '|', right = '|' },
+          section_separators = { left = '', right = '' },
+          component_separators = { left = '', right = '' },
           always_divide_middle = true,
+          disabled_filetypes = {
+            'neo-tree',
+            'Avante', 'AvanteSelectedFiles', 'AvanteInput',
+          },
         },
         sections = {
-          lualine_a = {'filename'},
-          lualine_b = {'branch'},
+          lualine_a = { 'filename' }, lualine_b = { 'filetype' },
           lualine_c = {
-            "'%='",
-            {
-              'diff',
-              symbols = {added = ' ', modified = ' ', removed = ' '},
-              separator = "  |  ",
-            },
+            'fileformat',
+            'encoding',
             {
               'diagnostics',
-              symbols = {error = ' ', warn = ' ', info = ' ', hint = ' '},
+              symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' },
             },
           },
-          lualine_x = {'encoding', 'fileformat', 'filetype'},
-          lualine_y = {'progress'},
-          lualine_z = {'location'}
+          lualine_x = {
+            {
+              'diff',
+              symbols = { added = ' ', modified = ' ', removed = ' ' },
+            },
+            'branch',
+          },
+          lualine_y = { 'progress' }, lualine_z = { 'location' },
         },
         inactive_sections = {
-          lualine_a = {}, lualine_b = {}, lualine_c = {},
+          lualine_a = { 'filename' }, lualine_b = { 'filetype' },
+          lualine_c = {},
           lualine_x = {}, lualine_y = {}, lualine_z = {},
         },
-        extension = {'neo-tree'},
+        extension = {},
       }
     end
   },
@@ -131,9 +138,9 @@ return {
     'akinsho/bufferline.nvim',
     version = "*",
     dependencies = 'nvim-tree/nvim-web-devicons',
-    config = function ()
+    config = function()
       vim.o.termguicolors = true
-      require("bufferline").setup{
+      require("bufferline").setup {
         options = {
           mode = "buffers",
           numbers = function(opts) return string.format('%s·%s', opts.raise(opts.id), opts.lower(opts.ordinal)) end,
@@ -144,12 +151,12 @@ return {
           right_trunc_marker = '',
           max_name_length = 18,
           max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
-          truncate_names = true, -- whether or not tab names should be truncated
+          truncate_names = true,  -- whether or not tab names should be truncated
           tab_size = 18,
           diagnostics = "nvim_lsp",
           diagnostics_update_in_insert = false,
           always_show_bufferline = false,
-          hover = { enabled = true, delay = 200, reveal = {'close'} },
+          hover = { enabled = true, delay = 200, reveal = { 'close' } },
         }
       }
       vim.keymap.set('n', '<Tab>', '<Cmd>BufferLineCycleNext<CR>', {})
@@ -162,7 +169,7 @@ return {
   {
     'dinhhuy258/git.nvim',
     event = 'InsertEnter',
-    config = function ()
+    config = function()
       require('git').setup({
         default_mappings = false,
         keymaps = {
@@ -189,15 +196,15 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
-    config = function () 
+    config = function()
       require("nvim-treesitter.configs").setup {
         auto_install = true,
-        highlight = { enable = true },
-        indent    = { enable = true }
+        highlight    = { enable = true },
+        indent       = { enable = true }
       }
     end
   },
-  
+
   {
     "zbirenbaum/copilot.lua",
     event = "InsertEnter",
@@ -219,7 +226,7 @@ return {
         },
         lsp_binary = "$XDG_CONFIG_HOME/nvim/copilot/bin/copilot-language-server",
         -- $ export XDG_CONFIG_HOME=$HOME/.config
-        -- $ npm install @github/copilot-language-server -g --prefix ~/.config/nvim/copilot/ 
+        -- $ npm install @github/copilot-language-server -g --prefix ~/.config/nvim/copilot/
         -- $ chmod +x ~/.config/nvim/copilot/bin/copilot-language-server
       })
     end,
@@ -244,20 +251,22 @@ return {
         model = "claude-3.7-sonnet",
       },
       vertex = {
-        -- require 
+        -- require
         -- export LOCATION=<location>
         -- export PROJECT_ID=<projcet id>
-        endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
+        endpoint =
+        "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
         model = "gemini-2.5-pro-preview-05-06",
         timeout = 60000, -- Timeout in milliseconds
         temperature = 0,
         max_tokens = 65534,
       },
       vertex_claude = {
-        -- require 
+        -- require
         -- export LOCATION=<location>
         -- export PROJECT_ID=<projcet id>
-        endpoint = "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/antrhopic/models",
+        endpoint =
+        "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/antrhopic/models",
         model = "claude-sonnet-4@20250514",
         timeout = 60000, -- Timeout in milliseconds
         temperature = 0,
@@ -277,6 +286,11 @@ return {
         temperature = 0,
         max_tokens = 65534,
       },
+      window = {
+        ask = {
+          floating = true,
+        }
+      },
       system_prompt = function()
         local hub = require("mcphub").get_hub_instance()
         return hub:get_active_servers_prompt()
@@ -288,7 +302,7 @@ return {
         }
       end,
       disabled_tools = {
-        "list_files",    -- Built-in file operations
+        "list_files", -- Built-in file operations
         "search_files",
         "read_file",
         "create_file",
@@ -297,7 +311,7 @@ return {
         "create_dir",
         "rename_dir",
         "delete_dir",
-        "bash",         -- Built-in terminal access
+        "bash", -- Built-in terminal access
       },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
@@ -353,7 +367,7 @@ return {
   {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
-    config = function ()
+    config = function()
       local cmp = require('cmp')
       local lspkind = require('lspkind')
 
@@ -397,8 +411,8 @@ return {
           { name = 'nvim_lsp_signature_help' },
           { name = 'calc' },
         }, {
-            { name = 'buffer', keyword_length = 2 },
-          })
+          { name = 'buffer', keyword_length = 2 },
+        })
       }
 
       cmp.setup.cmdline({ '/', '?' }, {
@@ -416,24 +430,24 @@ return {
         )
       })
 
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
       vim.cmd('let g:vsnip_filetypes = {}')
     end
   },
-  {'hrsh7th/cmp-nvim-lsp',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-nvim-lsp-signature-help',  event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' }},
-  {'hrsh7th/cmp-nvim-lsp-document-symbol', event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' }},
-  {'onsails/lspkind.nvim',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-buffer',                   event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-path',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-vsnip',                    event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-cmdline',                  event = 'ModeChanged', dependencies = { 'hrsh7th/nvim-cmp' }}, 
-  {'hrsh7th/cmp-calc',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' }},
+  { 'hrsh7th/cmp-nvim-lsp',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' } },
+  { 'hrsh7th/cmp-nvim-lsp-signature-help',  event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' } },
+  { 'hrsh7th/cmp-nvim-lsp-document-symbol', event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' } },
+  { 'onsails/lspkind.nvim',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' } },
+  { 'hrsh7th/cmp-buffer',                   event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' } },
+  { 'hrsh7th/cmp-path',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' } },
+  { 'hrsh7th/cmp-vsnip',                    event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' } },
+  { 'hrsh7th/cmp-cmdline',                  event = 'ModeChanged', dependencies = { 'hrsh7th/nvim-cmp' } },
+  { 'hrsh7th/cmp-calc',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' } },
 
   {
     'hrsh7th/vim-vsnip',
     event = 'InsertEnter',
-    config = function ()
+    config = function()
       vim.api.nvim_set_keymap('i', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
       vim.api.nvim_set_keymap('s', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
       vim.api.nvim_set_keymap('i', '<C-h>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
@@ -441,19 +455,19 @@ return {
       vim.g.vsnip_snippet_dir = '~/.config/nvim/snippet'
     end
   },
-  {'hrsh7th/vim-vsnip-integ', event = 'InsertEnter'},
-  {'rafamadriz/friendly-snippets', event = 'InsertEnter'},
+  { 'hrsh7th/vim-vsnip-integ',      event = 'InsertEnter' },
+  { 'rafamadriz/friendly-snippets', event = 'InsertEnter' },
 
   {
     'neovim/nvim-lspconfig',
-    config = function ()
-      local opts = { noremap=true, silent=true }
+    config = function()
+      local opts = { noremap = true, silent = true }
       vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
       vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
       vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
       -- Use an on_attach function to only map the following keys
       -- after the language server attaches to the current buffer
-      local on_attach = function(client, bufnr)
+      local on_attach = function(_, bufnr)
         -- Enable completion triggered by <c-x><c-o>
         -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
         -- Mappings.
@@ -471,20 +485,21 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-      local servers = { 
-        'nil_ls', 
+      local servers = {
+        'nil_ls',
         'ocamllsp', 'rescriptls', -- 'reason_ls',
-        'rust_analyzer', 
-        'gopls', 
+        'rust_analyzer',
+        'gopls',
         'metals', 'jdtls',
-        'csharp_ls', 
+        'csharp_ls',
         'ts_ls', 'elmls',
-        'ruby_lsp', 
+        'ruby_lsp',
         'pylsp',
-        'intelephense', 
+        'intelephense',
+        'lua_ls',
       }
       for _, lsp in pairs(servers) do
-        require('lspconfig')[lsp].setup{
+        require('lspconfig')[lsp].setup {
           on_attach = on_attach,
           autostart = true,
           capabilities = capabilities,
@@ -492,9 +507,9 @@ return {
       end
     end
   },
-  { 'ToruNiina/satysfi.vim', ft='satysfi', },
-  { 'rescript-lang/vim-rescript', ft='rescript' },
-  { 'reasonml-editor/vim-reason-plus', ft='reason'},
+  { 'ToruNiina/satysfi.vim',           ft = 'satysfi', },
+  { 'rescript-lang/vim-rescript',      ft = 'rescript' },
+  { 'reasonml-editor/vim-reason-plus', ft = 'reason' },
   {
     'ocaml-mlx/ocaml_mlx.nvim',
     ft = 'ocaml',
@@ -502,7 +517,7 @@ return {
       'neovim/nvim-lspconfig',
       'nvim-treesitter/nvim-treesitter'
     },
-    config = function ()
+    config = function()
       require 'ocaml_mlx'
     end
   },
@@ -562,7 +577,7 @@ return {
   --   end
   -- }
 
-  -- { 
+  -- {
   --   "catppuccin/nvim",
   --   name = "catppuccin",
   --   priority = 1000,
@@ -610,7 +625,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd[[colorscheme nord]]
+      vim.cmd [[colorscheme nord]]
 
       -- Example config in lua
       vim.g.nord_contrast = true
