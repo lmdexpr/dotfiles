@@ -328,7 +328,7 @@ return {
       },
       window = {
         ask = {
-          floating = true,
+          -- floating = true,
         }
       },
       system_prompt = function()
