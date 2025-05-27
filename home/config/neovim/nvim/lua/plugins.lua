@@ -1,5 +1,17 @@
 return {
   {
+    'akinsho/toggleterm.nvim',
+    event = 'VeryLazy',
+    version = "*",
+    opts = {
+      direction = 'float',
+      float_opts = {
+        border = 'rounded',
+      },
+    },
+  },
+
+  {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.8',
     dependencies = { 'nvim-lua/plenary.nvim' },
@@ -136,6 +148,7 @@ return {
   },
   {
     'akinsho/bufferline.nvim',
+    event = 'VeryLazy',
     version = "*",
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
