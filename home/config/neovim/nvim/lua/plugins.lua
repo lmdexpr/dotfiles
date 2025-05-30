@@ -119,10 +119,8 @@ return {
           },
         },
         sections = {
-          lualine_a = { 'filename' }, lualine_b = { 'filetype' },
+          lualine_a = { 'filetype' }, lualine_b = { 'fileformat', 'encoding' },
           lualine_c = {
-            'fileformat',
-            'encoding',
             {
               'diagnostics',
               symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' },
@@ -138,8 +136,8 @@ return {
           lualine_y = { 'progress' }, lualine_z = { 'location' },
         },
         inactive_sections = {
-          lualine_a = { 'filename' }, lualine_b = { 'filetype' },
-          lualine_c = {},
+          lualine_a = { 'filename' },
+          lualine_b = {}, lualine_c = {},
           lualine_x = {}, lualine_y = {}, lualine_z = {},
         },
         extension = {},
