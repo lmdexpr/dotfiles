@@ -66,7 +66,7 @@ vim.diagnostic.config({ virtual_text = true })
 local keymap_options = { noremap = true, silent = true }
 local term_opts = { silent = true }
 
-local keymap = 
+local keymap =
 
 --Remap space as leader key
 vim.api.nvim_set_keymap("", "<Space>", "<Nop>", keymap_options)
@@ -92,8 +92,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local plugins = require('plugins')
-require('lazy').setup(plugins, {
+require('lazy').setup("plugins", {
   lockfile = "~/.lazy.lock",
   reset_packpath = false,
 })
