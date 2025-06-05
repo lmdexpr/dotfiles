@@ -278,51 +278,51 @@ return {
       provider = vim.env.AVANTE_PROVIDER or "copilot", -- :Copilot auth
       -- provider = "vertex",
       -- provider = "vertex_claude",
-      -- provider = "bedrock",
       -- provider = "gemini",
       -- auto_suggestions_provider = "copilot",
       behaviour = {
         enable_cursor_planning_mode = true,
       },
       hints = { enabled = false },
-      copilot = {
-        model = "claude-sonnet-4",
-      },
-      vertex = {
-        -- require
-        -- export LOCATION=<location>
-        -- export PROJECT_ID=<projcet id>
-        endpoint =
-        "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
-        model = "gemini-2.5-pro-preview-05-06",
-        timeout = 60000, -- Timeout in milliseconds
-        temperature = 0,
-        max_tokens = 65534,
-      },
-      vertex_claude = {
-        -- require
-        -- export LOCATION=<location>
-        -- export PROJECT_ID=<projcet id>
-        endpoint =
-        "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/antrhopic/models",
-        model = "claude-sonnet-4@20250514",
-        timeout = 60000, -- Timeout in milliseconds
-        temperature = 0,
-        max_tokens = 32768,
-      },
-      bedrock = {
-        -- require export BEDROCK_KEYS=$AWS_ACCESS_KEY_ID,$AWS_SECRET_ACCESS_KEY,$AWS_REGION,$AWS_SESSION_TOKEN
-        model = "anthropic.claude-3-5-sonnet-20241022-v2:0",
-        timeout = 60000, -- Timeout in milliseconds
-        temperature = 0,
-        max_tokens = 32768,
-      },
-      gemini = {
-        -- require export GEMINI_API_KEY=<api key>
-        model = "gemini-2.5-pro-preview-05-06",
-        timeout = 60000, -- Timeout in milliseconds
-        temperature = 0,
-        max_tokens = 65534,
+      providers = {
+        copilot = {
+          model = "claude-sonnet-4",
+        },
+        vertex = {
+          -- require
+          -- export LOCATION=<location>
+          -- export PROJECT_ID=<projcet id>
+          endpoint =
+          "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/google/models",
+          model = "gemini-2.5-pro-preview-05-06",
+          timeout = 60000, -- Timeout in milliseconds
+          extra_request_body = {
+            temperature = 0,
+            max_tokens = 65534,
+          },
+        },
+        vertex_claude = {
+          -- require
+          -- export LOCATION=<location>
+          -- export PROJECT_ID=<projcet id>
+          endpoint =
+          "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/publishers/antrhopic/models",
+          model = "claude-sonnet-4@20250514",
+          timeout = 60000, -- Timeout in milliseconds
+          extra_request_body = {
+            temperature = 0,
+            max_tokens = 32768,
+          },
+        },
+        gemini = {
+          -- require export GEMINI_API_KEY=<api key>
+          model = "gemini-2.5-pro-preview-05-06",
+          timeout = 60000, -- Timeout in milliseconds
+          extra_request_body = {
+            temperature = 0,
+            max_tokens = 65534,
+          },
+        },
       },
       window = {
         ask = {
