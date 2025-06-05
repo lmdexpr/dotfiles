@@ -13,14 +13,16 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    mcp-servers.url = "github:natsukium/mcp-servers-nix";
   };
 
-  outputs = { nixpkgs, nixos-wsl, home-manager, ... }:
+  outputs = { nixpkgs, nixos-wsl, home-manager, mcp-servers, ... }:
     let
       mkNixosSystem = { system, hostname, username, homename, additionalModules ? [] }: 
         nixpkgs.lib.nixosSystem rec {
           inherit system;
-          specialArgs = { inherit hostname username; };
+          specialArgs = { inherit hostname username mcp-servers; };
           modules = additionalModules ++ [
             ./machine/${hostname}
 

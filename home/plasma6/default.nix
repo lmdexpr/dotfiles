@@ -1,4 +1,4 @@
-{ pkgs, username, ... }:
+{ pkgs, username, mcp-servers, ... }:
 {
   imports = [
     ../config/zsh
@@ -34,6 +34,29 @@
 
     stateVersion = "25.05";
   };
+
+  home.file = {
+    ".config/mcphub/servers.json" = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux
+      {
+        source = mcp-servers.lib.mkConfig pkgs {
+          programs = {
+            fetch.enable = true;
+            playwright.enable = true;
+            filesystem = {
+              enable = true;
+              args = [ "/home/${username}" ];
+            };
+          };
+
+          settings.servers.duckduckgo-search = {
+            command = "${pkgs.lib.getExe' pkgs.uv "uvx"}";
+            args = [ "duckduckgo-mcp-server" ];
+          };
+        };
+
+      };
+  };
+
   home.packages = with pkgs; [
     gcc
     nodePackages.npm
@@ -78,5 +101,8 @@
 
     aider-chat
     claude-code
+    
+    chromium
+    playwright-driver
   ];
 }
