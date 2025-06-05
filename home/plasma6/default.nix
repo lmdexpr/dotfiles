@@ -77,5 +77,6 @@
     obsidian
 
     aider-chat
+    claude-code
   ];
 }
