@@ -1,5 +1,32 @@
 { pkgs, username, mcp-servers, ... }:
-{
+let
+  mcp-servers-config = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux
+    {
+      source = mcp-servers.lib.mkConfig pkgs {
+        programs = {
+          fetch.enable = true;
+          playwright.enable = true;
+          filesystem = {
+            enable = true;
+            args = [ "/home/${username}" ];
+          };
+        };
+
+        settings.servers = {
+          mcp-obsidian = {
+            command = "${pkgs.lib.getExe' pkgs.nodejs "npx"}";
+            args = [
+              "-y"
+              "mcp-obsidian"
+              "$OBSIDIAN_VAULT"
+            ];
+          };
+        };
+      };
+
+    };
+in
+  {
   imports = [
     ../config/zsh
     ../config/git
@@ -36,25 +63,10 @@
   };
 
   home.file = {
-    ".config/mcphub/servers.json" = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux
-      {
-        source = mcp-servers.lib.mkConfig pkgs {
-          programs = {
-            fetch.enable = true;
-            playwright.enable = true;
-            filesystem = {
-              enable = true;
-              args = [ "/home/${username}" ];
-            };
-          };
+    ".config/mcphub/servers.json" = mcp-servers-config;
 
-          settings.servers.duckduckgo-search = {
-            command = "${pkgs.lib.getExe' pkgs.uv "uvx"}";
-            args = [ "duckduckgo-mcp-server" ];
-          };
-        };
-
-      };
+    # claude --mcp-config ~/.config/claude/servers.json
+    ".config/claude/servers.json" = mcp-servers-config;
   };
 
   home.packages = with pkgs; [
