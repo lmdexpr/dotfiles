@@ -19,7 +19,7 @@ let
             args = [
               "-y"
               "mcp-obsidian"
-              "$OBSIDIAN_VAULT"
+              "/home/${username}/Documents/private-notes"
             ];
           };
         };
