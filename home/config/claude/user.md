@@ -1,85 +1,146 @@
-# Claude Code 設定
+# 🏗️ CLAUDE.md - Claude Code Global Configuration
+This is my global Claude Code configuration, providing guidance for a consistent and high-quality development experience across all projects.
 
-日本語で回答
-コメントを残すときは端的な英語
+# 📋 Overview
+This configuration file defines the standards and practices for my entire development workflow. The primary goals are:
 
-## 開発哲学
+- Development Philosophy: Prioritize Functional Programming (FP), emphasizing purity, immutability, and declarative code.
+- Environment: Enforce reproducible and declarative development environments using Nix and direnv.
+- Quality: Leverage the type system as living documentation and strive for self-documenting code.
+- Efficiency: Maximize proactive AI assistance to save engineer time.
 
-### 関数型プログラミング
-- **中核原則**: すべての言語で関数型プログラミングの概念を適用する
-- 可能な限り不変データ構造と純粋関数を選択
-- 高階関数、合成、宣言的パターンを活用
-- 副作用を避ける；必要な場合は分離して明示的にする
-- 文よりも式を優先
+## 🧠 Proactive AI Assistance
 
-### アーキテクチャ・設計
-- **DDD・クリーンアーキテクチャ**: 実際の問題を解決する場合にのみ適用し、教条的にならない
-- ドメインモデリングとレイヤー間の明確な境界に重点を置く
-- 過度な設計を避け、シンプルさと保守性を優先
-- 理論的な完璧さではなく、実際の要件から設計を導出
+**YOU MUST**: Always Suggest Improvements
 
-### 型システムの活用
-- **ドキュメント重視の型付け**: 型は生きたドキュメントとして機能すべき
-- パブリックAPI、関数シグネチャ、複雑なデータ構造には明示的な型を記述
-- ローカル変数や自明な文脈では型推論を活用
-- 型は意図を明確にし、エラーを防ぐためのもので、作業負荷を増やすためではない
+**Every interaction should include proactive suggestions to save engineer time.**
 
-### コード品質
-- **自己文書化コード**: 大量のコメントなしで読めるコードを書く
-- 変数、関数、モジュールには意味のある名前を使用
-- 意図を明確に表現するコード構造
-- コメントは「なぜ」のためのもので「何を」ではない - 控えめに、目的を持って使用
-- 明確な責任を持つ小さく焦点を絞った関数を優先
+1.  **Pattern Recognition (FP & Architecture)**
+    -   Detect procedural loops and suggest refactoring to higher-order functions like `map`/`filter`.
+    -   Identify functions with side effects and propose ways to separate pure logic from effects.
+    -   Recognize unclear domain boundaries and present improvements based on Clean Architecture principles.
+    -   Spot opportunities for recursion or composition to make code more declarative.
 
-## 環境・ツール
+2.  **Code Quality Improvements**
+    -   Recommend the use of more expressive and safer types (e.g., `Option`, `Result`).
+    -   Detect code that deviates from existing conventions and suggest fixes to maintain consistency.
+    -   Identify technical debt and propose gradual refactoring plans aligned with FP principles.
+    -   Encourage comments that explain "why," not "what."
 
-### プロジェクト設定
-- **主要環境**: 再現可能な開発環境のためのNix + direnv
-- **最初の確認**: プロジェクト設定を理解するため、常に`flake.nix`を確認
-- Nix設定が存在しない場合、代替案を提案する前に確認する
-- 既存のプロジェクト規約とツール選択を尊重
+3.  **Time-Saving Automations**
+    -   Suggest additions to `flake.nix` for new dependencies.
+    -   Propose the creation of Bash scripts or CLI tools for repetitive tasks.
+    -   Generate boilerplate for standard function signatures and data structures, including type definitions.
+    -   Suggest setting up CI/CD with GitHub Actions.
 
-### 開発ワークフロー
-- 環境の有効化には`nix develop`または`direnv allow`を使用
-- 命令的セットアップスクリプトよりも宣言的設定を優先
-- チームメンバー間での環境再現性を維持
+### Proactive Suggestion Format
+```
+💡 **Improvement Suggestion**: [Brief title]
+**Time saved**: ~X minutes per occurrence
+**Implementation**: [Quick command or code snippet]
+**Benefits**: [Why this improves the codebase]
+```
 
-## テスト戦略
+## 🎯 Development Philosophy
 
-### テストの考え方
-- **純粋関数中心**: FPアプローチにより、テストは書きやすいはず
-- **ユニットテスト重視**: 本当に必要なもの以外は基本的にユニットテストで担保
-- **TDD対応**: 重要だが、書き捨てコードも多いため、指示があるまでテストは書かない
-- 純粋関数の特性を活かしたテスト設計
+### Core Principles
+- **Functional Programming (FP) First**: Prefer immutable data structures and pure functions. Isolate side effects explicitly. Favor expressions over statements.
+- **Pragmatic Architecture**: Apply DDD or Clean Architecture only when necessary to solve real problems. Prioritize simplicity and maintainability over dogma.
+- **Types as Documentation**: Types must serve as living documentation. Use explicit types for public APIs and complex data structures to clarify intent.
+- **Self-Documenting Code**: Write code that communicates its intent through structure and naming. Use comments sparingly to explain the "why."
+- **Purity vs. Performance**: When in doubt, prioritize code purity and beauty. Optimize only when performance needs are proven.
 
-## エラーハンドリング
-- **型ベースアプローチ**: Option、Resultのような型を基本とする
-- 例外よりも明示的なエラー型を優先
-- エラーケースを型レベルで表現し、コンパイル時に検証
+## 📚 AI Assistant Guidelines
 
-## パフォーマンス vs 純粋性
-- **判断基準**: 迷った場合は純粋性とコードの美しさを重視
-- 文脈に応じた柔軟な判断
-- 最適化が必要な場合でも、可能な限り関数型の原則を維持
+### Interaction Style
+- **Primary Language**: All conversations and explanations must be conducted in Japanese.
+- **Code Comments**: When leaving comments in code, use concise English.
 
-## 個人開発での注意点
+### Efficient Professional Workflow
+**A smart Explore-Plan-Code-Commit workflow enhanced with AI-powered automation.**
 
-### 既存コードベースの尊重
-- **最重要**: 既存の書き方と規約を最優先で守る
-- 新しい機能追加時も既存パターンに合わせる
-- リファクタリング提案は既存設計を理解した上で行う
-- 一貫性を保つことでコードベースの品質を維持
+#### 1. EXPLORE Phase (Automated First)
+- **Top Priority**: Respect existing conventions and coding styles above all else.
+- **Primary Source of Truth**: Always start by reading and summarizing README.md. This file is the absolute authority on the project's setup, conventions, and workflow.
+- **Environment Discovery**:
+  - **Nix Environment**: If README.md or file existence (flake.nix, shell.nix) indicates the use of Nix, use it as the primary environment manager.
+  - **mise Environment**: If Nix is not present, check for a mise configuration (e.g., .mise.toml). If found, use mise to manage tool versions.
+  - **Fallback & Improvement**: If neither Nix nor mise is configured, strictly adhere to the manual setup process in README.md. Proactively suggest creating a mise configuration to automate tool management.
+- **Respect Existing Patterns**: After understanding the environment, scan the codebase to identify and respect existing architectural patterns, coding styles, and conventions mentioned in the README or inferred from the code.
+- **Dependency Analysis**: Based on the discovered environment (flake.nix, .mise.toml, package.json, etc.), analyze the dependency graph and identify key libraries.
+- **Type Strategy Evaluation**: Assess the project's current typing strategy and its consistency.
 
-### プロジェクト分析手順
-1. **環境確認**: `flake.nix`、`shell.nix`、`.envrc`、`README.md`の内存在するものをチェック
-2. **既存パターン理解**: 現在のコーディングスタイルと規約を把握
-3. **アーキテクチャ把握**: ドメイン境界とレイヤー分離を特定
-4. **型戦略評価**: 現在の型付け戦略と一貫性を評価
-5. **関数型パターン**: FP概念を適用する機会を探す
+#### 2. PLAN Phase (AI-Assisted)
+- Generate multiple implementation approaches based on FP principles (e.g., recursion vs. iterators, composition vs. chaining).
+- Automatically create test scenarios based on the inputs and outputs of pure functions.
+- Predict potential issues arising from side-effect management or state transition complexity.
+- Present the trade-offs of each approach (readability, performance, maintainability).
 
-## 対話スタイル
-- 日本語での対話を基本とする（コードコメントは英語でも可）
-- アーキテクチャ上の決定とトレードオフを説明
-- FP原則に沿ったリファクタリング機会を提案
-- 理論的ベストプラクティスと実践的制約のバランスを取る
-- 完全な書き直しではなく、段階的改善に重点を置く
+#### 3. CODE Phase (Accelerated)
+- Generate complete boilerplate for functions and data structures, including type definitions and documentation.
+- Auto-complete repetitive patterns like higher-order functions and method chains.
+- Perform real-time detection of type errors and potential nulls, suggesting fixes using `Option`/`Result` types.
+- Auto-generate comments (`// why`) to explain the intent behind complex business logic or algorithms.
+
+#### 4. COMMIT Phase (Automated)
+- Automatically run formatters and linters defined in `flake.nix` before committing.
+- Auto-generate unit tests for new code (when instructed).
+- Generate commit messages following the Conventional Commits specification.
+
+## 🛠️ Environment & Tooling
+
+### Core Rules
+- **README is Authoritative**: The `README.md` file is the ultimate source of truth for project setup and tooling. Always start there.
+- **Preferred Tooling Hierarchy**: Use declarative, project-specific tooling in the following order of preference:
+    1.  **Nix**: If the project is configured with Nix (`flake.nix`), it is the preferred method for ensuring a fully reproducible environment.
+    2.  **mise**: If Nix is not used, `mise` (e.g., `.mise.toml`) is the next-best choice for managing project-specific tool versions.
+    3.  **Other**: Fall back to other package managers or instructions specified in the `README`.
+- **Proactive Improvement**: If a project relies on manual setup or global tool installations, proactively suggest creating a `mise` configuration to codify and automate the environment.
+- **Activation**: Use the appropriate command for the environment (`direnv allow`, `nix develop`, `mise activate`, etc.) as specified by the project's setup.
+
+## 🧪 Testing Strategy
+
+### Core Principles
+- **Pure Function-Centric Testing**: An FP approach should make most logic testable as pure functions, reducing the need for mocks.
+- **Emphasis on Unit Tests**: Core logic, excluding external I/O, should be covered by unit tests.
+- **Selective TDD**: TDD is important but should be applied selectively to core domain logic or when explicitly instructed, not for prototypes or throwaway code.
+
+## 🚫 Security and Quality Standards
+
+### NEVER Rules (Non-negotiable)
+- **NEVER**: Delete production data without explicit confirmation.
+- **NEVER**: Hardcode API keys, passwords, or other secrets.
+- **NEVER**: Commit code with failing tests or linting errors.
+- **NEVER**: Push directly to the `main`/`master` branch.
+- **NEVER**: Skip security reviews for authentication/authorization code.
+
+### YOU MUST Rules (Required Standards)
+- **YOU MUST**: Write tests for new features and bug fixes (subject to the selective TDD rule).
+- **YOU MUST**: Ensure CI/CD checks pass before marking a task as complete.
+- **YOU MUST**: Adhere to semantic versioning for releases.
+- **YOU MUST**: Document breaking changes.
+- **YOU MUST**: Use feature branches for all development.
+- **YOU MUST**: Provide comprehensive documentation for all public APIs.
+
+## 🔧 Commit Standards
+
+### Conventional Commits
+
+```bash
+# Format: <type>(<scope>): <subject>
+git commit -m "feat(auth): add JWT token refresh"
+git commit -m "fix(api): handle null response correctly"
+git commit -m "docs(readme): update installation steps"
+git commit -m "perf(db): optimize query performance"
+git commit -m "refactor(core): extract validation logic"
+```
+
+### PR Guidelines
+- Focus on high-level problem and solution
+- Never mention tools used (no co-authored-by)
+- Add specific reviewers as configured
+- Include performance impact if relevant
+
+---
+
+Remember: **Engineer time is gold** - Automate everything, document comprehensively, and proactively suggest improvements. Every interaction should save time and improve code quality.
