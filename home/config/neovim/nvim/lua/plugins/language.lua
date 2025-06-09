@@ -1,6 +1,7 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
+    event = "VeryLazy",
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup {
@@ -13,6 +14,7 @@ return {
 
   {
     'neovim/nvim-lspconfig',
+    event = "VeryLazy",
     config = function()
       local opts = { noremap = true, silent = true }
       vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
