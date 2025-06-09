@@ -63,13 +63,15 @@ in
     stateVersion = "25.05";
   };
 
+  home.file = {
+    ".claude/CLAUDE.md" = { source = ../config/claude/user.md; };
+  };
+
   xdg.configFile = {
     "mcphub/servers.json" = mcp-servers-config;
 
     # claude --mcp-config ~/.config/claude/servers.json
     "claude/servers.json" = mcp-servers-config;
-
-    "claude/CLAUDE.md" = { source = ../config/claude/user.md; };
   };
 
   home.packages = with pkgs; [
