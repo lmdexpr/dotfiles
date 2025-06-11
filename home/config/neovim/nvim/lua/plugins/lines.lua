@@ -14,7 +14,6 @@ return {
           always_divide_middle = true,
           disabled_filetypes = {
             'neo-tree',
-            'Avante', 'AvanteSelectedFiles', 'AvanteInput',
           },
         },
         sections = {
