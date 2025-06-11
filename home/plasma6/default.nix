@@ -7,6 +7,10 @@ let
         programs = {
           fetch.enable = true;
           playwright.enable = true;
+          filesystem = {
+            enable = true;
+            args = [ "/home/${username}" ];
+          };
         };
 
         settings.servers = {
