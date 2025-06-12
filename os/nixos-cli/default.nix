@@ -1,11 +1,8 @@
-{ config, pkgs, ... }:
-let
-  main-user = "lmdexpr";
-in
+{ config, pkgs, username, ... }:
 {
   programs.zsh.enable = true;
 
-  users.users."${main-user}" = {
+  users.users."${username}" = {
     isNormalUser = true;
     initialPassword = "p4ssw0rd";
     extraGroups = [ "networkmanager" "wheel" ];
