@@ -5,7 +5,7 @@ let
     {
       source = mcp-servers.lib.mkConfig pkgs {
         programs = {
-          fetch.enable = true;
+          # fetch.enable = true;
           playwright.enable = true;
           filesystem = {
             enable = true;
