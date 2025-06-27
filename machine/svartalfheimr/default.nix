@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  hostName = "svartalfaheimr";
+  hostName = "svartalfheimr";
 in 
 {
   boot.kernelPackages = pkgs.linuxPackages_latest;

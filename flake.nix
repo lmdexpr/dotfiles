@@ -29,8 +29,8 @@
 
             home-manager.nixosModules.home-manager
             {
-              documentation.enable = false;        # これを追加
-              documentation.nixos.enable = false;  # これを追加
+              documentation.enable = false;
+              documentation.nixos.enable = false;
 
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
@@ -42,9 +42,9 @@
           ];
         };
     in {
-      nixosConfigurations.svartalfaheimr = mkNixosSystem {
+      nixosConfigurations.svartalfheimr = mkNixosSystem {
         system   = "x86_64-linux";
-        hostname = "svartalfaheimr";
+        hostname = "svartalfheimr";
         username = "lmdexpr";
         homename = "cui";
       };

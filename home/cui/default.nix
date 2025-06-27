@@ -1,4 +1,7 @@
-{ pkgs, username, ... }:
+{ pkgs, username, nixpkgs-master, ... }:
+let
+  pkgs-master = import nixpkgs-master { system = pkgs.system; config = pkgs.config; };
+in
 {
   imports = [
     ../config/zsh
@@ -46,5 +49,9 @@
     kubernetes-helm
 
     nil
+
+    pkgs-master.claude-code
+
+    w3m
   ];
 }
