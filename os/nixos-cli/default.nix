@@ -31,33 +31,32 @@
   services.dbus.packages = [ config.i18n.inputMethod.package ];
 
   fonts.packages = with pkgs; [
+    font-awesome
+
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-emoji
+    noto-fonts-extra
+
     fira-code
     fira-code-symbols
-    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+    nerd-fonts.fira-code
+
+    powerline-fonts
+    powerline-symbols
+
+    "${pkgs.fetchzip {
+      url  = "https://github.com/yuru7/HackGen/releases/download/v2.10.0/HackGen_NF_v2.10.0.zip";
+      hash = "sha256-n0ibIzNIy5tUdC0QEWRRW4S5Byih39agW2IxCiqTLoQ=";
+    }}"
   ];
 
   services.xserver = {
     enable = false;
     xkb.layout = "us";
-
-    displayManager = { gdm.enable = false; };
-    desktopManager = { gnome.enable = false; };
   };
-  services.libinput.enable = false;
   
   hardware = {
-    pulseaudio.enable = false;
-
-    graphics= {
-      enable = false;
-      extraPackages = with pkgs; [
-        intel-media-driver
-        vaapiIntel
-        vaapiVdpau
-        libvdpau-va-gl
-      ];
-    };
-
     keyboard.qmk.enable = true;
   };
 
@@ -93,5 +92,5 @@
     settings.KbdInteractiveAuthentication = false;
   };
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "25.05";
 }

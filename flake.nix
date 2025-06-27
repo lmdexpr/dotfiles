@@ -29,6 +29,9 @@
 
             home-manager.nixosModules.home-manager
             {
+              documentation.enable = false;        # これを追加
+              documentation.nixos.enable = false;  # これを追加
+
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.${username} = ./home/${homename};
