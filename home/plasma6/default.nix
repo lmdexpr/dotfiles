@@ -116,7 +116,7 @@ in
 
     obsidian
 
-    aider-chat
+    terminal-notifier
     pkgs-master.claude-code
     
     chromium
