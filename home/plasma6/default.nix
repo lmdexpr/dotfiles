@@ -116,7 +116,6 @@ in
 
     obsidian
 
-    terminal-notifier
     pkgs-master.claude-code
     
     chromium
