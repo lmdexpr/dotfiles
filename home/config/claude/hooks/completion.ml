@@ -14,7 +14,7 @@ let () =
   if stop_hook_active then
     exit 0
 
-let project_name = Filename.(basename current_dir_name)
+let project_name = Filename.basename @@ Sys.getcwd ()
 
 let () =
   ["terminal-notifier";
