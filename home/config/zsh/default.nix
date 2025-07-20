@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   programs.zsh = {
@@ -8,43 +8,6 @@
       cls = "clear;ls";
       reload="source $HOME/.zshrc";
       k = "kubectl";
-    };
-
-    plugins = [
-      {
-        name = "zsh-nix-shell";
-        file = "nix-shell.plugin.zsh";
-        src = pkgs.fetchFromGitHub {
-          owner = "chisui";
-          repo = "zsh-nix-shell";
-          rev = "v0.5.0";
-          sha256 = "0za4aiwwrlawnia4f29msk822rj9bgcygw6a8a6iikiwzjjz0g91";
-        };
-      }
-    ];
-
-    prezto = {
-      enable = true;
-      pmodules = [
-        "environment"
-        "terminal"
-        "editor"
-        "history"
-        "directory"
-        "spectrum"
-        "git"
-        "utility"
-        "syntax-highlighting"
-        "autosuggestions"
-        "completion"
-        "prompt"
-      ];
-      editor.keymap = "vi";
-      git.submoduleIgnore = "all";
-      prompt.theme = "pure";
-      extraConfig = ''
-        zstyle :prompt:pure:git:stash show yes
-      '';
     };
 
     envExtra = ''
@@ -58,5 +21,19 @@
       export NPM_PATH=`npm prefix --location=global`/bin
       export PATH=$PATH:$NPM_PATH
     '';
+  };
+
+  programs.starship = {
+    enable = true;
+    settings = {
+      add_newline = true;
+      command_timeout = 1300;
+      scan_timeout = 50;
+      format = "$all$nix_shell$nodejs$lua$golang$rust$php$git_branch$git_commit$git_state$git_status\n$username$hostname$directory";
+      character = {
+        success_symbol = "[](bold green) ";
+        error_symbol = "[✗](bold red) ";
+      };
+    };
   };
 }
