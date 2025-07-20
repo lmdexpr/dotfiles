@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   programs.zsh = {
@@ -21,19 +21,42 @@
       export NPM_PATH=`npm prefix --location=global`/bin
       export PATH=$PATH:$NPM_PATH
     '';
+
+    setOptions = [
+      "AUTO_CD"
+    ];
   };
 
   programs.starship = {
     enable = true;
+
     settings = {
-      add_newline = true;
-      command_timeout = 1300;
-      scan_timeout = 50;
-      format = "$all$nix_shell$nodejs$lua$golang$rust$php$git_branch$git_commit$git_state$git_status\n$username$hostname$directory";
-      character = {
-        success_symbol = "[](bold green) ";
-        error_symbol = "[✗](bold red) ";
+      format = lib.strings.concatStrings [
+        "$status" "$time" "$cmd_duration" "$line_break"
+        "$all" "$line_break"
+        "$character"
+      ];
+
+      status = {
+        disabled = false;
+        success_symbol = "🟢";
+        format = "[$symbol]($style) ";
       };
+      cmd_duration = {
+        format = "took [$duration]($style) ";
+        style = "bold blue";
+      };
+
+      time = {
+        disabled = false;
+        format = "at [$time]($style) ";
+      };
+
+      kubernates.disabled = false;
+      direnv.disabled = false;
+
+      git_branch.symbol = " ";
+      git_status.style = "bold purple";
     };
   };
 }

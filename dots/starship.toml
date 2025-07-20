@@ -1,0 +1,23 @@
+format = "$status$time$cmd_duration$line_break$all$line_break$character"
+
+[cmd_duration]
+format = "🕙[$duration]($style) "
+style = "bold blue"
+
+[direnv]
+disabled = false
+
+[git_branch]
+symbol = " "
+
+[kubernates]
+disabled = false
+
+[status]
+disabled = false
+format = "[$symbol]($style) "
+success_symbol = "🟢"
+
+[time]
+disabled = false
+format = "at [$time]($style) "
