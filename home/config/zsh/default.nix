@@ -23,6 +23,9 @@
     '';
 
     setOptions = [
+      "HIST_IGNORE_DUPS"
+      "SHARE_HISTORY"
+      "HIST_FCNTL_LOCK"
       "AUTO_CD"
     ];
   };
@@ -52,7 +55,6 @@
         format = "at [$time]($style) ";
       };
 
-      kubernates.disabled = false;
       direnv.disabled = false;
 
       git_branch.symbol = " ";

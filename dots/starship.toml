@@ -1,7 +1,7 @@
 format = "$status$time$cmd_duration$line_break$all$line_break$character"
 
 [cmd_duration]
-format = "🕙[$duration]($style) "
+format = "took [$duration]($style) "
 style = "bold blue"
 
 [direnv]
@@ -10,8 +10,8 @@ disabled = false
 [git_branch]
 symbol = " "
 
-[kubernates]
-disabled = false
+[git_status]
+style = "bold purple"
 
 [status]
 disabled = false
