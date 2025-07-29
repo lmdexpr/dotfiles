@@ -12,6 +12,11 @@ export PATH=$PATH:$CARGO_PATH
 export NPM_PATH=`npm prefix --location=global`/bin
 export PATH=$PATH:$NPM_PATH
 
+setopt HIST_IGNORE_DUPS
+setopt SHARE_HISTORY
+setopt HIST_FCNTL_LOCK
+setopt AUTO_CD
+
 # Aliases
 alias cls='clear;ls'
 
@@ -26,8 +31,5 @@ fi
 # direnv
 eval "$(direnv hook zsh)"
 
-# prezto
-setopt EXTENDED_GLOB
-for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-done
+# starship
+eval "$(starship init zsh)"
