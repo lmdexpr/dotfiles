@@ -11,10 +11,14 @@ disabled = false
 symbol = " "
 
 [aws]
-symbol = " "
+symbol = " "
+
+[aws.region_aliases]
+ap-northeast-1 = 'jp'
 
 [gcloud]
-symbol = " "
+format = 'on [$symbol$account(\($region\))]($style) '
+symbol = " "
 
 [nix_shell]
 symbol = " "
