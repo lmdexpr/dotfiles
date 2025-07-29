@@ -1,10 +1,5 @@
 format = "$cmd_duration$all$line_break$character"
 
-[character]
-success_symbol = "[→](bold green)"
-error_symbol = "[×](bold red)"
-vimcmd_symbol = "[←](bold green)"
-
 [cmd_duration]
 format = "took [$duration]($style)\n"
 style = "bold blue"
@@ -13,4 +8,16 @@ style = "bold blue"
 disabled = false
 
 [git_branch]
-symbol = " "
+symbol = " "
+
+[aws]
+symbol = " "
+
+[gcloud]
+symbol = " "
+
+[nix_shell]
+symbol = " "
+
+[ocaml]
+symbol = " "
