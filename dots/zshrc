@@ -17,7 +17,17 @@ setopt SHARE_HISTORY
 setopt HIST_FCNTL_LOCK
 setopt AUTO_CD
 
+setopt HIST_IGNORE_DUPS
+setopt SHARE_HISTORY
+setopt HIST_FCNTL_LOCK
+setopt AUTO_CD
+
+bindkey -v
+
 # Aliases
+alias ls='ls -G'
+alias l='ls'
+
 alias cls='clear;ls'
 
 alias reload="source $HOME/.zshrc"

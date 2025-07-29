@@ -1,7 +1,12 @@
-format = "$status$time$cmd_duration$line_break$all$line_break$character"
+format = "$cmd_duration$all$line_break$character"
+
+[character]
+success_symbol = "[→](bold green)"
+error_symbol = "[×](bold red)"
+vimcmd_symbol = "[←](bold green)"
 
 [cmd_duration]
-format = "took [$duration]($style) "
+format = "took [$duration]($style)\n"
 style = "bold blue"
 
 [direnv]
@@ -9,15 +14,3 @@ disabled = false
 
 [git_branch]
 symbol = " "
-
-[git_status]
-style = "bold purple"
-
-[status]
-disabled = false
-format = "[$symbol]($style) "
-success_symbol = "🟢"
-
-[time]
-disabled = false
-format = "at [$time]($style) "
