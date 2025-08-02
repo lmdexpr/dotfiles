@@ -14,6 +14,8 @@
       cargo
       gnumake
     ];
+
+    defaultEditor = true;
   };
 
   xdg.configFile = {

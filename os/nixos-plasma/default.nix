@@ -3,6 +3,7 @@
   system.stateVersion = "25.05";
 
   programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
 
   users.users."${username}" = {
     isNormalUser = true;
