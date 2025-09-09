@@ -45,7 +45,7 @@ return {
         'ocamllsp', 'rescriptls', -- 'reason_ls',
         'rust_analyzer',
         'gopls',
-        'metals', 'jdtls',
+        'metals', 'jdtls', 'kotlin_language_server',
         'csharp_ls',
         'ts_ls', 'elmls',
         'ruby_lsp',
