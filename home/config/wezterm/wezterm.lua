@@ -1,6 +1,40 @@
 local wezterm = require 'wezterm'
 
-local home = os.getenv("HOME")
+local function is_claude(pane)
+  local process = pane:get_foreground_process_info()
+  if not process or not process.argv then
+    return false
+  end
+  for _, arg in ipairs(process.argv) do
+    if arg:find("claude") then
+      return true
+    end
+  end
+  return false
+end
+
+local function get_tab_id(window, pane)
+  local mux_window = window:mux_window()
+  for i, tab_info in ipairs(mux_window:tabs_with_info()) do
+    for _, p in ipairs(tab_info.tab:panes()) do
+      if p:pane_id() == pane:pane_id() then
+        return i
+      end
+    end
+  end
+end
+
+wezterm.on('bell', function(window, pane)
+  if not is_claude(pane) then
+    return
+  end
+
+  window:toast_notification('Claude Code', 'Task (tab_id:' .. get_tab_id(window, pane) .. ') completed', nil, 4000)
+
+  if wezterm.target_triple:find("darwin") then
+    wezterm.background_child_process({ "say", "Claude があなたを呼んでいます" })
+  end
+end)
 
 return {
   font = wezterm.font("HackGen Console NF"),
