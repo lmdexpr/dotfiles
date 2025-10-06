@@ -1,6 +1,5 @@
-{ pkgs, username, mcp-servers, nixpkgs-master, ... }:
+{ pkgs, username, mcp-servers, ... }:
 let
-  pkgs-master = import nixpkgs-master { system = pkgs.system; config = pkgs.config; };
   mcp-servers-config = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux
     {
       source = mcp-servers.lib.mkConfig pkgs {
@@ -116,7 +115,7 @@ in
 
     obsidian
 
-    pkgs-master.claude-code
+    claude-code
     
     chromium
     playwright-driver

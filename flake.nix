@@ -7,7 +7,6 @@
 
   inputs = {
     nixpkgs.url   = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
 
     home-manager = {
@@ -18,12 +17,12 @@
     mcp-servers.url = "github:natsukium/mcp-servers-nix";
   };
 
-  outputs = { nixpkgs, nixpkgs-master, nixos-wsl, home-manager, mcp-servers, ... }:
+  outputs = { nixpkgs, nixos-wsl, home-manager, mcp-servers, ... }:
     let
       mkNixosSystem = { system, hostname, username, homename, additionalModules ? [] }: 
         nixpkgs.lib.nixosSystem rec {
           inherit system;
-          specialArgs = { inherit hostname username mcp-servers nixpkgs-master; };
+          specialArgs = { inherit hostname username mcp-servers; };
           modules = additionalModules ++ [
             ./machine/${hostname}
 

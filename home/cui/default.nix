@@ -1,7 +1,4 @@
-{ pkgs, username, nixpkgs-master, ... }:
-let
-  pkgs-master = import nixpkgs-master { system = pkgs.system; config = pkgs.config; };
-in
+{ pkgs, username, ... }:
 {
   imports = [
     ../config/zsh
@@ -50,7 +47,7 @@ in
 
     nil
 
-    pkgs-master.claude-code
+    claude-code
 
     w3m
   ];
