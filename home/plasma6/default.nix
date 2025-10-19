@@ -46,12 +46,14 @@ in
 
     ssh = {
       enable = true;
-      extraConfig = ''
-        Host git.lmdex.pro
-        Port 22
-        User git
-        ProxyCommand sh -c 'resolved_ip=$(dig +short %h | head -1); if echo "$resolved_ip" | grep -E "^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)"; then nc "$resolved_ip" 22; else cloudflared access ssh --hostname %h; fi'
-      '';
+      enableDefaultConfig = false;
+      matchBlocks = {
+        "git.lmdex.pro" = {
+          port = 22;
+          user = "git";
+          proxyCommand = "sh -c 'resolved_ip=$(dig +short %h | head -1); if echo \"$resolved_ip\" | grep -E \"^(192\\.168\\.|10\\.|172\\.(1[6-9]|2[0-9]|3[01])\\.)\" ; then nc \"$resolved_ip\" 22; else cloudflared access ssh --hostname %h; fi'";
+        };
+      };
     };
   };
 
@@ -79,6 +81,7 @@ in
 
     lua51Packages.lua
     lua51Packages.luarocks
+    lua-language-server
 
     jq
     rlwrap

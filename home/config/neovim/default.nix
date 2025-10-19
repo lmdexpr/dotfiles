@@ -20,11 +20,8 @@
 
   xdg.configFile = {
     "nvim/init.lua".source = ./nvim/init.lua;
-    "nvim/lua" = {
-      source = ./nvim/lua; recursive = true;
-    };
-    "nvim/snippet" = {
-      source = ./nvim/snippet; recursive = true;
-    };
+    "nvim/lua"     = { source = ./nvim/lua; recursive = true; };
+    "nvim/snippet" = { source = ./nvim/snippet; recursive = true; };
+    "nvim/after"   = { source = ./nvim/after; recursive = true; };
   };
 }
