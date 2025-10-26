@@ -9,7 +9,7 @@ in
   };
 
   imports = [
-    ../../os/nixos-plasma
+    ../../os/nixos-gnome
     ./hardware-configuration.nix
   ];
 

@@ -28,37 +28,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         function() vim.lsp.buf.hover({ border = "single" }) end,
         { buffer = buf, desc = "Show hover documentation" })
     end
-
-    -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
-    if client:supports_method("textDocument/completion") then
-      -- Optional: trigger autocompletion on EVERY keypress except brackets. May be slow!
-      local chars = {}
-      for i = 32, 126 do
-        local c = string.char(i)
-        if c ~= "(" and c ~= ")" and c ~= "[" and c ~= "]" and c ~= "{" and c ~= "}" then
-          table.insert(chars, c)
-        end
-      end
-      client.server_capabilities.completionProvider.triggerCharacters = chars
-      vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
-    end
-
-    if client:supports_method("textDocument/inlineCompletion") then
-      vim.lsp.inline_completion.enable(true, { bufnr = buf })
-      vim.keymap.set("i", "<Tab>", function()
-        if not vim.lsp.inline_completion.get() then
-          return "<Tab>"
-        end
-        -- close the completion popup if it's open
-        if vim.fn.pumvisible() == 1 then
-          return "<C-e>"
-        end
-      end, {
-        expr = true,
-        buffer = buf,
-        desc = "Accept the current inline completion",
-      })
-    end
   end,
 })
 

@@ -17,12 +17,12 @@
     mcp-servers.url = "github:natsukium/mcp-servers-nix";
   };
 
-  outputs = { nixpkgs, nixos-wsl, home-manager, mcp-servers, ... }:
+  outputs = { nixpkgs, nixos-wsl, home-manager, mcp-servers, ... } @ inputs:
     let
       mkNixosSystem = { system, hostname, username, homename, additionalModules ? [] }: 
         nixpkgs.lib.nixosSystem rec {
           inherit system;
-          specialArgs = { inherit hostname username mcp-servers; };
+          specialArgs = { inherit inputs hostname username mcp-servers; };
           modules = additionalModules ++ [
             ./machine/${hostname}
 
@@ -52,7 +52,7 @@
         system   = "x86_64-linux";
         hostname = "fenrir";
         username = "lmdexpr";
-        homename = "plasma6";
+        homename = "gui";
       };
 
       nixosConfigurations.skelton = mkNixosSystem {
