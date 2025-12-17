@@ -1,17 +1,5 @@
 return {
   {
-    'akinsho/toggleterm.nvim',
-    event = 'VeryLazy',
-    version = "*",
-    opts = {
-      direction = 'float',
-      float_opts = {
-        border = 'rounded',
-      },
-    },
-  },
-
-  {
     'lewis6991/gitsigns.nvim',
     event = 'VeryLazy',
     opts = {

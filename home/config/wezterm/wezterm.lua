@@ -30,10 +30,6 @@ wezterm.on('bell', function(window, pane)
   end
 
   window:toast_notification('Claude Code', 'Task (tab_id:' .. get_tab_id(window, pane) .. ') completed', nil, 4000)
-
-  if wezterm.target_triple:find("darwin") then
-    wezterm.background_child_process({ "say", "Claude があなたを呼んでいます" })
-  end
 end)
 
 return {
