@@ -19,17 +19,6 @@ return {
   { 'ToruNiina/satysfi.vim',           ft = 'satysfi', },
   { 'rescript-lang/vim-rescript',      ft = 'rescript' },
   { 'reasonml-editor/vim-reason-plus', ft = 'reason' },
-  -- {
-  --   'ocaml-mlx/ocaml_mlx.nvim',
-  --   ft = 'ocaml',
-  --   dependencies = {
-  --     'neovim/nvim-lspconfig',
-  --     'nvim-treesitter/nvim-treesitter'
-  --   },
-  --   config = function()
-  --     require 'ocaml_mlx'
-  --   end
-  -- },
 
   {
     "stevearc/conform.nvim",

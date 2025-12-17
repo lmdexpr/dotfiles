@@ -78,18 +78,4 @@ return {
   { 'hrsh7th/cmp-vsnip',                    event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' } },
   { 'hrsh7th/cmp-cmdline',                  event = 'ModeChanged', dependencies = { 'hrsh7th/nvim-cmp' } },
   { 'hrsh7th/cmp-calc',                     event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' } },
-
-  {
-    'hrsh7th/vim-vsnip',
-    event = 'InsertEnter',
-    config = function()
-      vim.api.nvim_set_keymap('i', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
-      vim.api.nvim_set_keymap('s', '<C-l>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<C-f>"', { expr = true })
-      vim.api.nvim_set_keymap('i', '<C-h>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
-      vim.api.nvim_set_keymap('s', '<C-h>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<C-b>"', { expr = true })
-      vim.g.vsnip_snippet_dir = '~/.config/nvim/snippet'
-    end
-  },
-  { 'hrsh7th/vim-vsnip-integ',      event = 'InsertEnter' },
-  { 'rafamadriz/friendly-snippets', event = 'InsertEnter' },
 }
