@@ -9,7 +9,7 @@ in
   };
 
   imports = [
-    ../../os/nixos-gnome
+    ../../os/nixos-niri
     ./hardware-configuration.nix
   ];
 

@@ -8,12 +8,15 @@
   users.users."${username}" = {
     isNormalUser = true;
     initialPassword = "p4ssw0rd";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "video" ];
     shell = pkgs.zsh;
   };
 
   environment.sessionVariables = {
     XDG_CONFIG_HOME = "$HOME/.config";
+
+    NIXOS_OZONE_WL = "1";
+    MOZ_ENABLE_WAYLAND = "1";
 
     QT_QPA_PLATFORM     = "wayland";
     QT_IM_MODULE        = "fcitx";
@@ -59,22 +62,35 @@
     }}"
   ];
 
-  services = {
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
-
-    gnome.core-apps.enable = false;
-    gnome.core-developer-tools.enable = false;
-    gnome.games.enable = false;
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --cmd niri-session";
+        user = "greeter";
+      };
+    };
   };
-  environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
+
+  boot.kernelParams = [ "quiet" ];
+
+  programs.niri.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gnome
+      xdg-desktop-portal-gtk
+    ];
+    config.common.default = "gnome";
+  };
 
   services.libinput.enable = true;
-  
+
   services.printing.enable = true;
 
   services.dbus.packages = [ config.i18n.inputMethod.package ];
-  
+
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -94,10 +110,7 @@
     openFirewall = true;
   };
 
-  environment.systemPackages = [
-    pkgs.gnomeExtensions.paperwm
-    pkgs.cloudflare-warp
-  ];
+  environment.systemPackages = [ pkgs.cloudflare-warp ];
   systemd.packages = [ pkgs.cloudflare-warp ];
   systemd.targets.multi-user.wants = [ "warp-svc.service" ];
 
@@ -113,9 +126,9 @@
     keep-derivations = true
   '';
 
-  nix.settings.experimental-features = [ 
-    "nix-command" 
-    "flakes" 
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
     "pipe-operators"
   ];
 
@@ -135,6 +148,8 @@
       setSocketVariable = true;
     };
   };
+
+  security.pam.services.swaylock = {};
 
   systemd.services.libinput-gestures.enable = true;
 }

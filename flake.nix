@@ -19,7 +19,7 @@
 
   outputs = { nixpkgs, nixos-wsl, home-manager, mcp-servers, ... } @ inputs:
     let
-      mkNixosSystem = { system, hostname, username, homename, additionalModules ? [] }: 
+      mkNixosSystem = { system, hostname, username, homename, additionalModules ? [] }:
         nixpkgs.lib.nixosSystem rec {
           inherit system;
           specialArgs = { inherit inputs hostname username mcp-servers; };
@@ -52,7 +52,7 @@
         system   = "x86_64-linux";
         hostname = "fenrir";
         username = "lmdexpr";
-        homename = "gui";
+        homename = "niri";
       };
 
       nixosConfigurations.skelton = mkNixosSystem {

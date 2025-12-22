@@ -35,7 +35,7 @@ end)
 return {
   font = wezterm.font("HackGen Console NF"),
   use_ime = true,
-  enable_wayland = false,
+  enable_wayland = true,
   font_size = 14.0,
   color_scheme = "Hybrid",
   -- window_background_image = home .. "/.background.jpg",
@@ -44,7 +44,7 @@ return {
     hue = 1.0,
     saturation = 1.0,
   },
-  window_decorations = "RESIZE",
+  window_decorations = "NONE",
   window_background_opacity = 0.9,
   macos_window_background_blur = 10,
   hide_mouse_cursor_when_typing = false,

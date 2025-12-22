@@ -4,7 +4,6 @@ let
     {
       source = mcp-servers.lib.mkConfig pkgs {
         programs = {
-          # fetch.enable = true;
           playwright.enable = true;
           filesystem = {
             enable = true;
@@ -23,10 +22,9 @@ let
           };
         };
       };
-
     };
 in
-  {
+{
   imports = [
     ../config/zsh
     ../config/git
@@ -60,7 +58,6 @@ in
   home = {
     inherit username;
     homeDirectory = "/home/${username}";
-
     stateVersion = "25.05";
   };
 
@@ -70,8 +67,6 @@ in
 
   xdg.configFile = {
     "mcphub/servers.json" = mcp-servers-config;
-
-    # claude --mcp-config ~/.config/claude/servers.json
     "claude/servers.json" = mcp-servers-config;
   };
 
