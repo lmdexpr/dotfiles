@@ -84,7 +84,7 @@ in
 
           modules-left = [ "niri/workspaces" "niri/window" ];
           modules-center = [ "clock" ];
-          modules-right = [ "pulseaudio" "network" "battery" "tray" ];
+          modules-right = [ "cpu" "memory" "temperature" "backlight" "pulseaudio" "tray" "battery" ];
 
           "niri/workspaces" = {
             format = "{name}";
@@ -96,30 +96,53 @@ in
           };
 
           clock = {
-            format = "{:%Y-%m-%d %H:%M}";
+            format = "🕐 {:%Y-%m-%d %H:%M}";
             tooltip-format = "<tt><small>{calendar}</small></tt>";
           };
 
           pulseaudio = {
             format = "{icon} {volume}%";
-            format-muted = "🔇";
+            format-muted = "🔇 ";
             format-icons = {
               default = ["🔈" "🔉" "🔊"];
             };
             on-click = "pavucontrol";
           };
 
-          network = {
-            format-wifi = "📶 {essid}";
-            format-ethernet = "🌐 {ifname}";
-            format-disconnected = "⚠";
-            on-click = "nm-connection-editor";
-          };
-
           battery = {
             format = "{icon} {capacity}%";
-            format-icons = ["" "" "" "" ""];
+            format-icons = ["🪫" "🔋" "🔋" "🔋" "🔋"];
+            states = {
+              warning = 30;
+              critical = 15;
+            };
+            format-charging = "⚡ {capacity}%";
+            format-plugged = "🔌 {capacity}%";
             on-click = "gnome-power-statistics";
+          };
+
+          cpu = {
+            format = "💻 {usage}%";
+            interval = 2;
+          };
+
+          memory = {
+            format = "🧠 {percentage}%";
+            interval = 2;
+          };
+
+          backlight = {
+            format = "{icon} {percent}%";
+            format-icons = ["🔅" "🔆"];
+            on-scroll-up = "brightnessctl set +5%";
+            on-scroll-down = "brightnessctl set 5%-";
+          };
+
+          temperature = {
+            format = "🌡️ {temperatureC}°C";
+            critical-threshold = 80;
+            format-critical = "🔥 {temperatureC}°C";
+            interval = 2;
           };
         };
       };
@@ -130,7 +153,7 @@ in
         }
 
         window#waybar {
-          background-color: #2e3440;
+          background-color: rgba(46, 52, 64, 0.8);
           color: #eceff4;
           border-bottom: 2px solid #4c566a;
         }
@@ -151,8 +174,40 @@ in
         #clock,
         #pulseaudio,
         #network,
-        #battery,
+        #battery {
+          padding: 0 4px;
+          margin: 0 1px;
+        }
+
+        #cpu,
+        #memory,
+        #temperature {
+          padding: 0 4px;
+          margin: 0 1px;
+        }
+        #temperature {
+          margin-right: 12px;
+          border-right: 2px solid #4c566a;
+        }
+
+        /* ハードウェア制御グループ */
+        #backlight,
+        #pulseaudio {
+          padding: 0 4px;
+          margin: 0 1px;
+        }
+        #pulseaudio {
+          margin-right: 12px;
+          border-right: 2px solid #4c566a;
+        }
+
+        /* システムトレイ */
         #tray {
+          padding: 0 4px;
+          margin: 0 1px;
+        }
+        /* 電源グループ */
+        #battery {
           padding: 0 8px;
           margin: 0 2px;
         }
@@ -243,6 +298,9 @@ in
     pavucontrol
     networkmanagerapplet
     wlogout
+    brightnessctl
+    blueman
+    lm_sensors
   ];
 
   services = {

@@ -16,13 +16,6 @@
     XDG_CONFIG_HOME = "$HOME/.config";
 
     NIXOS_OZONE_WL = "1";
-    MOZ_ENABLE_WAYLAND = "1";
-
-    QT_QPA_PLATFORM     = "wayland";
-    QT_IM_MODULE        = "fcitx";
-    IM_MODULE_CLASSNAME = "fcitx::QFcitxPlatformInputContext";
-
-    GTK_IM_MODULE = "fcitx";
   };
 
   networking.networkmanager.enable = true;
@@ -117,6 +110,11 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+  };
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
   };
 
   hardware.keyboard.qmk.enable = true;

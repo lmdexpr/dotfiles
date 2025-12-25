@@ -1,5 +1,5 @@
 [default]
-path = "/home/${username}/Pictures/isekaijoucho"
+path = "~/Pictures/isekaijoucho"
 duration = "60m"
 mode = "center"
 sorting = "random"
