@@ -219,6 +219,10 @@ in
     inherit username;
     homeDirectory = "/home/${username}";
     stateVersion = "25.05";
+
+    sessionVariables = {
+      NIXOS_OZONE_WL = "1";
+    };
   };
 
   home.file = {
@@ -273,7 +277,7 @@ in
       ];
     }))
 
-    discord
+    spotify
 
     remmina
 
