@@ -1,0 +1,75 @@
+* {
+  font-family: HackGen Console NF;
+  font-size: 11px;
+}
+
+window#waybar {
+  background: transparent;
+  color: #eceff4;
+}
+
+#window {
+  padding: 4px 12px;
+  margin: 4px 2px;
+  background-color: rgba(46, 52, 64, 0.9);
+  border-radius: 8px;
+  border: 1px solid rgba(76, 86, 106, 0.5);
+}
+
+#clock {
+  padding: 4px 12px;
+  margin: 4px 2px;
+  background-color: rgba(46, 52, 64, 0.9);
+  border-radius: 8px;
+  border: 1px solid rgba(76, 86, 106, 0.5);
+}
+
+#cpu,
+#memory,
+#temperature,
+#backlight,
+#pulseaudio,
+#tray,
+#battery {
+  padding: 4px 10px;
+  margin: 4px 2px;
+  background-color: rgba(46, 52, 64, 0.9);
+  border-radius: 8px;
+  border: 1px solid rgba(76, 86, 106, 0.5);
+  transition: all 0.2s ease-in-out;
+}
+
+#cpu:hover,
+#memory:hover,
+#temperature:hover,
+#backlight:hover,
+#pulseaudio:hover,
+#battery:hover {
+  background-color: rgba(76, 86, 106, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#battery.warning {
+  background-color: rgba(235, 203, 139, 0.9);
+  color: #2e3440;
+  border-color: #ebcb8b;
+}
+
+#battery.critical {
+  background-color: rgba(191, 97, 106, 0.9);
+  color: #eceff4;
+  border-color: #bf616a;
+  animation: blink 1s ease-in-out infinite;
+}
+
+#temperature.critical {
+  background-color: rgba(191, 97, 106, 0.9);
+  color: #eceff4;
+  border-color: #bf616a;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}

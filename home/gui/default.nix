@@ -104,7 +104,7 @@ in
       ];
     }))
     
-    discord
+    spotify
 
     remmina
 
