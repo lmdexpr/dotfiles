@@ -28,7 +28,7 @@ in
   imports = [
     ../config/zsh
     ../config/git
-    ../config/wezterm
+    ../config/ghostty
     ../config/neovim
   ];
 
