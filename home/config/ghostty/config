@@ -21,3 +21,6 @@ keybind = ctrl+,>n=new_tab
 keybind = ctrl+,>x=close_tab
 keybind = ctrl+b=previous_tab
 keybind = ctrl+n=next_tab
+
+keybind = performable:ctrl+c=copy_to_clipboard
+keybind = ctrl+v=paste_from_clipboard
