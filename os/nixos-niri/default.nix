@@ -69,6 +69,9 @@
 
   programs.niri.enable = true;
 
+  # Enable dconf for GTK applications
+  programs.dconf.enable = true;
+
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
@@ -102,7 +105,12 @@
     openFirewall = true;
   };
 
-  environment.systemPackages = [ pkgs.cloudflare-warp ];
+  environment.systemPackages = with pkgs; [
+    cloudflare-warp
+    # GTK dependencies for standalone window managers
+    gsettings-desktop-schemas
+    glib # for gsettings command
+  ];
   systemd.packages = [ pkgs.cloudflare-warp ];
   systemd.targets.multi-user.wants = [ "warp-svc.service" ];
 

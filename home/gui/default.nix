@@ -70,6 +70,10 @@ in
     "claude/servers.json" = mcp-servers-config;
   };
 
+  home.sessionVariables = {
+    BROWSER = "vivaldi";
+  };
+
   home.packages = with pkgs; [
     gcc
     nodePackages.npm
