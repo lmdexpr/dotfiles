@@ -13,6 +13,9 @@ local options = {
   wildmenu     = true,
   wrapscan     = true,
   clipboard    = "unnamedplus",
+  foldexpr     = "v:lua.vim.treesitter.foldexpr()",
+  foldlevel    = 99,
+  foldmethod   = "expr",
 }
 
 for k, v in pairs(options) do
