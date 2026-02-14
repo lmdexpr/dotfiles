@@ -15,14 +15,22 @@
     };
 
     mcp-servers.url = "github:natsukium/mcp-servers-nix";
+
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
+    };
   };
 
-  outputs = { nixpkgs, nixos-wsl, home-manager, mcp-servers, ... } @ inputs:
+  outputs = { nixpkgs, nixos-wsl, home-manager, mcp-servers, zen-browser, ... } @ inputs:
     let
       mkNixosSystem = { system, hostname, username, homename, additionalModules ? [] }:
         nixpkgs.lib.nixosSystem rec {
           inherit system;
-          specialArgs = { inherit inputs hostname username mcp-servers; };
+          specialArgs = { inherit inputs hostname username mcp-servers zen-browser; };
           modules = additionalModules ++ [
             ./machine/${hostname}
 

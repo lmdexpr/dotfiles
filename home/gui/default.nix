@@ -1,4 +1,4 @@
-{ pkgs, username, mcp-servers, ... }:
+{ pkgs, username, mcp-servers, zen-browser, ... }:
 let
   mcp-servers-config = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux
     {
@@ -30,6 +30,8 @@ in
     ../config/git
     ../config/ghostty
     ../config/neovim
+
+    zen-browser.homeModules.beta
   ];
 
   programs = {
@@ -53,6 +55,8 @@ in
         };
       };
     };
+
+    zen-browser.enable = true;
   };
 
   home = {
@@ -71,7 +75,7 @@ in
   };
 
   home.sessionVariables = {
-    BROWSER = "vivaldi";
+    BROWSER = "zen-browser";
   };
 
   home.packages = with pkgs; [
@@ -100,14 +104,6 @@ in
 
     nil
 
-    (vivaldi.overrideAttrs (oldAttrs: {
-      dontWrapQtApps = false;
-      dontPatchELF = true;
-      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ 
-        kdePackages.wrapQtAppsHook 
-      ];
-    }))
-    
     spotify
 
     remmina

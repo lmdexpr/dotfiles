@@ -37,6 +37,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 vim.lsp.enable({
   'nil_ls',
   'ocamllsp', 'rescriptls', -- 'reason_ls',
+  'gleam',
   'rust_analyzer',
   'gopls',
   'metals', 'jdtls', 'kotlin_language_server',
