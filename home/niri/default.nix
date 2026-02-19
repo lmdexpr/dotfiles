@@ -35,11 +35,11 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/html" = "vivaldi-stable.desktop";
-      "x-scheme-handler/http" = "vivaldi-stable.desktop";
-      "x-scheme-handler/https" = "vivaldi-stable.desktop";
-      "x-scheme-handler/about" = "vivaldi-stable.desktop";
-      "x-scheme-handler/unknown" = "vivaldi-stable.desktop";
+      "text/html" = "zen";
+      "x-scheme-handler/http" = "zen";
+      "x-scheme-handler/https" = "zen";
+      "x-scheme-handler/about" = "zen";
+      "x-scheme-handler/unknown" = "zen";
     };
   };
 }

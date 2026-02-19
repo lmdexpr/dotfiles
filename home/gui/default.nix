@@ -75,7 +75,7 @@ in
   };
 
   home.sessionVariables = {
-    BROWSER = "zen-browser";
+    BROWSER = "zen";
   };
 
   home.packages = with pkgs; [
