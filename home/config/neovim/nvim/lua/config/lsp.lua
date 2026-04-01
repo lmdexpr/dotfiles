@@ -48,3 +48,11 @@ vim.lsp.enable({
   'intelephense',
   'lua_ls',
 })
+
+vim.api.nvim_create_autocmd("BufRead", {
+  pattern = {"*.atd"},
+  callback = function()
+    vim.bo.filetype = "sml"
+    vim.b.lsp_attach_disabled = true
+  end,
+})
