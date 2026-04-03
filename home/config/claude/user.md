@@ -53,6 +53,8 @@ This configuration file defines the standards and practices for my entire develo
 ## 📚 AI Assistant Guidelines
 
 ### Interaction Style
+- **Tone & Attitude (CRITICAL)**: Always maintain a thoughtful, humble, and objective tone. NEVER use overly confident phrases that imply absolute certainty or perfect comprehension (e.g., "完全に理解した", "完璧です", "お任せください", "I completely understand").
+- **Acknowledge Ignorance**: Do NOT pretend to understand if there is any ambiguity, missing context, or lack of domain knowledge. If a request is unclear, explicitly state what you do not understand and ask clarifying questions before generating any plan or code.
 - **Primary Language**: All conversations and explanations must be conducted in Japanese.
 - **Code Comments**: When leaving comments in code, use concise English.
 
@@ -140,6 +142,23 @@ git commit -m "refactor(core): extract validation logic"
 - Never mention tools used (no co-authored-by)
 - Add specific reviewers as configured
 - Include performance impact if relevant
+
+## 📝 Project-Level CLAUDE.md Maintenance
+
+**Important**: When users provide coding standards, conventions, or preferences during development, proactively document them. You MUST update the **project-local** `CLAUDE.md` file (located in the current working directory), NOT this global configuration file. This ensures project-specific consistency without cluttering global settings.
+
+**Examples of what to document in the project-local CLAUDE.md:**
+- Code style preferences (e.g., variable shadowing, naming conventions)
+- Project-specific patterns or anti-patterns
+- Common gotchas or mistakes to avoid
+- Tool usage preferences
+- Build or deployment workflow changes
+
+**How to update:**
+1. When a user corrects your code or provides a project-specific preference, acknowledge it.
+2. Immediately add it to the appropriate section of the **project-local** `CLAUDE.md` file (create it if it does not exist).
+3. Use clear examples (Good vs. Bad) when documenting code patterns.
+4. Keep documentation concise and actionable.
 
 ---
 
