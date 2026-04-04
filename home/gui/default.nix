@@ -80,7 +80,7 @@ in
 
   home.packages = with pkgs; [
     gcc
-    nodePackages.npm
+    nodejs
 
     lua51Packages.lua
     lua51Packages.luarocks
