@@ -8,11 +8,32 @@ return {
       "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim",
     },
-    opts = {
-      close_if_last_window = true,
-    },
-    config = function(_)
+    config = function()
+      require("neo-tree").setup({
+        close_if_last_window = true,
+        filesystem = {
+          use_libuv_file_watcher = true,
+        },
+        event_handlers = {
+          {
+            event = "neo_tree_buffer_enter",
+            handler = function()
+              vim.cmd("checktime")
+            end,
+          },
+        },
+      })
+
       vim.keymap.set('n', '<C-e>', ':<C-u>Neotree<CR>', { noremap = true, silent = true })
+
+      -- Refresh neo-tree on focus gain (for external git operations)
+      vim.api.nvim_create_autocmd("FocusGained", {
+        callback = function()
+          if package.loaded["neo-tree.sources.manager"] then
+            require("neo-tree.command").execute({ action = "show", source = "filesystem" })
+          end
+        end,
+      })
 
       -- Ensure nvim quits when neo-tree is the last window
       vim.api.nvim_create_autocmd("QuitPre", {
