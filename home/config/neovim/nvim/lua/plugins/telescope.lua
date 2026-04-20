@@ -1,7 +1,6 @@
 return {
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.8',
     dependencies = { 'nvim-lua/plenary.nvim' },
     event = 'VeryLazy',
     config = function()
@@ -18,8 +17,12 @@ return {
         defaults = {
           mappings = {
             i = {
-              ["<C-q>"] = ts_actions.close
-            }
+              ["<C-q>"] = ts_actions.close,
+              ["<Esc>"] = ts_actions.close,
+            },
+            n = {
+              ["<Esc>"] = ts_actions.close,
+            },
           }
         },
         extensions = {
