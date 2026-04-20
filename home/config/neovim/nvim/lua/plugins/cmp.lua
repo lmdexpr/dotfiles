@@ -43,7 +43,6 @@ return {
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = 'vsnip' },
-          { name = 'nvim_lsp_signature_help' },
           { name = 'calc' },
         }, {
           { name = 'buffer', keyword_length = 2 },
@@ -70,7 +69,6 @@ return {
     end
   },
   { 'hrsh7th/cmp-nvim-lsp',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' } },
-  { 'hrsh7th/cmp-nvim-lsp-signature-help',  event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' } },
   { 'hrsh7th/cmp-nvim-lsp-document-symbol', event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp', 'hrsh7th/cmp-nvim-lsp' } },
   { 'onsails/lspkind.nvim',                 event = 'LspAttach',   dependencies = { 'hrsh7th/nvim-cmp' } },
   { 'hrsh7th/cmp-buffer',                   event = 'InsertEnter', dependencies = { 'hrsh7th/nvim-cmp' } },
