@@ -139,7 +139,6 @@ git commit -m "refactor(core): extract validation logic"
 
 ### PR Guidelines
 - Focus on high-level problem and solution
-- Never mention tools used (no co-authored-by)
 - Add specific reviewers as configured
 - Include performance impact if relevant
 
