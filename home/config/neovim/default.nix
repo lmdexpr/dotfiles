@@ -7,9 +7,7 @@
     vimAlias = true;
     withRuby = false;
     withPython3 = false;
-    plugins = with pkgs.vimPlugins; [
-      nvim-treesitter.withAllGrammars
-    ];
+    plugins = [ ];
     extraPackages = with pkgs; [
       gcc
       cargo
