@@ -1,28 +1,33 @@
-{ pkgs, username, mcp-servers, zen-browser, ... }:
+{
+  pkgs,
+  username,
+  mcp-servers,
+  zen-browser,
+  ...
+}:
 let
-  mcp-servers-config = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux
-    {
-      source = mcp-servers.lib.mkConfig pkgs {
-        programs = {
-          playwright.enable = true;
-          filesystem = {
-            enable = true;
-            args = [ "/home/${username}" ];
-          };
+  mcp-servers-config = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
+    source = mcp-servers.lib.mkConfig pkgs {
+      programs = {
+        playwright.enable = true;
+        filesystem = {
+          enable = true;
+          args = [ "/home/${username}" ];
         };
+      };
 
-        settings.servers = {
-          mcp-obsidian = {
-            command = "${pkgs.lib.getExe' pkgs.nodejs "npx"}";
-            args = [
-              "-y"
-              "mcp-obsidian"
-              "/home/${username}/Documents/private-notes"
-            ];
-          };
+      settings.servers = {
+        mcp-obsidian = {
+          command = "${pkgs.lib.getExe' pkgs.nodejs "npx"}";
+          args = [
+            "-y"
+            "mcp-obsidian"
+            "/home/${username}/Documents/private-notes"
+          ];
         };
       };
     };
+  };
 in
 {
   imports = [
@@ -66,7 +71,9 @@ in
   };
 
   home.file = {
-    ".claude/CLAUDE.md" = { source = ../config/claude/user.md; };
+    ".claude/CLAUDE.md" = {
+      source = ../config/claude/user.md;
+    };
   };
 
   xdg.configFile = {
@@ -94,6 +101,8 @@ in
 
     wl-clipboard
 
+    gh
+
     kubectl
     talosctl
     argocd
@@ -114,7 +123,7 @@ in
     obsidian
 
     claude-code
-    
+
     chromium
     playwright-driver
   ];
