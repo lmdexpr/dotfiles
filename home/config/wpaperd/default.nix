@@ -4,7 +4,7 @@
     wpaperd
   ];
 
-  xdg.configFile."wpaperd/wallpaper.toml" = {
+  xdg.configFile."wpaperd/config.toml" = {
     source = ./wallpaper.toml;
   };
 }
