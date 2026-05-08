@@ -82,7 +82,7 @@ in
   };
 
   home.sessionVariables = {
-    BROWSER = "zen";
+    BROWSER = "zen-beta";
   };
 
   home.packages = with pkgs; [

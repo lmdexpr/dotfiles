@@ -1,4 +1,9 @@
-{ config, pkgs, username, ... }:
+{
+  config,
+  pkgs,
+  username,
+  ...
+}:
 {
   system.stateVersion = "25.05";
 
@@ -8,7 +13,12 @@
   users.users."${username}" = {
     isNormalUser = true;
     initialPassword = "p4ssw0rd";
-    extraGroups = [ "networkmanager" "wheel" "video" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "video"
+      "docker"
+    ];
     shell = pkgs.zsh;
   };
 
@@ -51,7 +61,7 @@
     powerline-symbols
 
     "${pkgs.fetchzip {
-      url  = "https://github.com/yuru7/HackGen/releases/download/v2.10.0/HackGen_NF_v2.10.0.zip";
+      url = "https://github.com/yuru7/HackGen/releases/download/v2.10.0/HackGen_NF_v2.10.0.zip";
       hash = "sha256-n0ibIzNIy5tUdC0QEWRRW4S5Byih39agW2IxCiqTLoQ=";
     }}"
   ];
@@ -149,13 +159,9 @@
 
   virtualisation.docker = {
     enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
   };
 
-  security.pam.services.swaylock = {};
+  security.pam.services.swaylock = { };
 
   systemd.services.libinput-gestures.enable = true;
 }
