@@ -3,6 +3,10 @@ return {
     "nvim-neo-tree/neo-tree.nvim",
     event = "VeryLazy",
     branch = "v3.x",
+    -- Pin before ea7491e ("perf(git): use check-ignore for new worktrees")
+    -- which breaks initial gitignore filtering: check-ignore.lua splits the
+    -- git output by "\001" while git outputs "\n", so no items get marked.
+    commit = "4d0828d95adaf4250c1373d2cd9318d3509712b7",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons",
