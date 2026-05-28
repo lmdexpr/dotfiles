@@ -7,6 +7,8 @@ require('config.keymap')
 require('config.lazy')
 require('config.lsp')
 
+require('sidetree').setup()
+
 require('vim._core.ui2').enable({
   enable = true,
   msg = {
