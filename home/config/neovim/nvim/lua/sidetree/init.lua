@@ -645,6 +645,49 @@ local function copy_entry(e)
   end)
 end
 
+-- Create a new file or directory inside target_dir. Trailing '/' on the
+-- input creates a directory; intermediate dirs are mkdir -p'd as needed.
+local function add_in(target_dir)
+  vim.ui.input({ prompt = 'New (end with / for dir): ' .. target_dir .. '/' }, function(name)
+    if not name or name == '' then return end
+    local is_dir = name:sub(-1) == '/'
+    local dst = vim.fs.normalize(target_dir .. '/' .. name)
+    if vim.uv.fs_stat(dst) then
+      notify_err('Already exists: ' .. dst)
+      return
+    end
+    if is_dir then
+      vim.fn.mkdir(dst, 'p')
+    else
+      vim.fn.mkdir(vim.fs.dirname(dst), 'p')
+      local fd, err = vim.uv.fs_open(dst, 'w', 420)
+      if not fd then
+        notify_err('Create failed: ' .. tostring(err))
+        return
+      end
+      vim.uv.fs_close(fd)
+    end
+    -- Expand all ancestors up to target_dir so the new entry is visible
+    local p = vim.fs.dirname(dst)
+    while p and #p >= #target_dir do
+      state.expanded[p] = true
+      if p == target_dir then break end
+      p = vim.fs.dirname(p)
+    end
+    -- Jump cursor to the new entry after refresh
+    state.after_render = function()
+      if not state.win or not vim.api.nvim_win_is_valid(state.win) then return end
+      for i, ent in ipairs(state.entries) do
+        if ent.path == dst then
+          pcall(vim.api.nvim_win_set_cursor, state.win, { i, 0 })
+          return
+        end
+      end
+    end
+    M.refresh()
+  end)
+end
+
 -- ===== Window/buffer =====
 
 local function create_buffer()
@@ -669,6 +712,12 @@ local function create_buffer()
   vim.keymap.set('n', 'm', with_entry(move_entry), opts)
   vim.keymap.set('n', 'd', with_entry(delete_entry), opts)
   vim.keymap.set('n', 'c', with_entry(copy_entry), opts)
+  vim.keymap.set('n', 'a', function()
+    local e = entry_under_cursor()
+    -- file under cursor → create in its parent; dir → create inside it; nothing → root
+    local target = (e and (e.is_dir and e.path or vim.fs.dirname(e.path))) or state.root
+    add_in(target)
+  end, opts)
   vim.keymap.set('n', 'q', function() M.close() end, opts)
 
   return buf
