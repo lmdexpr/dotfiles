@@ -510,6 +510,9 @@ local function open_or_toggle()
       state.expanded[e.path] = true
     end
     render()
+    -- Newly-visible paths may not be in the ignored cache yet; fill them in
+    -- async and re-render so .gitignore'd entries get filtered out.
+    check_ignored_batch(collect_candidate_paths(), render)
   else
     local target = find_target_win()
     if target then
