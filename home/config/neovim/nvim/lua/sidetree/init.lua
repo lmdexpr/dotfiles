@@ -362,8 +362,11 @@ render = function()
   local lines = {}
   local meta = {}
   for _, e in ipairs(state.entries) do
-    local git = state.git_status[e.path] or ' '
-    local sev = state.diag[e.path]
+    -- Expanded dirs hide their propagated markers since the contributing
+    -- child entry is already visible directly underneath.
+    local hide_markers = e.is_dir and state.expanded[e.path]
+    local git = (not hide_markers and state.git_status[e.path]) or ' '
+    local sev = not hide_markers and state.diag[e.path] or nil
     local diag = (sev and DIAG_CHAR[sev]) or ' '
     local indent = string.rep('  ', e.depth)
     local icon, color
@@ -393,14 +396,15 @@ render = function()
   for i, e in ipairs(state.entries) do
     local row = i - 1
     local m = meta[i]
-    local git = state.git_status[e.path]
+    local hide_markers = e.is_dir and state.expanded[e.path]
+    local git = not hide_markers and state.git_status[e.path] or nil
     if git then
       vim.api.nvim_buf_set_extmark(state.buf, ns, row, 0, {
         end_col = 1,
         hl_group = GIT_HL[git] or 'Normal',
       })
     end
-    local sev = state.diag[e.path]
+    local sev = not hide_markers and state.diag[e.path] or nil
     if sev then
       vim.api.nvim_buf_set_extmark(state.buf, ns, row, 2, {
         end_col = 3,
