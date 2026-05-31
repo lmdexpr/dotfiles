@@ -9,6 +9,7 @@ local state = {
   expanded = {},
   entries = {},
   git_status = {},
+  untracked_dirs = {},
   ignored_cache = {},
   diag = {},
   show_hidden = false,
@@ -74,7 +75,7 @@ end
 local GIT_PRIORITY = { D = 1, C = 2, R = 3, A = 4, M = 5, ['?'] = 6, U = 7 }
 
 local function parse_porcelain(out, root)
-  local status, ignored = {}, {}
+  local status, ignored, untracked_dirs = {}, {}, {}
   local i, len = 1, #out
   while i <= len do
     if i + 3 > len then break end
@@ -89,6 +90,12 @@ local function parse_porcelain(out, root)
       ignored[root .. '/' .. path] = true
       i = nul + 1
     else
+      -- untracked dirs are reported as a single `?? path/` entry with no
+      -- per-child entries; remember them so descendants can inherit `?`.
+      if x == '?' and y == '?' and path:sub(-1) == '/' then
+        path = path:sub(1, -2)
+        untracked_dirs[root .. '/' .. path] = true
+      end
       local code = (y ~= ' ' and y) or x
       status[root .. '/' .. path] = code
       -- rename/copy entries include an extra NUL-terminated old path
@@ -100,7 +107,7 @@ local function parse_porcelain(out, root)
       end
     end
   end
-  return status, ignored
+  return status, ignored, untracked_dirs
 end
 
 local function propagate_git(map, root)
@@ -119,6 +126,30 @@ local function propagate_git(map, root)
   return result
 end
 
+-- Repo root discovery (cached). Walks up looking for .git so we can run
+-- check-ignore with the *correct* git context per path, not state.root.
+local repo_root_cache = {}
+local function repo_root_for_dir(dir)
+  if dir == nil then return nil end
+  if repo_root_cache[dir] ~= nil then
+    return repo_root_cache[dir] or nil
+  end
+  local check = dir
+  while check and check ~= '' and check ~= '/' do
+    if vim.uv.fs_stat(check .. '/.git') then
+      repo_root_cache[dir] = check
+      return check
+    end
+    check = vim.fs.dirname(check)
+  end
+  repo_root_cache[dir] = false
+  return nil
+end
+
+local function find_repo_root(path)
+  return repo_root_for_dir(vim.fs.dirname(path))
+end
+
 -- status: git status without --ignored. Cheap.
 local git_running = false
 local git_pending_done = nil
@@ -134,10 +165,14 @@ local function refresh_status(done)
     vim.schedule_wrap(function(res)
       git_running = false
       if res.code == 0 and res.stdout and res.stdout ~= '' then
-        local status = parse_porcelain(res.stdout, state.root)
-        state.git_status = propagate_git(status, state.root)
+        -- porcelain paths are relative to the repo toplevel, not state.root.
+        local repo = repo_root_for_dir(state.root) or state.root
+        local status, _, untracked = parse_porcelain(res.stdout, repo)
+        state.git_status = propagate_git(status, repo)
+        state.untracked_dirs = untracked
       else
         state.git_status = {}
+        state.untracked_dirs = {}
       end
       if done then done() end
       if git_pending_done then
@@ -147,27 +182,6 @@ local function refresh_status(done)
       end
     end)
   )
-end
-
--- Repo root discovery (cached). Walks up looking for .git so we can run
--- check-ignore with the *correct* git context per path, not state.root.
-local repo_root_cache = {}
-local function find_repo_root(path)
-  local dir = vim.fs.dirname(path)
-  if dir == nil then return nil end
-  if repo_root_cache[dir] ~= nil then
-    return repo_root_cache[dir] or nil
-  end
-  local check = dir
-  while check and check ~= '' and check ~= '/' do
-    if vim.uv.fs_stat(check .. '/.git') then
-      repo_root_cache[dir] = check
-      return check
-    end
-    check = vim.fs.dirname(check)
-  end
-  repo_root_cache[dir] = false
-  return nil
 end
 
 -- ignored: git check-ignore --stdin for visible paths only. Lazy + cached.
@@ -338,6 +352,19 @@ local DIAG_HL = {
   [4] = 'DiagnosticHint',
 }
 
+-- Git porcelain reports untracked dirs as a single `?? dir/` entry without
+-- listing children, so descendants need to inherit `?` from the ancestor.
+local function effective_git(path)
+  local s = state.git_status[path]
+  if s then return s end
+  local p = vim.fs.dirname(path)
+  while p and #p > #state.root do
+    if state.untracked_dirs[p] then return '?' end
+    p = vim.fs.dirname(p)
+  end
+  return nil
+end
+
 local function name_hl(e)
   if e.dimmed then return 'Comment' end
   if e.is_dir then return 'Directory' end
@@ -365,7 +392,7 @@ render = function()
     -- Expanded dirs hide their propagated markers since the contributing
     -- child entry is already visible directly underneath.
     local hide_markers = e.is_dir and state.expanded[e.path]
-    local git = (not hide_markers and state.git_status[e.path]) or ' '
+    local git = (not hide_markers and effective_git(e.path)) or ' '
     local sev = not hide_markers and state.diag[e.path] or nil
     local diag = (sev and DIAG_CHAR[sev]) or ' '
     local indent = string.rep('  ', e.depth)
@@ -397,7 +424,7 @@ render = function()
     local row = i - 1
     local m = meta[i]
     local hide_markers = e.is_dir and state.expanded[e.path]
-    local git = not hide_markers and state.git_status[e.path] or nil
+    local git = not hide_markers and effective_git(e.path) or nil
     if git then
       vim.api.nvim_buf_set_extmark(state.buf, ns, row, 0, {
         end_col = 1,
