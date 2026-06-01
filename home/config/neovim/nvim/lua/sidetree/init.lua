@@ -829,7 +829,11 @@ function M.setup()
 
   vim.api.nvim_create_autocmd('VimEnter', {
     group = grp,
-    callback = function() vim.schedule(M.open) end,
+    callback = function()
+      -- Skip auto-open when nvim was launched with file arguments
+      if vim.fn.argc() > 0 then return end
+      vim.schedule(M.open)
+    end,
   })
 
   vim.api.nvim_create_autocmd({ 'BufWritePost', 'FocusGained' }, {
@@ -849,6 +853,29 @@ function M.setup()
   vim.api.nvim_create_autocmd('DiagnosticChanged', {
     group = grp,
     callback = function() M.refresh() end,
+  })
+
+  -- If the user :q's the last non-sidetree regular window, close sidetree too
+  -- so the quit propagates and nvim exits (saves them from typing :qa).
+  vim.api.nvim_create_autocmd('QuitPre', {
+    group = grp,
+    callback = function()
+      if not state.win or not vim.api.nvim_win_is_valid(state.win) then return end
+      local cur = vim.api.nvim_get_current_win()
+      if cur == state.win then return end
+      if vim.api.nvim_win_get_config(cur).relative ~= '' then return end
+
+      local other = 0
+      for _, w in ipairs(vim.api.nvim_list_wins()) do
+        if w ~= state.win and vim.api.nvim_win_get_config(w).relative == '' then
+          other = other + 1
+        end
+      end
+      if other == 1 then
+        pcall(vim.api.nvim_win_close, state.win, true)
+        state.win = nil
+      end
+    end,
   })
 end
 
