@@ -50,5 +50,7 @@
     claude-code
 
     w3m
+
+    ghostty.terminfo
   ];
 }
