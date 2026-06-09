@@ -124,11 +124,11 @@
     },
     "private": {
       "locked": {
-        "lastModified": 1780992294,
-        "narHash": "sha256-ZO+PUfTexkRtghgqdyosGIOvULdtFMZ/qSalBWcWqIo=",
+        "lastModified": 1780992478,
+        "narHash": "sha256-g71OGCoNN0vNHYfeBuRVOdmnqBjpYWme/FVooRLiTms=",
         "ref": "refs/heads/main",
-        "rev": "d06a0aa539ada1da7fa996ec8da97bbb036fc87b",
-        "revCount": 15,
+        "rev": "84a4c3983ebe52d1de10a68fb20ae1418890a375",
+        "revCount": 16,
         "type": "git",
         "url": "ssh://git@git.lmdex.pro/lmdexpr/private-nix"
       },
