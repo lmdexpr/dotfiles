@@ -1,7 +1,7 @@
 { pkgs, ... }:
 let
   hostName = "svartalfheimr";
-in 
+in
 {
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.loader = {

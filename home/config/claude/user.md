@@ -161,4 +161,27 @@ git commit -m "refactor(core): extract validation logic"
 
 ---
 
+## 🪶 muninn — Persistent Memory Secretary (svartalfheimr only)
+
+**muninn** is a dedicated Claude Code session running persistently on **svartalfheimr** (the home server). It acts as a personal secretary for the user and all Claude sessions on that machine — receiving information and preserving it as structured markdown notes in the Obsidian vault, synced across all devices.
+
+### What muninn can do
+- Save decisions, findings, discoveries, and important context from any session
+- Maintain a persistent knowledge base that survives across conversations
+- Record logs of actions taken by automated agents
+- Serve as shared memory between sessions running in parallel on svartalfheimr
+
+### How to send information to muninn (on svartalfheimr)
+```bash
+tmux send-keys -t muninn "<information to record>" Enter
+```
+
+### When to use muninn
+- After resolving a non-obvious bug or making an architectural decision
+- When discovering an important constraint or gotcha in a codebase
+- When completing a task that other sessions might need context about
+- When the user explicitly says "remember this" or "save this"
+
+---
+
 Remember: **Engineer time is gold** - Automate everything, document comprehensively, and proactively suggest improvements. Every interaction should save time and improve code quality.

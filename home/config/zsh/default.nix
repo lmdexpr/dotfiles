@@ -16,6 +16,7 @@
 
     envExtra = ''
       export XDG_CONFIG_HOME=$HOME/.config
+      export TMUX_TMPDIR="''${XDG_RUNTIME_DIR:-/tmp}"
       export GOPATH=$HOME/go
       export PATH=$PATH:$GOPATH/bin
       export DOTNET_TOOLS_PATH=$HOME/.dotnet/tools
