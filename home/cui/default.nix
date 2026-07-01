@@ -33,6 +33,7 @@ in
     ../config/zsh
     ../config/git
     ../config/neovim
+    ../config/firefox-sync
   ];
 
   programs = {
