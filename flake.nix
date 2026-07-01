@@ -47,7 +47,14 @@
               home-manager.extraSpecialArgs = specialArgs;
             }
 
-            { nixpkgs.config = { allowUnfree = true; }; }
+            {
+              nixpkgs.config = {
+                allowUnfree = true;
+                # bitwarden-desktop 2026.6.0 still uses electron-39 which is EOL;
+                # remove once nixpkgs updates it to a newer electron
+                permittedInsecurePackages = [ "electron-39.8.10" ];
+              };
+            }
           ];
         };
     in {

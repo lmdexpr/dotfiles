@@ -118,6 +118,7 @@ in
     remmina
 
     bitwarden-cli
+    bitwarden-desktop
 
     obsidian
 
