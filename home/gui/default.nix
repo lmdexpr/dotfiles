@@ -115,10 +115,12 @@ in
 
     spotify
 
+    # bambu-studio
+
     remmina
 
     bitwarden-cli
-    bitwarden-desktop
+    # bitwarden-desktop
 
     obsidian
 
