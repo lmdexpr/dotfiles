@@ -45,10 +45,44 @@ This configuration file defines the standards and practices for my entire develo
 
 ### Core Principles
 - **Functional Programming (FP) First**: Prefer immutable data structures and pure functions. Isolate side effects explicitly. Favor expressions over statements.
+- **Parse, Don't Validate**: 不正な状態を「型として表現不可能」にする。詳細は下記。
 - **Pragmatic Architecture**: Apply DDD or Clean Architecture only when necessary to solve real problems. Prioritize simplicity and maintainability over dogma.
 - **Types as Documentation**: Types must serve as living documentation. Use explicit types for public APIs and complex data structures to clarify intent.
 - **Self-Documenting Code**: Write code that communicates its intent through structure and naming. Use comments sparingly to explain the "why."
 - **Purity vs. Performance**: When in doubt, prioritize code purity and beauty. Optimize only when performance needs are proven.
+
+### Parse, Don't Validate
+
+関数型プログラミングが安全性で勝つ理由の核心は、**入力を「検証する (validate)」のではなく「解析する (parse)」** こと。Alexis King の "Parse, don't validate" (2019, https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/) を出典とし、ここで採用するモデルとする。
+
+**Parse と Validate の違い**
+- **Validate**: 入力を真偽でチェックして `()` を返す。検査で得た情報をすぐに捨てる。`validateNonEmpty : 'a list -> unit`
+- **Parse**: 入力をより制約の強い型に変換する。検査で得た情報を**型として保存**し、以後のコードに渡す。`parseNonEmpty : 'a list -> 'a NonEmpty option`
+
+呼び出し側は parse 後の値を受け取れば「ここは空ではない」を**再検証なしに確実に**使える。これが「型を documentation/proof として使う」の実体。
+
+**なぜ validate を避けるか**
+- 同じ性質を関数ごとに再検証する重複が生まれ、検証漏れの面が広がる
+- 「ここまで検証済み」が静的に追えず、後の改修で「不可能なはずのエラー」が顕在化する
+- 検証と本処理が散在する **shotgun parsing** は、無効入力の一部を処理した後に失敗→ロールバック不能の温床になる
+
+**実践 5 原則**
+1. **不正な状態を表現不可能にする (make illegal states unrepresentable)**: 制約を構造に組み込んだ型 (`NonEmpty<T>`, `Map<K,V>`, refinement type) を選ぶ。`option<string>` を 2 つ並べる代わりに variant で「どちらか」を表現する等。
+2. **証明の負担を上流に押し上げる (push the proof upstream)**: 境界 (HTTP リクエスト、DB 読込、CLI 引数) で **早期に parse** し、内部関数は parse 済みの型だけを受け取る。
+3. **複数パスを恐れない**: shotgun parsing は避けるが、構造の異なるパス (lex → parse → typecheck 等) は分けてよい。
+4. **非正規化を避ける**: 同じ事実を複数フィールドに重複させない (同期ズレ = 不正状態の温床)。導出可能なら関数で計算する。
+5. **smart constructor で「validate」を「parse」に化ける**: `newtype` / abstract type + `make : raw -> t option` のパターンで、コンストラクタを通った値は不変式を満たすことを保証する。
+
+**関連用語**
+- **Total function**: あらゆる入力に対して結果が定義された関数。`head : 'a NonEmpty -> 'a` は total、`head : 'a list -> 'a` は partial。
+- **Refinement type**: ベース型より制約の強い subtype。`NonEmpty 'a` は `'a list` の refinement。
+- **Smart constructor**: 不変式を満たした値だけを構築させる公開 API。実装 (型コンストラクタ) は隠蔽する。
+- **Abstract data type**: モジュールが型を隠蔽し、不変式を内部だけで保証する設計。OCaml の `.mli`、ReScript の `interface file` がこれ。
+
+**How to apply**
+- 関数のシグネチャを書くとき「partial か total か」を意識する。`Result`/`option` で部分性を**型に乗せる**。
+- 「この string は実は email」「この int は実は正の数」を放置せず、`Email.t` / `PositiveInt.t` のように smart constructor を切る。
+- 既存コードに `assert` や if-guard で散らばった検証があったら、それは parse に集約できる候補。
 
 ## 📚 AI Assistant Guidelines
 
