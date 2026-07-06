@@ -108,11 +108,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1783214977,
-        "narHash": "sha256-0lkauQbtrljJqwtzTCILPAiHAJyMvn6XDo264moDv30=",
+        "lastModified": 1783279667,
+        "narHash": "sha256-/NAkDSsve+GNM0Bt6tleJdCGfsTlK89nPjkVOzZMo0s=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6edbf1a6a03e75886a6609c088801a0856449e88",
+        "rev": "f205b5574fd0cb7da5b702a2da51507b7f4fdd1b",
         "type": "github"
       },
       "original": {
@@ -124,11 +124,11 @@
     },
     "private": {
       "locked": {
-        "lastModified": 1783050490,
-        "narHash": "sha256-e+PFJIuOH7jAYa/ll3/bOZ4Pp6q7P5txl2MCjOb08RA=",
+        "lastModified": 1783313178,
+        "narHash": "sha256-2Y8Gn+hM2qt3jXSuaCwmOOgvX7ISW/CrRtmWuT4DlPc=",
         "ref": "refs/heads/main",
-        "rev": "1d440cd84cd0a000812ce07c533e67246ab7fdc2",
-        "revCount": 42,
+        "rev": "989277dbf7a7be4693680aadf3180104308400b2",
+        "revCount": 44,
         "type": "git",
         "url": "ssh://git@git.lmdex.pro/lmdexpr/private-nix"
       },
