@@ -23,11 +23,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783222121,
-        "narHash": "sha256-E/ElL373TO8lQ2aMvYyzN+k4xkVaUGoRqoa8AtM71tI=",
+        "lastModified": 1783458499,
+        "narHash": "sha256-a8whUXG4ThsZNjL92cH4wbl+/dt8CbT/F0zJsfhzFbM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "a1645f40777620c4bd2b6d854b290c2fc354a266",
+        "rev": "53ebbdc405acc04acd9bb73ccca462b51ddb8c6d",
         "type": "github"
       },
       "original": {
@@ -41,11 +41,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1783220794,
-        "narHash": "sha256-ynyinghI6g9YDpNdee7QdP9lGT47vOTXNCRVAP8p+Zw=",
+        "lastModified": 1783475267,
+        "narHash": "sha256-pZ/IeIHIKvCVyvJng2Fx268hPCmJTCXOTIGbGylaB14=",
         "owner": "natsukium",
         "repo": "mcp-servers-nix",
-        "rev": "14686054fc50e5a806ca0bde41733179ba2d5244",
+        "rev": "207ee8dda98410bd1abdacdaf3ceff57fd90c4d1",
         "type": "github"
       },
       "original": {
@@ -60,11 +60,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1781182279,
-        "narHash": "sha256-V5EQQbDnmdiXGQXrEF1PEL7QYsFqfH8N1E89Z5ONwFk=",
+        "lastModified": 1783336371,
+        "narHash": "sha256-ZisTtweyb7JUwPP54HAXE9TypT8m89dIxDI36Ak0hAs=",
         "owner": "nix-community",
         "repo": "NixOS-WSL",
-        "rev": "5675822ba756e6e56f8f6a5a76e90e0da2ece94d",
+        "rev": "a9620cfa43f0c1c30a46c31ae3c6e58cdb124a14",
         "type": "github"
       },
       "original": {
@@ -124,11 +124,11 @@
     },
     "private": {
       "locked": {
-        "lastModified": 1783313178,
-        "narHash": "sha256-2Y8Gn+hM2qt3jXSuaCwmOOgvX7ISW/CrRtmWuT4DlPc=",
+        "lastModified": 1783476020,
+        "narHash": "sha256-GQtv8i9Y9lTE5IV0nw9MYbNRy6n9h/g0Hgc4ZaNEs1c=",
         "ref": "refs/heads/main",
-        "rev": "989277dbf7a7be4693680aadf3180104308400b2",
-        "revCount": 44,
+        "rev": "47ec15eb956a3563e60b145d34597cac654dc24a",
+        "revCount": 55,
         "type": "git",
         "url": "ssh://git@git.lmdex.pro/lmdexpr/private-nix"
       },
@@ -157,11 +157,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783190846,
-        "narHash": "sha256-UcdKHKcDxLxBon0HsOjDRRA7l1vVT28R83LkCIAlYYc=",
+        "lastModified": 1783463911,
+        "narHash": "sha256-Lz6NtqHnqRcsDajeaKE4/CX4fQ61HlwKy3E+SHujbRQ=",
         "owner": "0xc000022070",
         "repo": "zen-browser-flake",
-        "rev": "0758bc86f7a55bbe002f0cede9e1a49e5a6e34d9",
+        "rev": "7ac921ce5425c377f7cabe193b0b1f973eab7ba8",
         "type": "github"
       },
       "original": {

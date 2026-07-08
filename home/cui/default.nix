@@ -50,11 +50,6 @@ in
       enable = true;
       enableDefaultConfig = false;
     };
-
-    tmux = {
-      enable = true;
-      extraConfig = "set -g exit-empty off";
-    };
   };
 
   home = {
@@ -102,5 +97,7 @@ in
     kubernetes-helm
 
     nil
+
+    herdr
   ];
 }
