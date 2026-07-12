@@ -23,3 +23,9 @@ for k, v in pairs(options) do
 end
 
 vim.diagnostic.config({ virtual_text = true })
+
+vim.filetype.add({
+  extension = {
+    flix = "flix",
+  },
+})

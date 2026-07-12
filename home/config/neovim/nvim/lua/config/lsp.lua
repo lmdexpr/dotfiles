@@ -38,6 +38,7 @@ vim.lsp.enable({
   'nil_ls',
   'ocamllsp', 'rescriptls', -- 'reason_ls',
   'gleam',
+  'flix',
   'rust_analyzer',
   'gopls',
   'metals', 'jdtls', 'kotlin_language_server',
