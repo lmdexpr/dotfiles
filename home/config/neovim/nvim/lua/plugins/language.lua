@@ -14,6 +14,13 @@ return {
   { 'ToruNiina/satysfi.vim',           ft = 'satysfi', },
   { 'rescript-lang/vim-rescript',      ft = 'rescript' },
   { 'reasonml-editor/vim-reason-plus', ft = 'reason' },
+  {
+    'whonore/Coqtail',
+    ft = 'coq',
+    init = function()
+      vim.g.filetype_v = 'coq'
+    end,
+  },
 
   {
     "stevearc/conform.nvim",

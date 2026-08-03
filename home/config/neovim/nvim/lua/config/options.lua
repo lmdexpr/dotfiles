@@ -22,6 +22,11 @@ for k, v in pairs(options) do
   vim.opt[k] = v
 end
 
+local venv_python = vim.fn.expand("~/.local/share/nvim/venv/bin/python3")
+if vim.uv.fs_stat(venv_python) then
+  vim.g.python3_host_prog = venv_python
+end
+
 vim.diagnostic.config({ virtual_text = true })
 
 vim.filetype.add({

@@ -6,7 +6,7 @@
     viAlias = true;
     vimAlias = true;
     withRuby = false;
-    withPython3 = false;
+    withPython3 = true;
     plugins = [ ];
     extraPackages = with pkgs; [
       gcc
