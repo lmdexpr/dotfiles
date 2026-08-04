@@ -19,6 +19,7 @@ return {
     ft = 'coq',
     init = function()
       vim.g.filetype_v = 'coq'
+      vim.g.coqtail_build_system = 'coqproject'
     end,
   },
 
