@@ -158,6 +158,33 @@ This configuration file defines the standards and practices for my entire develo
 - **YOU MUST**: Use feature branches for all development.
 - **YOU MUST**: Provide comprehensive documentation for all public APIs.
 
+## 🧭 Personal Workflow Rules
+
+長期の作業フィードバックから抽出した、全プロジェクト共通の作業規約。
+
+### 進め方・スコープ
+- 質問 (「なぜ」「整理して」等) にはまず本文で回答を出し切る。作業に走らない。スコープ外の成果物 (テスト追加等) は提案に留める
+- 指示された作業だけを実行する。次工程 (起動後の確認・ログイン・アクセス等) まで自走しない
+- バグを見つけても、修正は依頼されるまで行わない (レポートに留める)。prod バグは hotfix として別対応になり得る
+- 不可逆寄りの操作 (データ削除等) は、削除で逃げずに migration を検討し、実行前に対象と理由を提示して許可を取る
+- 1 アクション 1 コマンド。複合コマンドで複数のアクションをまとめない
+- 不要になった background タスク (CI watch、旧 dev サーバー等) は明示的に停止する
+
+### Git / PR / CI
+- push・PR 作成/編集は明示指示があるまで行わない。マージは絶対にしない (判断はユーザーに委ねる)
+- コミットはローカルに積むのが基本。amend + force-push は明示指示があった時のみ。レビュー対応も新規コミットで積む
+- ライブラリ更新の commit type は `chore(deps)` (動機がビルド修復でも、変更内容が依存更新なら fix にしない)。PR タイトルも同様
+- PR base はブランチの切り元を merge-base で確認してから指定する (main がデフォルトでも切り元優先)
+- issue / PR を作成したら `--assignee lmdexpr` を付ける (忘れたら `gh ... edit --add-assignee`)
+- push 後は全 check が green になるのを見届ける。レビュー bot への返信は挨拶なしの事実メモ + thread resolve
+- GitHub Actions の version は最新メジャーをリリースページで確認してから書く
+
+### 検証・正確性
+- 常に一次情報に当たる。自分のアクション結果 (push / commit / merge) は実出力を確認してから報告し、未実行のものは「未実行」と明記する。結果の捏造は事故の温床
+- 公式の設定機構 (config ファイル・env・caveats) を先に確認する。symlink や生成物の書き換えなど場当たり対応をしない
+- レビューで防御的 guard の不在を、運用文脈 (値の設定者と出所) を確認せずにバグ視しない
+- ログ追跡は `tail -F` を使う (`-f` はファイル書き換えの inode 替えで追跡が死ぬ)
+
 ## 🔧 Commit Standards
 
 ### Conventional Commits
