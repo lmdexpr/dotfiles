@@ -37,6 +37,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 vim.lsp.enable({
   'nil_ls',
   'ocamllsp', 'rescriptls', -- 'reason_ls',
+  'vsrocq', 'coq_lsp',
   'gleam',
   'flix',
   'rust_analyzer',
@@ -51,7 +52,7 @@ vim.lsp.enable({
 })
 
 vim.api.nvim_create_autocmd("BufRead", {
-  pattern = {"*.atd"},
+  pattern = { "*.atd" },
   callback = function()
     vim.bo.filetype = "sml"
     vim.b.lsp_attach_disabled = true
