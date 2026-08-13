@@ -89,6 +89,7 @@ in
     w3m
     claude-code
     gh
+    forgejo-cli
 
     kubectl
     talosctl

@@ -102,6 +102,7 @@ in
     wl-clipboard
 
     gh
+    forgejo-cli
 
     kubectl
     talosctl
