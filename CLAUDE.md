@@ -71,3 +71,11 @@ sudo nix-collect-garbage -d
 - The `skelton` machine includes NixOS-WSL for Windows Subsystem for Linux
 - Docker is configured with rootless mode on all systems
 - Input method support (fcitx5) is configured for Japanese input
+
+## Comment Policy
+
+Code that needs a comment to explain what it does is asking to be rewritten clearer instead — reach for a comment only when the code truly cannot say it, not as a substitute for restructuring.
+Default to no comment; if you're about to write one, first check whether a better name, a smaller function, or a clearer shape would make it unnecessary.
+A comment earns its place only by carrying something the code itself cannot: the reasoning behind a non-obvious decision, a constraint from outside this file, a trade-off knowingly accepted.
+This repository is also public, so don't document operational detail beyond its own scope (e.g. how a private/internal system consumes something defined here).
+Don't hard-wrap prose to a fixed column width — break lines at semantic boundaries (sentences, clauses) if at all, never because a line hit some column count.

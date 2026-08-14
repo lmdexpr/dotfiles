@@ -122,28 +122,12 @@
         "type": "github"
       }
     },
-    "private": {
-      "locked": {
-        "lastModified": 1783476020,
-        "narHash": "sha256-GQtv8i9Y9lTE5IV0nw9MYbNRy6n9h/g0Hgc4ZaNEs1c=",
-        "ref": "refs/heads/main",
-        "rev": "47ec15eb956a3563e60b145d34597cac654dc24a",
-        "revCount": 55,
-        "type": "git",
-        "url": "ssh://git@git.lmdex.pro/lmdexpr/private-nix"
-      },
-      "original": {
-        "type": "git",
-        "url": "ssh://git@git.lmdex.pro/lmdexpr/private-nix"
-      }
-    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "mcp-servers": "mcp-servers",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_3",
-        "private": "private",
         "zen-browser": "zen-browser"
       }
     },

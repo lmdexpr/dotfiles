@@ -9,8 +9,6 @@
     nixpkgs.url   = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
 
-    private.url = "git+ssh://git@git.lmdex.pro/lmdexpr/private-nix";
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,7 +25,7 @@
     };
   };
 
-  outputs = { nixpkgs, nixos-wsl, home-manager, mcp-servers, zen-browser, private, ... } @ inputs:
+  outputs = { nixpkgs, nixos-wsl, home-manager, mcp-servers, zen-browser, ... } @ inputs:
     let
       mkNixosSystem = { system, hostname, username, homename, additionalModules ? [] }:
         nixpkgs.lib.nixosSystem rec {
@@ -63,7 +61,6 @@
         hostname = "svartalfheimr";
         username = "lmdexpr";
         homename = "cui";
-        additionalModules = [ private.nixosModules.svartalfheimr ];
       };
 
       nixosConfigurations.fenrir = mkNixosSystem {
