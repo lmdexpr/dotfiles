@@ -5,12 +5,25 @@
   ...
 }:
 let
+  # mcp-servers-nix's generic-ts builder patches tsconfig.json in preBuild,
+  # but @modelcontextprotocol/server-filesystem's own "prepare" npm script
+  # already runs `tsc` during npm install (before preBuild), so the patch
+  # never takes effect. Apply it in postPatch instead, before npm install runs.
+  mcp-server-filesystem-fixed =
+    mcp-servers.packages.${pkgs.stdenv.hostPlatform.system}.mcp-server-filesystem.overrideAttrs
+      (old: {
+        postPatch = (old.postPatch or "") + ''
+          yq -i '.compilerOptions.types = ["node"]' tsconfig.json
+        '';
+      });
+
   mcp-servers-config = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
     source = mcp-servers.lib.mkConfig pkgs {
       programs = {
         playwright.enable = true;
         filesystem = {
           enable = true;
+          package = mcp-server-filesystem-fixed;
           args = [ "/home/${username}" ];
         };
       };

@@ -6,12 +6,25 @@
   ...
 }:
 let
+  # mcp-servers-nix's generic-ts builder patches tsconfig.json in preBuild,
+  # but @modelcontextprotocol/server-filesystem's own "prepare" npm script
+  # already runs `tsc` during npm install (before preBuild), so the patch
+  # never takes effect. Apply it in postPatch instead, before npm install runs.
+  mcp-server-filesystem-fixed =
+    mcp-servers.packages.${pkgs.stdenv.hostPlatform.system}.mcp-server-filesystem.overrideAttrs
+      (old: {
+        postPatch = (old.postPatch or "") + ''
+          yq -i '.compilerOptions.types = ["node"]' tsconfig.json
+        '';
+      });
+
   mcp-servers-config = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
     source = mcp-servers.lib.mkConfig pkgs {
       programs = {
         playwright.enable = true;
         filesystem = {
           enable = true;
+          package = mcp-server-filesystem-fixed;
           args = [ "/home/${username}" ];
         };
       };
@@ -52,11 +65,11 @@ in
     ssh = {
       enable = true;
       enableDefaultConfig = false;
-      matchBlocks = {
+      settings = {
         "git.lmdex.pro" = {
-          port = 22;
-          user = "git";
-          proxyCommand = "sh -c 'resolved_ip=$(dig +short %h | head -1); if echo \"$resolved_ip\" | grep -E \"^(192\\.168\\.|10\\.|172\\.(1[6-9]|2[0-9]|3[01])\\.)\" ; then nc \"$resolved_ip\" 22; else cloudflared access ssh --hostname %h; fi'";
+          Port = 22;
+          User = "git";
+          ProxyCommand = "sh -c 'resolved_ip=$(dig +short %h | head -1); if echo \"$resolved_ip\" | grep -E \"^(192\\.168\\.|10\\.|172\\.(1[6-9]|2[0-9]|3[01])\\.)\" ; then nc \"$resolved_ip\" 22; else cloudflared access ssh --hostname %h; fi'";
         };
       };
     };
