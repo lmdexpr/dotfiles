@@ -382,6 +382,62 @@ local function hl_for_color(color)
   return name
 end
 
+-- ===== Overflow preview =====
+
+local overflow = { buf = nil, win = nil }
+
+local function close_overflow()
+  if overflow.win and vim.api.nvim_win_is_valid(overflow.win) then
+    vim.api.nvim_win_close(overflow.win, true)
+  end
+  overflow.win = nil
+end
+
+-- Overlay the full name on top of the cursor line when it is clipped by the
+-- narrow tree window, extending past the window's right edge.
+local function show_overflow()
+  close_overflow()
+  if vim.api.nvim_get_current_win() ~= state.win then return end
+  local row = vim.api.nvim_win_get_cursor(state.win)[1]
+  local e = state.entries[row]
+  if not e then return end
+
+  local line = vim.api.nvim_buf_get_lines(state.buf, row - 1, row, false)[1] or ''
+  local view = vim.fn.winsaveview()
+  local info = vim.fn.getwininfo(state.win)[1]
+  if vim.fn.strdisplaywidth(line) - view.leftcol <= info.width - info.textoff then return end
+
+  local name = e.is_dir and (e.name .. '/') or e.name
+  local prefix = line:sub(1, #line - #name)
+  local col = math.max(0, info.textoff + vim.fn.strdisplaywidth(prefix) - view.leftcol)
+  local width = math.min(vim.fn.strdisplaywidth(name), vim.o.columns - (info.wincol - 1) - col)
+  if width < 1 then return end
+
+  if not overflow.buf or not vim.api.nvim_buf_is_valid(overflow.buf) then
+    overflow.buf = vim.api.nvim_create_buf(false, true)
+    vim.bo[overflow.buf].bufhidden = 'hide'
+  end
+  vim.api.nvim_buf_set_lines(overflow.buf, 0, -1, false, { name })
+  vim.api.nvim_buf_clear_namespace(overflow.buf, ns, 0, -1)
+  local hl = name_hl(e)
+  if hl then
+    vim.api.nvim_buf_set_extmark(overflow.buf, ns, 0, 0, { end_col = #name, hl_group = hl })
+  end
+
+  overflow.win = vim.api.nvim_open_win(overflow.buf, false, {
+    relative = 'win',
+    win = state.win,
+    row = row - view.topline,
+    col = col,
+    width = width,
+    height = 1,
+    style = 'minimal',
+    focusable = false,
+    noautocmd = true,
+  })
+  vim.wo[overflow.win].winhighlight = 'NormalFloat:CursorLine'
+end
+
 render = function()
   if not state.buf or not vim.api.nvim_buf_is_valid(state.buf) then return end
   state.entries = build_entries()
@@ -463,6 +519,7 @@ render = function()
     end
   end
   vim.bo[state.buf].modifiable = false
+  show_overflow()
 
   if state.after_render then
     local cb = state.after_render
@@ -753,6 +810,9 @@ local function create_buffer()
     add_in(target)
   end, opts)
   vim.keymap.set('n', 'q', function() M.close() end, opts)
+
+  vim.api.nvim_create_autocmd({ 'CursorMoved', 'WinScrolled' }, { buffer = buf, callback = show_overflow })
+  vim.api.nvim_create_autocmd({ 'WinLeave', 'BufLeave' }, { buffer = buf, callback = close_overflow })
 
   return buf
 end
