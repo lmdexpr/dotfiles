@@ -5,6 +5,14 @@
   ...
 }:
 let
+  # binutils 2.46 ld.bfd rejects the zig-built libghostty-vt ("overlapping FDEs").
+  herdr = pkgs.herdr.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.lld ];
+    env = (old.env or { }) // {
+      NIX_CFLAGS_LINK = "-fuse-ld=lld";
+    };
+  });
+
   mcp-servers-config = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
     source = mcp-servers.lib.mkConfig pkgs {
       programs = {
