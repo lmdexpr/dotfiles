@@ -12,6 +12,7 @@ in
   imports = [
     ../../os/nixos-cli
     ./hardware-configuration.nix
+    ./auto-upgrade.nix
   ];
 
   networking = { inherit hostName; };
