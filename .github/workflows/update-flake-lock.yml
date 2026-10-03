@@ -1,0 +1,43 @@
+name: update flake.lock
+
+on:
+  schedule:
+    # Sunday 06:00 JST. svartalfheimr's nightly auto-upgrade (04:00) applies it after merge.
+    - cron: "0 21 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes pipe-operators
+      - uses: DeterminateSystems/update-flake-lock@v29
+        with:
+          pr-title: "chore(deps): update flake.lock"
+          commit-msg: "chore(deps): update flake.lock"
+          pr-assignees: lmdexpr
+          pr-body: |
+            Automated `nix flake update`.
+
+            Merging deploys it: svartalfheimr's `nixos-upgrade.service` pulls master at 04:00 JST and switches.
+            The same workflow run evaluates every nixosConfiguration against this lock; check that it is green before merging
+            (PRs opened with GITHUB_TOKEN do not trigger other workflows).
+
+            {{ env.GIT_COMMIT_MESSAGE }}
+      # Evaluate (not build) every host against the updated lock in the working tree.
+      - name: evaluate nixosConfigurations
+        run: |
+          for host in $(nix eval --json .#nixosConfigurations --apply builtins.attrNames | jq -r '.[]'); do
+            echo "::group::$host"
+            nix eval --raw ".#nixosConfigurations.$host.config.system.build.toplevel.drvPath"
+            echo
+            echo "::endgroup::"
+          done
