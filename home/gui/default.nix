@@ -126,6 +126,7 @@ in
     obsidian
 
     claude-code
+    codex
 
     chromium
     playwright-driver

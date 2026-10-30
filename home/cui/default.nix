@@ -96,6 +96,7 @@ in
     ghostty.terminfo
     w3m
     claude-code
+    codex
     gh
     forgejo-cli
 
