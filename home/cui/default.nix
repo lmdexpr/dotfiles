@@ -97,6 +97,7 @@ in
     w3m
     claude-code
     codex
+    herdr
     gh
     forgejo-cli
 

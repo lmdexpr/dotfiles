@@ -127,6 +127,7 @@ in
 
     claude-code
     codex
+    herdr
 
     chromium
     playwright-driver
