@@ -111,6 +111,7 @@ in
     kubernetes-helm
     awscli2
     cloudflared
+    wrangler
     dig
 
     nil
