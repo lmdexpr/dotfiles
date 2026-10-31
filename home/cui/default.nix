@@ -106,6 +106,7 @@ in
     argocd
     kustomize
     kubernetes-helm
+    awscli2
 
     nil
 

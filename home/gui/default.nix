@@ -109,6 +109,7 @@ in
     argocd
     kustomize
     kubernetes-helm
+    awscli2
     cloudflared
     dig
 
