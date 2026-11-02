@@ -28,6 +28,8 @@ let
     if cmp -s "$tmp" "$settings"; then
       rm -f "$tmp"
     else
+      # mktemp creates 0600; keep the file's own mode.
+      chmod --reference="$settings" "$tmp"
       run mv "$tmp" "$settings"
       rm -f "$tmp"
     fi
