@@ -30,7 +30,7 @@
       mkNixosSystem = { system, hostname, username, homename, additionalModules ? [] }:
         nixpkgs.lib.nixosSystem rec {
           inherit system;
-          specialArgs = { inherit inputs hostname username mcp-servers zen-browser; userClaudeMd = ./home/config/claude/user.md; };
+          specialArgs = { inherit inputs hostname username mcp-servers zen-browser; };
           modules = additionalModules ++ [
             ./machine/${hostname}
 

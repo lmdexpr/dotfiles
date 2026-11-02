@@ -31,6 +31,7 @@ let
 in
 {
   imports = [
+    ../config/agents
     ../config/zsh
     ../config/git
     ../config/ghostty
@@ -68,12 +69,6 @@ in
     inherit username;
     homeDirectory = "/home/${username}";
     stateVersion = "25.05";
-  };
-
-  home.file = {
-    ".claude/CLAUDE.md" = {
-      source = ../config/claude/user.md;
-    };
   };
 
   xdg.configFile = {
