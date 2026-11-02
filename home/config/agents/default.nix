@@ -1,5 +1,7 @@
 { ... }:
 {
+  imports = [ ./publish-guard ];
+
   home.file = {
     ".claude/CLAUDE.md".source = ./user.md;
     ".codex/AGENTS.md".source = ./user.md;

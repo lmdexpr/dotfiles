@@ -9,8 +9,18 @@
 | `~/.agents/skills/analyze-workflow-harness/SKILL.md` | Codexが発見するユーザースキル |
 | `~/.claude/skills/analyze-workflow-harness/SKILL.md` | Claude Codeが発見する同一内容のユーザースキル |
 | `~/.{agents,claude}/skills/analyze-workflow-harness/record.sh` | 分析の記録。`~/.local/share/harness-notes-local` があればそこへ書くだけ。なければ `~/.local/share/harness-notes`（git clone）へ書いて commit・push する |
+| `~/.local/bin/publish-guard` | リモートへの書き込み前に確認するPreToolUse hook。下の「publish-guard」を参照 |
 
-各配布先は同じリポジトリ内の原本を参照し、ユーザー名やホームの絶対パスに依存しない。スキルは常時全文を読み込む共通方針ではなく、履歴分析・ハーネス改善を依頼されたときに使う。Codex用に`.codex/skills`への重複登録は追加しない。別途導入したシステム/プラグインのスキル、認証情報、権限設定、hooks、外部接続は管理・変更しない。
+各配布先は同じリポジトリ内の原本を参照し、ユーザー名やホームの絶対パスに依存しない。スキルは常時全文を読み込む共通方針ではなく、履歴分析・ハーネス改善を依頼されたときに使う。Codex用に`.codex/skills`への重複登録は追加しない。別途導入したシステム/プラグインのスキル、認証情報、権限設定、hooks、外部接続は管理・変更しない（例外はpublish-guardのhook 1件）。
+
+## publish-guard
+
+シェルコマンドがリモートのリポジトリへ書き込む前に、宛先が許可リストにない限り確認を求める（`git push`、ghの書き込み系、fjの作成系など）。
+
+- 対象のコマンドは`publish-guard/rules.json`。ホスト固有の追加は`~/.config/publish-guard/rules.json`に書く。宛先の割り出し方（`git-remote`、`origin`、`gh-repo`、`gh-api`、`none`）はスクリプト側にあり、新しい割り出し方が要るときだけスクリプトを変える。
+- 許可リストは`~/.config/publish-guard/allow`（1行1件の`HOST/OWNER/REPO`、`*`可）。dotfilesでは管理しない。
+- 宛先が分からない、許可リストがない、ルールが読めない、内部エラーのときは確認に倒す。
+- `~/.claude/settings.json`と`~/.codex/hooks.json`はagent自身も書き換えるため、activationでこのhookの1件だけを追記・更新する。Codexは確認（ask）を返せないので`--strict`（拒否）で登録する。Codexではhookのtrustを初回に承認する必要がある。
 
 外部スキルの追加は、用途・適用環境・配布元・更新方法を個別に確認する。環境依存の手順を、すべての作業へ常時適用する共通方針にはしない。
 
