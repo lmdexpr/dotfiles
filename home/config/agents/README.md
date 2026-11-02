@@ -1,6 +1,6 @@
 # 個人用agent設定の配布
 
-`default.nix`をCUI/GUIの両Home Managerプロファイルから読み込む。NiriはGUIを継承する。共通方針は`user.md`、用途別の手順は`skills/`を配布元とする。
+`package.nix`が配布物の唯一の組み立て元（`CLAUDE.md`、`skills/`、`bin/publish-guard`）で、`default.nix`がこれをCUI/GUIの両Home Managerプロファイルへ配る。NiriはGUIを継承する。他のリポジトリ（コンテナイメージなど）も`pkgs.callPackage "${dotfiles}/home/config/agents/package.nix" {}`で同じものを使える。共通方針は`user.md`、用途別の手順は`skills/`を配布元とする。
 
 | 配布先 | 内容・読み込み |
 |---|---|
@@ -8,7 +8,7 @@
 | `~/.codex/AGENTS.md` | Codexのユーザー共通方針。標準のCODEX_HOMEを使う環境が対象 |
 | `~/.agents/skills/analyze-workflow-harness/SKILL.md` | Codexが発見するユーザースキル |
 | `~/.claude/skills/analyze-workflow-harness/SKILL.md` | Claude Codeが発見する同一内容のユーザースキル |
-| `~/.{agents,claude}/skills/analyze-workflow-harness/record.sh` | 分析の記録。`~/.local/share/harness-notes-local` があればそこへ書くだけ。なければ `~/.local/share/harness-notes`（git clone）へ書いて commit・push する |
+| `~/.{agents,claude}/skills/analyze-workflow-harness/record.sh` | 分析の記録。`~/.local/share/harness-notes-local` があればそこへ書くだけ。なければ `~/.local/share/harness-notes`（git clone。なければ`HARNESS_NOTES_REPO`から作る）へ書いて push する。`--prepare`は読むべき記録のディレクトリを出力する |
 | `~/.local/bin/publish-guard` | リモートへの書き込み前に確認するPreToolUse hook。下の「publish-guard」を参照 |
 
 各配布先は同じリポジトリ内の原本を参照し、ユーザー名やホームの絶対パスに依存しない。スキルは常時全文を読み込む共通方針ではなく、履歴分析・ハーネス改善を依頼されたときに使う。Codex用に`.codex/skills`への重複登録は追加しない。別途導入したシステム/プラグインのスキル、認証情報、権限設定、hooks、外部接続は管理・変更しない（例外はpublish-guardのhook 1件）。
@@ -24,7 +24,7 @@
 
 外部スキルの追加は、用途・適用環境・配布元・更新方法を個別に確認する。環境依存の手順を、すべての作業へ常時適用する共通方針にはしない。
 
-対象はこのdotfilesのHome Manager設定を適用するローカルのClaude Code/Codex環境。クラウドセッション、コンテナ、独自のCODEX_HOME、dotfiles未適用の端末へ自動で届くわけではない。
+対象はこのdotfilesのHome Manager設定を適用するローカルのClaude Code/Codex環境。クラウドセッション、コンテナ、独自のCODEX_HOME、dotfiles未適用の端末へは自動で届かず、`package.nix`を導入する側が配った環境にだけ届く。
 
 ## 全環境へ配る内容の基準
 

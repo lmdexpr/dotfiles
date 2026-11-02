@@ -1,12 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  publishGuard = pkgs.writeShellApplication {
-    name = "publish-guard";
-    runtimeInputs = with pkgs; [ jq git ];
-    text = ''
-      : "''${PUBLISH_GUARD_DEFAULT_RULES:=${./rules.json}}"
-    '' + builtins.readFile ./publish-guard.sh;
-  };
+  publishGuard = (pkgs.callPackage ../package.nix { }).publishGuard;
 
   hookPath = "${config.home.homeDirectory}/.local/bin/publish-guard";
 
