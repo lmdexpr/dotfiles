@@ -225,7 +225,8 @@ while IFS= read -r seg; do
   while ((${#toks[@]})) && [[ "${toks[0]}" =~ ^[A-Za-z_][A-Za-z0-9_]*= ]]; do toks=("${toks[@]:1}"); done
   ((${#toks[@]})) || continue
 
-  c=${toks[0]}
+  # Basename, so `/usr/bin/git push` is still seen.
+  c=${toks[0]##*/}
   if [[ "$c" == cd ]]; then
     t=${toks[1]:-$HOME}; t=${t/#\~/$HOME}; [[ "$t" == /* ]] || t="$dir/$t"; dir=$t
     continue
@@ -248,14 +249,15 @@ while IFS= read -r seg; do
   done
   sub=${toks[i]:-} act=${toks[i + 1]:-}
 
-  # First matching rule; act-less rules consume only the subcommand.
+  # First matching rule; a rule consumes only the fields it names.
   m=$(jq -r --arg c "$c" --arg s "$sub" --arg a "$act" '
-    first(.rules[] | select(.cmd == $c and (.sub | index($s)) != null
+    first(.rules[] | select(.cmd == $c
+      and (if .sub then (.sub | index($s)) != null else true end)
       and (if .act then (.act | index($a)) != null else true end))
-      | "\(.target)\t\(if .act then 2 else 1 end)") // empty' <<<"$rules")
+      | "\(.target)\t\(if .act then 2 elif .sub then 1 else 0 end)") // empty' <<<"$rules")
   [[ -n "$m" ]] || continue
   target=${m%%$'\t'*} used=${m#*$'\t'}
-  what="$c $sub"; ((used == 2)) && what+=" $act"
+  what=$c; ((used >= 1)) && what+=" $sub"; ((used == 2)) && what+=" $act"
   resolve "$target" "$cdir" "$what" "${toks[@]:i+used}"
 done <<<"$segs"
 
