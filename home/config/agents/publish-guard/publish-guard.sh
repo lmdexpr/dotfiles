@@ -47,7 +47,8 @@ rules=$(jq -cs '{commands: (map(.commands // {}) | add), rules: (map(.rules // [
   emit_ask "publish-guard: cannot read rules (${rule_files[*]}); confirm manually"
 
 # Fast path: none of the ruled commands appear.
-mapfile -t cmds < <(jq -r '[.rules[].cmd] | unique[]' <<<"$rules")
+cmds=()
+while IFS= read -r c; do cmds+=("$c"); done < <(jq -r '[.rules[].cmd] | unique[]' <<<"$rules")
 hit=0
 for c in "${cmds[@]}"; do
   re="(^|[^[:alnum:]_-])${c}([[:space:]]|\$)"
@@ -172,7 +173,7 @@ resolve_gh_api() {
       *) [[ -n "$endpoint" ]] || endpoint=${args[i]} ;;
     esac
   done
-  method=${method^^}
+  method=$(tr '[:lower:]' '[:upper:]' <<<"$method")
   if [[ -z "$method" ]]; then [[ $writes == 1 ]] && method=POST || method=GET; fi
   [[ "$method" == GET || "$method" == HEAD ]] && return 0
   if [[ "$endpoint" =~ (^|/)repos/([^/]+/[^/?]+) ]]; then
@@ -223,12 +224,13 @@ while IFS= read -r seg; do
 
   # Leading options of the command: a directory option and value options.
   dir_opt=$(jq -r --arg c "$c" '.commands[$c].dir_option // empty' <<<"$rules")
-  mapfile -t value_opts < <(jq -r --arg c "$c" '.commands[$c].value_options // [] | .[]' <<<"$rules")
+  value_opts=()
+  while IFS= read -r o; do value_opts+=("$o"); done < <(jq -r --arg c "$c" '.commands[$c].value_options // [] | .[]' <<<"$rules")
   cdir=$dir i=1
   while ((i < ${#toks[@]})) && [[ "${toks[i]}" == -* ]]; do
     if [[ -n "$dir_opt" && "${toks[i]}" == "$dir_opt" ]]; then
       t=${toks[i + 1]:-}; t=${t/#\~/$HOME}; [[ "$t" == /* ]] || t="$cdir/$t"; cdir=$t; ((i += 2))
-    elif in_list "${toks[i]}" "${value_opts[@]}"; then
+    elif in_list "${toks[i]}" ${value_opts[@]+"${value_opts[@]}"}; then
       ((i += 2))
     else
       ((i += 1))
