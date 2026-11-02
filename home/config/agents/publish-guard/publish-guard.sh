@@ -210,7 +210,17 @@ while IFS= read -r seg; do
   read -ra words <<<"$seg"
   ((${#words[@]})) || continue
   toks=()
-  for w in "${words[@]}"; do toks+=("$(strip_quotes "$w")"); done
+  skip=0
+  for w in "${words[@]}"; do
+    ((skip)) && { skip=0; continue; }
+    if [[ "$w" =~ ^[0-9]*([\<\>]|\&\>) && ! "$w" =~ ^[\<\>]\( ]]; then
+      [[ "$w" =~ ^[0-9]*([\<\>]{1,3}|[\<\>]\&|\&\>\>?)$ ]] && skip=1
+      continue
+    fi
+    toks+=("$(strip_quotes "$w")")
+  done
+  # `>|file` was split on the pipe above.
+  ((skip)) && { ask "cannot parse the redirection in '$seg'"; continue; }
   # Skip leading env assignments.
   while ((${#toks[@]})) && [[ "${toks[0]}" =~ ^[A-Za-z_][A-Za-z0-9_]*= ]]; do toks=("${toks[@]:1}"); done
   ((${#toks[@]})) || continue
