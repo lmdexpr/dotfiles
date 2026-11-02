@@ -1,21 +1,13 @@
 #!/usr/bin/env bash
-# Record one analysis note read from stdin, or prepare the records for reading.
+# Record one analysis note read from stdin, or print where past records are.
 #   record.sh <name> < note.md
 #   record.sh --prepare
-# If ~/.local/share/harness-notes-local exists, only write the file there and
-# do not touch ~/.local/share/harness-notes.
-# Otherwise write into the shared clone ~/.local/share/harness-notes, then
-# commit and push. If that clone is missing and HARNESS_NOTES_REPO (a clone
-# URL) is set, it is cloned first.
-# The shared clone is synced before writing and the push is retried after a
-# rebase. The clone is never left mid-rebase or with a staged note. A note
-# whose rebase conflicts with the remote (typically the same name recorded
-# elsewhere) is dropped rather than left to break later syncs; the caller
-# keeps the text and can re-run with another name. A note that is merely
-# unpushed (network, auth) stays committed for a later run to push.
-# In shared mode the note path is printed on stdout only after the push.
-# --prepare prints the directory holding past records (nothing if there is
-# none) and refreshes the shared clone on a best-effort basis.
+# Writes to ~/.local/share/harness-notes-local if it exists; otherwise commits
+# and pushes in the clone ~/.local/share/harness-notes, cloning
+# $HARNESS_NOTES_REPO when it is missing.
+# A note that conflicts with the remote is dropped rather than committed, so
+# the clone keeps syncing; the caller still has the text and can re-run with
+# another name.
 set -euo pipefail
 
 local_dir="$HOME/.local/share/harness-notes-local"
