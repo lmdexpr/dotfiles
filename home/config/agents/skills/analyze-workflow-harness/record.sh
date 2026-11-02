@@ -2,7 +2,7 @@
 # Record one analysis note read from stdin.
 #   record.sh <name> < note.md
 # If ~/.local/share/harness-notes-local exists, only write the file there and
-# never touch the shared notes (keeps machine-local notes from leaving the host).
+# do not touch ~/.local/share/harness-notes.
 # Otherwise write into the shared clone ~/.local/share/harness-notes, then
 # commit and push.
 set -euo pipefail
