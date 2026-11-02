@@ -8,6 +8,7 @@
 | `~/.codex/AGENTS.md` | Codexのユーザー共通方針。標準のCODEX_HOMEを使う環境が対象 |
 | `~/.agents/skills/analyze-workflow-harness/SKILL.md` | Codexが発見するユーザースキル |
 | `~/.claude/skills/analyze-workflow-harness/SKILL.md` | Claude Codeが発見する同一内容のユーザースキル |
+| `~/.{agents,claude}/skills/analyze-workflow-harness/record.sh` | 分析の記録。`~/.local/share/harness-notes-local` があればそこへ書くだけ。なければ `~/.local/share/harness-notes`（git clone）へ書いて commit・push する |
 
 各配布先は同じリポジトリ内の原本を参照し、ユーザー名やホームの絶対パスに依存しない。スキルは常時全文を読み込む共通方針ではなく、履歴分析・ハーネス改善を依頼されたときに使う。Codex用に`.codex/skills`への重複登録は追加しない。別途導入したシステム/プラグインのスキル、認証情報、権限設定、hooks、外部接続は管理・変更しない。
 
