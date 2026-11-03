@@ -6,6 +6,8 @@ in
 {
   imports = [ ./publish-guard ];
 
+  home.packages = [ agents.waitCommands ];
+
   home.file = {
     ".claude/CLAUDE.md".source = "${agents}/CLAUDE.md";
     ".codex/AGENTS.md".source = "${agents}/CLAUDE.md";
