@@ -1,6 +1,6 @@
 # 個人用agent設定の配布
 
-`package.nix`が配布物の唯一の組み立て元（`CLAUDE.md`、`skills/`、固定したrevから取るherdrのスキル、`bin/publish-guard`、`bin/`の状態待ちコマンド）で、`default.nix`がこれをCUI/GUIの両Home Managerプロファイルへ配る。NiriはGUIを継承する。他のリポジトリ（コンテナイメージなど）も`pkgs.callPackage "${dotfiles}/home/config/agents/package.nix" {}`で同じものを使える。共通方針は`user.md`、用途別の手順は`skills/`を配布元とする。
+`package.nix`が配布物の唯一の組み立て元（`CLAUDE.md`、`skills/`、固定したrevから取るherdrのスキル、`bin/publish-guard`、`bin/devshell-env`、`bin/`の状態待ちコマンド）で、`default.nix`がこれをCUI/GUIの両Home Managerプロファイルへ配る。NiriはGUIを継承する。他のリポジトリ（コンテナイメージなど）も`pkgs.callPackage "${dotfiles}/home/config/agents/package.nix" {}`で同じものを使える。共通方針は`user.md`、用途別の手順は`skills/`を配布元とする。
 
 | 配布先 | 内容・読み込み |
 |---|---|
@@ -11,9 +11,10 @@
 | `~/.{agents,claude}/skills/analyze-workflow-harness/record.sh` | 分析の記録。`~/.local/share/harness-notes-local` があればそこへ書くだけ。なければ `~/.local/share/harness-notes`（git clone。なければ`HARNESS_NOTES_REPO`から作る）へ書いて push する。`--prepare`は読むべき記録のディレクトリを出力する |
 | `~/.{agents,claude}/skills/herdr/SKILL.md` | herdrの公式スキル。下の「herdrスキル」を参照 |
 | `~/.local/bin/publish-guard` | リモートへの書き込み前に確認するPreToolUse hook。下の「publish-guard」を参照 |
+| `~/.local/bin/devshell-env` | Claude CodeのSessionStart/CwdChanged hook。下の「devShellの環境」を参照 |
 | `forgejo-wait-status`、`argocd-wait-app`（PATH） | CIやデプロイの完了待ち。下の「状態待ちコマンド」を参照 |
 
-各配布先は同じリポジトリ内の原本を参照し、ユーザー名やホームの絶対パスに依存しない。スキルは常時全文を読み込む共通方針ではなく、履歴分析・ハーネス改善を依頼されたときに使う。Codex用に`.codex/skills`への重複登録は追加しない。別途導入したシステム/プラグインのスキル、認証情報、権限設定、hooks、外部接続は管理・変更しない（例外はpublish-guardのhook 1件）。
+各配布先は同じリポジトリ内の原本を参照し、ユーザー名やホームの絶対パスに依存しない。スキルは常時全文を読み込む共通方針ではなく、履歴分析・ハーネス改善を依頼されたときに使う。Codex用に`.codex/skills`への重複登録は追加しない。別途導入したシステム/プラグインのスキル、認証情報、権限設定、hooks、外部接続は管理・変更しない（例外はpublish-guardとdevshell-envのhook）。
 
 ## publish-guard
 
@@ -27,6 +28,18 @@
 外部スキルの追加は、用途・適用環境・配布元・更新方法を個別に確認する。環境依存の手順を、すべての作業へ常時適用する共通方針にはしない。
 
 対象はこのdotfilesのHome Manager設定を適用するローカルのClaude Code/Codex環境。クラウドセッション、コンテナ、独自のCODEX_HOME、dotfiles未適用の端末へは自動で届かず、`package.nix`を導入する側が配った環境にだけ届く。
+
+## devShellの環境
+
+Claude CodeのBashツールはdirenvを読まないので、作業ディレクトリのflakeのdevShellにあるツールが見えない。`devshell-env`はSessionStartとCwdChangedのhookとして、作業ディレクトリから最も近い`flake.nix`（gitのルートまで遡る）の`devShells.<system>.default`の環境を`CLAUDE_ENV_FILE`へ書き出し、以降のBashツールに渡す。
+
+- 環境は`nix print-dev-env --json`から、devShellがexportする変数だけを取る。`.envrc`や`.envrc.local`は読まないので、そこで読み込むトークンなどは渡らない。flakeの評価はpureで、gitの管理外のファイルは見えない。
+- `shellHook`は実行しない。副作用（ファイル作成、サービス起動、秘密情報の読み込みなど）を伴うことがあり、hookから何が起きるか分からないため。shellHookで設定する変数が必要なら、devShellの属性（`env`など）として宣言する。
+- `PATH`と`XDG_DATA_DIRS`は元の値の前に足す。`HOME`や`TMPDIR`など、`nix develop`が呼び出し側のシェルに任せる変数は渡さない。
+- gitの管理外のディレクトリでは何もしない。nixがディレクトリ全体を誰でも読めるstoreへコピーし、未追跡の秘密ファイルも含まれてしまうため。
+- flakeがない、devShellがない、評価や取得に失敗した、timeout（300秒）を超えたときは何もしない。lockファイルは書き換えない（`--no-write-lock-file`）。
+- 書き出す環境はそのflakeの配下にいるときだけ効く。Claude CodeはcdのたびにCwdChangedが書いたものを消すが、SessionStartが書いたものは残すため。nixは呼び出し側のPATHのものを使う。CwdChangedのhookは非同期に走るので、cd直後のコマンドにはまだ環境が届いていないことがある。
+- 判定はスタブのnixを使ったテスト（`devshell-env/test.sh`、`nix build`では`passthru.tests.devshellEnv`）で確認する。
 
 ## herdrスキル
 
