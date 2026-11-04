@@ -4,7 +4,7 @@ let
   skill = "skills/analyze-workflow-harness";
 in
 {
-  imports = [ ./publish-guard ];
+  imports = [ ./publish-guard ./devshell-env ];
 
   home.packages = [ agents.waitCommands ];
 
