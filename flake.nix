@@ -16,6 +16,11 @@
 
     mcp-servers.url = "github:natsukium/mcp-servers-nix";
 
+    harness = {
+      url = "git+ssh://git@git.lmdex.pro/lmdexpr/harness";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs = {

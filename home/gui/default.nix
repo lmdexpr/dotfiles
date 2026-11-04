@@ -1,6 +1,7 @@
 {
   pkgs,
   username,
+  inputs,
   mcp-servers,
   zen-browser,
   ...
@@ -31,7 +32,7 @@ let
 in
 {
   imports = [
-    ../config/agents
+    inputs.harness.homeManagerModules.default
     ../config/zsh
     ../config/git
     ../config/ghostty

@@ -16,6 +16,26 @@
         "type": "github"
       }
     },
+    "harness": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793782018,
+        "narHash": "sha256-fwT1z1PfFNV/lJLVlTaj5Gb7tD21dOxXck7uUDEgNAU=",
+        "ref": "refs/heads/main",
+        "rev": "d6013a5ce1b4cee27173e5cc1bb5fa9c8ed3ff2c",
+        "revCount": 22,
+        "type": "git",
+        "url": "ssh://git@git.lmdex.pro/lmdexpr/harness"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@git.lmdex.pro/lmdexpr/harness"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -124,6 +144,7 @@
     },
     "root": {
       "inputs": {
+        "harness": "harness",
         "home-manager": "home-manager",
         "mcp-servers": "mcp-servers",
         "nixos-wsl": "nixos-wsl",
