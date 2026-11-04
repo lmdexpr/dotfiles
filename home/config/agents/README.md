@@ -1,6 +1,6 @@
 # 個人用agent設定の配布
 
-`package.nix`が配布物の唯一の組み立て元（`CLAUDE.md`、`skills/`、`bin/publish-guard`、`bin/`の状態待ちコマンド）で、`default.nix`がこれをCUI/GUIの両Home Managerプロファイルへ配る。NiriはGUIを継承する。他のリポジトリ（コンテナイメージなど）も`pkgs.callPackage "${dotfiles}/home/config/agents/package.nix" {}`で同じものを使える。共通方針は`user.md`、用途別の手順は`skills/`を配布元とする。
+`package.nix`が配布物の唯一の組み立て元（`CLAUDE.md`、`skills/`、固定したrevから取るherdrのスキル、`bin/publish-guard`、`bin/`の状態待ちコマンド）で、`default.nix`がこれをCUI/GUIの両Home Managerプロファイルへ配る。NiriはGUIを継承する。他のリポジトリ（コンテナイメージなど）も`pkgs.callPackage "${dotfiles}/home/config/agents/package.nix" {}`で同じものを使える。共通方針は`user.md`、用途別の手順は`skills/`を配布元とする。
 
 | 配布先 | 内容・読み込み |
 |---|---|
@@ -9,6 +9,7 @@
 | `~/.agents/skills/analyze-workflow-harness/SKILL.md` | Codexが発見するユーザースキル |
 | `~/.claude/skills/analyze-workflow-harness/SKILL.md` | Claude Codeが発見する同一内容のユーザースキル |
 | `~/.{agents,claude}/skills/analyze-workflow-harness/record.sh` | 分析の記録。`~/.local/share/harness-notes-local` があればそこへ書くだけ。なければ `~/.local/share/harness-notes`（git clone。なければ`HARNESS_NOTES_REPO`から作る）へ書いて push する。`--prepare`は読むべき記録のディレクトリを出力する |
+| `~/.{agents,claude}/skills/herdr/SKILL.md` | herdrの公式スキル。下の「herdrスキル」を参照 |
 | `~/.local/bin/publish-guard` | リモートへの書き込み前に確認するPreToolUse hook。下の「publish-guard」を参照 |
 | `forgejo-wait-status`、`argocd-wait-app`（PATH） | CIやデプロイの完了待ち。下の「状態待ちコマンド」を参照 |
 
@@ -26,6 +27,15 @@
 外部スキルの追加は、用途・適用環境・配布元・更新方法を個別に確認する。環境依存の手順を、すべての作業へ常時適用する共通方針にはしない。
 
 対象はこのdotfilesのHome Manager設定を適用するローカルのClaude Code/Codex環境。クラウドセッション、コンテナ、独自のCODEX_HOME、dotfiles未適用の端末へは自動で届かず、`package.nix`を導入する側が配った環境にだけ届く。
+
+## herdrスキル
+
+herdr（CUI/GUIの両プロファイルでnixpkgsから入れる）のペイン・エージェント操作をagentに教える、herdr公式のスキル。
+
+- 配布元は[herdrdev/herdr](https://github.com/herdrdev/herdr)の`skills/herdr/SKILL.md`で、`package.nix`が固定したrevから`fetchurl`で取る。内容は変更しない。
+- スキルはherdrのCLIを説明するので、revはnixpkgsのherdrと同じリリースのタグに合わせる。nixpkgsの更新でherdrのバージョンが変わったら、そのタグのcommitへrevとhashを更新する。
+- スキル自身が`HERDR_ENV=1`（herdrのペイン内）でなければ何もしないと定めているので、herdr外の作業には影響しない。
+- `npx skills`などで手動導入したものが配布先にあれば、内容を確認してから削除し、Home Managerの配布に置き換える。
 
 ## 状態待ちコマンド
 

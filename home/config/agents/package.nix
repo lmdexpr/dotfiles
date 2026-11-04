@@ -1,4 +1,4 @@
-{ lib, runCommandLocal, writeShellApplication, symlinkJoin, bash, jq, git, curl, coreutils, gnused }:
+{ lib, fetchurl, runCommandLocal, writeShellApplication, symlinkJoin, bash, jq, git, curl, coreutils, gnused }:
 let
   publishGuard = writeShellApplication {
     name = "publish-guard";
@@ -23,6 +23,12 @@ let
   };
 
   skillDir = "skills/analyze-workflow-harness";
+
+  # Keep in step with the herdr version from nixpkgs: the skill documents its CLI.
+  herdrSkill = fetchurl {
+    url = "https://raw.githubusercontent.com/herdrdev/herdr/2ecf19a92fc3a7fff75b6ce3655ef04f4625ec01/skills/herdr/SKILL.md"; # v0.9.5
+    hash = "sha256-+9nVAnZ/ff8pwhFQWgvZujTpgO1MxFYkfircFkKIOYQ=";
+  };
 in
 runCommandLocal "agents" {
   passthru = {
@@ -32,10 +38,11 @@ runCommandLocal "agents" {
     '';
   };
 } ''
-  mkdir -p $out/${skillDir} $out/bin
+  mkdir -p $out/${skillDir} $out/skills/herdr $out/bin
   cp ${./user.md} $out/CLAUDE.md
   cp ${./skills/analyze-workflow-harness/SKILL.md} $out/${skillDir}/SKILL.md
   install -m755 ${./skills/analyze-workflow-harness/record.sh} $out/${skillDir}/record.sh
+  cp ${herdrSkill} $out/skills/herdr/SKILL.md
   ln -s ${lib.getExe publishGuard} $out/bin/publish-guard
   ln -s ${waitCommands}/bin/* $out/bin/
 ''

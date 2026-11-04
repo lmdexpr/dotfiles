@@ -2,6 +2,7 @@
 let
   agents = pkgs.callPackage ./package.nix { };
   skill = "skills/analyze-workflow-harness";
+  herdrSkill = "skills/herdr/SKILL.md";
 in
 {
   imports = [ ./publish-guard ];
@@ -23,5 +24,8 @@ in
       source = "${agents}/${skill}/record.sh";
       executable = true;
     };
+
+    ".agents/${herdrSkill}".source = "${agents}/${herdrSkill}";
+    ".claude/${herdrSkill}".source = "${agents}/${herdrSkill}";
   };
 }
