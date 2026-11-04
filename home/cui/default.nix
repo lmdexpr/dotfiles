@@ -97,11 +97,6 @@ in
     gh
     forgejo-cli
 
-    kubectl
-    talosctl
-    argocd
-    kustomize
-    kubernetes-helm
     awscli2
 
     nil
