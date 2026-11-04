@@ -1,4 +1,4 @@
-{ lib, runCommandLocal, writeShellApplication, symlinkJoin, bash, dash, jq, git, curl, coreutils, gnused }:
+{ lib, stdenv, runCommandLocal, writeShellApplication, symlinkJoin, bash, dash, jq, git, curl, coreutils, gnused }:
 let
   publishGuard = writeShellApplication {
     name = "publish-guard";
@@ -8,17 +8,19 @@ let
     '' + builtins.readFile ./publish-guard/publish-guard.sh;
   };
 
-  # nix is left to the caller's PATH so that it matches their daemon and config.
-  devshellEnv = writeShellApplication {
-    name = "devshell-env";
-    runtimeInputs = [ jq git coreutils gnused ];
-    text = builtins.readFile ./devshell-env/devshell-env.sh;
-  };
-
   # kubectl is left to the caller's PATH so that it matches their cluster and config.
   waitCommand = name: runtimeInputs: writeShellApplication {
     inherit name runtimeInputs;
     text = builtins.readFile ./wait/poll.sh + builtins.readFile ./wait/${name}.sh;
+  };
+
+  # nix is left to the caller's PATH so that it matches their daemon and config.
+  devshellEnv = writeShellApplication {
+    name = "devshell-env";
+    runtimeInputs = [ jq git coreutils ];
+    text = ''
+      DEVSHELL_SYSTEM=${stdenv.hostPlatform.system}
+    '' + builtins.readFile ./devshell-env/devshell-env.sh;
   };
 
   waitCommands = symlinkJoin {
@@ -37,7 +39,7 @@ runCommandLocal "agents" {
     tests.wait = runCommandLocal "agents-wait-test" { nativeBuildInputs = [ bash jq coreutils gnused ]; } ''
       bash ${./wait/test.sh} ${./wait} && touch $out
     '';
-    tests.devshellEnv = runCommandLocal "agents-devshell-env-test" { nativeBuildInputs = [ bash dash jq git coreutils gnused ]; } ''
+    tests.devshellEnv = runCommandLocal "agents-devshell-env-test" { nativeBuildInputs = [ bash dash jq git coreutils ]; } ''
       bash ${./devshell-env/test.sh} ${./devshell-env} && touch $out
     '';
   };

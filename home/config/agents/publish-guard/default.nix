@@ -12,7 +12,7 @@ in
     ${mergeHook {
       file = ".claude/settings.json";
       event = "PreToolUse";
-      path = hookPath;
+      inherit hookPath;
       entry = {
         matcher = "Bash";
         hooks = [{ type = "command"; command = hookPath; timeout = 10; }];
@@ -23,8 +23,10 @@ in
     ${mergeHook {
       file = ".codex/hooks.json";
       event = "PreToolUse";
-      path = hookPath;
-      entry.hooks = [{ type = "command"; command = "${hookPath} --strict"; timeout = 10; }];
+      inherit hookPath;
+      entry = {
+        hooks = [{ type = "command"; command = "${hookPath} --strict"; timeout = 10; }];
+      };
     }}
   '';
 }

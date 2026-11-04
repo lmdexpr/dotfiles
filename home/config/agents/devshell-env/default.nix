@@ -4,15 +4,17 @@ let
   mergeHook = pkgs.callPackage ../merge-hook.nix { };
 
   hookPath = "${config.home.homeDirectory}/.local/bin/devshell-env";
-  # Covers building a devShell for the first time; later runs hit the store.
-  entry.hooks = [{ type = "command"; command = hookPath; timeout = 180; }];
-  register = event: mergeHook { file = ".claude/settings.json"; inherit event entry; path = hookPath; };
+  # A cold devShell may need downloads; past this the session goes on without it.
+  hooks = [{ type = "command"; command = hookPath; timeout = 300; }];
 in
 {
   home.file.".local/bin/devshell-env".source = lib.getExe devshellEnv;
 
-  home.activation.devshellEnvHooks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    ${register "SessionStart"}
-    ${register "CwdChanged"}
-  '';
+  home.activation.devshellEnvHooks = lib.hm.dag.entryAfter [ "writeBoundary" ] (
+    lib.concatMapStrings (event: mergeHook {
+      file = ".claude/settings.json";
+      inherit event hookPath;
+      entry = { inherit hooks; };
+    }) [ "SessionStart" "CwdChanged" ]
+  );
 }

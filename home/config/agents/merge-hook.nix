@@ -1,14 +1,14 @@
 { lib, jq }:
-# Settings files are also written by the agents themselves, so they cannot be
-# store symlinks. Merge in place instead: drop the event's entries that run
-# path, then append entry (idempotent across switches).
+# Settings files that agents also write themselves cannot be store symlinks.
+# Merge in place instead: drop the EVENT entries that run hookPath, then append
+# the current one (idempotent across switches).
 # FILE is relative to $HOME, resolved when the activation runs.
-{ file, event, path, entry }: ''
+{ file, event, hookPath, entry }: ''
   settings="$HOME"/${lib.escapeShellArg file}
   run mkdir -p "$(dirname "$settings")"
   [ -f "$settings" ] || run sh -c 'echo "{}" > "$1"' _ "$settings"
   tmp=$(mktemp "$settings.XXXXXX")
-  ${lib.getExe jq} --arg event ${lib.escapeShellArg event} --arg path ${lib.escapeShellArg path} --argjson entry ${lib.escapeShellArg (builtins.toJSON entry)} '
+  ${lib.getExe jq} --arg event ${lib.escapeShellArg event} --arg path ${lib.escapeShellArg hookPath} --argjson entry ${lib.escapeShellArg (builtins.toJSON entry)} '
     .hooks[$event] = (
       [ (.hooks[$event] // [])[]
         | select([.hooks[]?.command // "" | startswith($path)] | any | not) ]
