@@ -1,4 +1,4 @@
-{ lib, runCommandLocal, writeShellApplication, symlinkJoin, bash, jq, git, curl, coreutils, gnused }:
+{ lib, runCommandLocal, writeShellApplication, symlinkJoin, bash, dash, jq, git, curl, coreutils, gnused }:
 let
   publishGuard = writeShellApplication {
     name = "publish-guard";
@@ -6,6 +6,13 @@ let
     text = ''
       : "''${PUBLISH_GUARD_DEFAULT_RULES:=${./publish-guard/rules.json}}"
     '' + builtins.readFile ./publish-guard/publish-guard.sh;
+  };
+
+  # nix is left to the caller's PATH so that it matches their daemon and config.
+  devshellEnv = writeShellApplication {
+    name = "devshell-env";
+    runtimeInputs = [ jq git coreutils gnused ];
+    text = builtins.readFile ./devshell-env/devshell-env.sh;
   };
 
   # kubectl is left to the caller's PATH so that it matches their cluster and config.
@@ -26,9 +33,12 @@ let
 in
 runCommandLocal "agents" {
   passthru = {
-    inherit publishGuard waitCommands;
+    inherit publishGuard devshellEnv waitCommands;
     tests.wait = runCommandLocal "agents-wait-test" { nativeBuildInputs = [ bash jq coreutils gnused ]; } ''
       bash ${./wait/test.sh} ${./wait} && touch $out
+    '';
+    tests.devshellEnv = runCommandLocal "agents-devshell-env-test" { nativeBuildInputs = [ bash dash jq git coreutils gnused ]; } ''
+      bash ${./devshell-env/test.sh} ${./devshell-env} && touch $out
     '';
   };
 } ''
@@ -37,5 +47,6 @@ runCommandLocal "agents" {
   cp ${./skills/analyze-workflow-harness/SKILL.md} $out/${skillDir}/SKILL.md
   install -m755 ${./skills/analyze-workflow-harness/record.sh} $out/${skillDir}/record.sh
   ln -s ${lib.getExe publishGuard} $out/bin/publish-guard
+  ln -s ${lib.getExe devshellEnv} $out/bin/devshell-env
   ln -s ${waitCommands}/bin/* $out/bin/
 ''

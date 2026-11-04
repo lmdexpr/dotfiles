@@ -1,6 +1,6 @@
 # 個人用agent設定の配布
 
-`package.nix`が配布物の唯一の組み立て元（`CLAUDE.md`、`skills/`、`bin/publish-guard`、`bin/`の状態待ちコマンド）で、`default.nix`がこれをCUI/GUIの両Home Managerプロファイルへ配る。NiriはGUIを継承する。他のリポジトリ（コンテナイメージなど）も`pkgs.callPackage "${dotfiles}/home/config/agents/package.nix" {}`で同じものを使える。共通方針は`user.md`、用途別の手順は`skills/`を配布元とする。
+`package.nix`が配布物の唯一の組み立て元（`CLAUDE.md`、`skills/`、`bin/publish-guard`、`bin/devshell-env`、`bin/`の状態待ちコマンド）で、`default.nix`がこれをCUI/GUIの両Home Managerプロファイルへ配る。NiriはGUIを継承する。他のリポジトリ（コンテナイメージなど）も`pkgs.callPackage "${dotfiles}/home/config/agents/package.nix" {}`で同じものを使える。共通方針は`user.md`、用途別の手順は`skills/`を配布元とする。
 
 | 配布先 | 内容・読み込み |
 |---|---|
@@ -10,9 +10,10 @@
 | `~/.claude/skills/analyze-workflow-harness/SKILL.md` | Claude Codeが発見する同一内容のユーザースキル |
 | `~/.{agents,claude}/skills/analyze-workflow-harness/record.sh` | 分析の記録。`~/.local/share/harness-notes-local` があればそこへ書くだけ。なければ `~/.local/share/harness-notes`（git clone。なければ`HARNESS_NOTES_REPO`から作る）へ書いて push する。`--prepare`は読むべき記録のディレクトリを出力する |
 | `~/.local/bin/publish-guard` | リモートへの書き込み前に確認するPreToolUse hook。下の「publish-guard」を参照 |
+| `~/.local/bin/devshell-env` | 作業ディレクトリのflakeのdevShellをClaude CodeのBashツールへ渡すSessionStart/CwdChanged hook。下の「devShellの環境」を参照 |
 | `forgejo-wait-status`、`argocd-wait-app`（PATH） | CIやデプロイの完了待ち。下の「状態待ちコマンド」を参照 |
 
-各配布先は同じリポジトリ内の原本を参照し、ユーザー名やホームの絶対パスに依存しない。スキルは常時全文を読み込む共通方針ではなく、履歴分析・ハーネス改善を依頼されたときに使う。Codex用に`.codex/skills`への重複登録は追加しない。別途導入したシステム/プラグインのスキル、認証情報、権限設定、hooks、外部接続は管理・変更しない（例外はpublish-guardのhook 1件）。
+各配布先は同じリポジトリ内の原本を参照し、ユーザー名やホームの絶対パスに依存しない。スキルは常時全文を読み込む共通方針ではなく、履歴分析・ハーネス改善を依頼されたときに使う。Codex用に`.codex/skills`への重複登録は追加しない。別途導入したシステム/プラグインのスキル、認証情報、権限設定、hooks、外部接続は管理・変更しない（例外はpublish-guardとdevshell-envのhook）。
 
 ## publish-guard
 
@@ -26,6 +27,18 @@
 外部スキルの追加は、用途・適用環境・配布元・更新方法を個別に確認する。環境依存の手順を、すべての作業へ常時適用する共通方針にはしない。
 
 対象はこのdotfilesのHome Manager設定を適用するローカルのClaude Code/Codex環境。クラウドセッション、コンテナ、独自のCODEX_HOME、dotfiles未適用の端末へは自動で届かず、`package.nix`を導入する側が配った環境にだけ届く。
+
+## devShellの環境
+
+Claude CodeのBashツールはdirenvを読まないので、作業ディレクトリを含むflakeの`devShells.<system>.default`の環境を`CLAUDE_ENV_FILE`に書き出して渡す（`nix develop`と同じくPATHとXDG_DATA_DIRSは前に足す）。
+
+- 使うのは`nix print-dev-env`が返すdevShellの変数だけで、direnvは使わない。`.envrc`や`.envrc.local`が読み込むトークンなどは入らない。
+- flakeはgitの作業ツリー内にあるものだけを対象にする。評価に使われるのは追跡済みのファイルだけになり、未追跡の秘密ファイルがstoreへコピーされない。
+- shellHookは実行しない（任意のコードで、副作用や`.envrc`・秘密情報の読み込みを含むことがある）。shellHookでだけ設定する変数やセットアップは反映されない。
+- flakeがない、devShellがない、評価に失敗した（既定150秒で打ち切り）ときは何も足さず、前に足した分だけを元に戻す。`flake.lock`は書き換えない。
+- 同じflake内での`cd`でも評価し直す（評価キャッシュに当たれば短い）。flake.nixの変更は次の`cd`か新しいセッションで反映される。
+- `~/.claude/settings.json`にはactivationでこのhookの2件だけを追記・更新する。nixは呼び出し側のPATHのものを使う。
+- 判定はスタブのnixを使ったテスト（`devshell-env/test.sh`、`nix build`では`passthru.tests.devshellEnv`）で確認する。
 
 ## 状態待ちコマンド
 
