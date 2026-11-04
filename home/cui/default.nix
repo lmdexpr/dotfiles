@@ -1,6 +1,7 @@
 {
   pkgs,
   username,
+  inputs,
   mcp-servers,
   ...
 }:
@@ -38,7 +39,7 @@ let
 in
 {
   imports = [
-    ../config/agents
+    inputs.harness.homeManagerModules.default
     ../config/zsh
     ../config/git
     ../config/neovim
