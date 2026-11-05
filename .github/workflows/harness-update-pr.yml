@@ -1,0 +1,33 @@
+name: Harness update PR
+
+# The harness input's updater pushes chore/update-harness with a deploy key,
+# which cannot open pull requests.
+on:
+  push:
+    branches: [chore/update-harness]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Open the PR unless one is open
+        run: |
+          set -euo pipefail
+          if [ -n "$(gh pr list --head "$GITHUB_REF_NAME" --state open --json number --jq '.[].number')" ]; then
+            echo "A PR for $GITHUB_REF_NAME is open; this push updated it"
+            exit 0
+          fi
+          rev=$(gh api "repos/$GH_REPO/contents/flake.lock?ref=$GITHUB_SHA" --jq .content |
+            base64 -d | jq -r '.nodes[.nodes.root.inputs.harness].locked.rev')
+          url=$(gh pr create --base main --head "$GITHUB_REF_NAME" \
+            --title "chore(deps): update harness" \
+            --body "Updates the \`harness\` input to $rev (\`nix flake update harness\`). No other input moves.")
+          gh api --silent -X POST "repos/$GH_REPO/issues/${url##*/}/assignees" -f 'assignees[]=lmdexpr'
+          echo "$url"
