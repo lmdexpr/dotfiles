@@ -23,11 +23,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794064566,
-        "narHash": "sha256-X/JkezLfGXktU9nGLPcMEB/xMv1fXTN/e4nUB+FSO+Q=",
+        "lastModified": 1794294399,
+        "narHash": "sha256-D4GBi9OwZ73aSHmzltQ0FsKNjzFpUNAAKwDR/7lsV/8=",
         "ref": "refs/heads/main",
-        "rev": "c2e27ba65b168a38d47ecb2c501c3496574a067b",
-        "revCount": 48,
+        "rev": "2452b99cb3d7160759a846fa9195c681779a81c5",
+        "revCount": 54,
         "type": "git",
         "url": "ssh://git@git.lmdex.pro/lmdexpr/harness"
       },
